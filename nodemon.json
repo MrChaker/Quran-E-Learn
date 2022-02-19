@@ -1,0 +1,5 @@
+{
+  "watch": ["BackEnd"],
+  "ext": "ts",
+  "exec": "ts-node --project tsconfig.server.json BackEnd/Server.ts"
+}

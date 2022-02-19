@@ -1,0 +1,39 @@
+import  mongoose, { Model } from 'mongoose';
+import bcrypt from 'bcryptjs';
+
+interface UserModel extends Model<any> {
+  loginAPI(email: string, Password: string): any
+}
+
+const UserSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    image: String,
+    oAuthID: String,
+    isAdmin: Boolean,
+    password: String
+})
+UserSchema.pre('save', async function(next){
+    if( this.password){
+        const salt = await bcrypt.genSalt();
+        this.password = await bcrypt.hash(this.password, salt);
+    }
+    next();
+});
+// log in function
+UserSchema.static( 'loginAPI' , async function loginAPI(Email, Password){
+    const user = await this.findOne({ email: Email });
+    if (user){
+       const pass = await bcrypt.compare(Password, user.password);
+       if(pass){
+            return user;
+       }
+       throw Error('Password incorrect')
+    }
+    throw Error ('Email incorrect')
+}
+)
+
+
+const User: UserModel = mongoose.model<any, UserModel>('User', UserSchema);
+export default User;
