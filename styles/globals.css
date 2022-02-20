@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+* {
+    --main-color: #00ff00;
+    --txt-grey: #b3b3b3;
+    --err: #d81010;
+}
+.pt {
+    padding-top: 128px;
+}

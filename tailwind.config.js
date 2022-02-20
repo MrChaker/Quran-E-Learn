@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       fontFamily:{
         'main': ["Roboto", "sans-serif"]
+      },
+      BackgroundColor:{
+        'bg-main': "#00ff00"
       }
     },
   },

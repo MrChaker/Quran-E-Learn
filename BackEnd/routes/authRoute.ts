@@ -3,7 +3,7 @@ const authRoute = express.Router();
 import jwt, { Secret, JsonWebTokenError } from 'jsonwebtoken';
 import User from "../models/user"
 
-const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
+
 authRoute.post("/sign", async (req, res)=>{
   
   const alreadyExistsUser = await User.findOne({ email: req.body.email })
@@ -21,6 +21,7 @@ authRoute.post("/sign", async (req, res)=>{
     console.log("Error: ", err);
     res.status(500).json({ err });
   });
+  const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
   const jwtToken = jwt.sign(
     { id: user._id, email: user.email },
     jwtSecret,
@@ -43,6 +44,7 @@ authRoute.post("/loginAPI", async (req, res) => {
     console.log(error);
     return res.status(400).json({ failure: "البيانات خاطئة ، أعد المحاولة" });
   })
+  const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
 
   const jwtToken = jwt.sign(
     { id: user._id, email: user.email },
@@ -63,6 +65,7 @@ authRoute.get('/logout',  (req, res)=>{
 })
 
 authRoute.get('/user', (req, res)=>{
+  const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
   jwt.verify(req.cookies.jwt,jwtSecret, async (err: any, decodedToken: any )=>{
         if ( err ){
           console.log(err);

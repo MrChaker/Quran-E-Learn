@@ -1,16 +1,33 @@
 import { motion } from "framer-motion";
-
-export const Button = (props: any) => {
+import { MouseEventHandler } from "react";
+import { JsxElement } from "typescript";
+import { ReactElement } from 'react';
+type PropsType = {
+  block?: boolean,
+  rounded?: boolean,
+  outline?: boolean,
+  color: string,
+  txtColor?: string,
+  size?: string,
+  leftIcon?: ReactElement,
+  rightIcon?: ReactElement,
+  text?: string,
+  type?: "button" | "submit" | "reset" | undefined,
+  style?: string,
+  onClick?: () => MouseEventHandler<HTMLDivElement> | undefined,
+}
+export const Button = (props: PropsType) => {
   return (
-    <motion.div
+    <motion.button
       id="btn"
+      type={props.type}
       initial={{ x: "-100vw", opacity: 0 }}
       onClick={props.onClick}
       animate={{ x: 0, opacity: 1 }}
       className={` cursor-pointer p-4 px-8  ${
         props.rounded ? "rounded-full" : "rounded-md"
       } justify-center border border-solid ${props.style} ${
-        props.block ? "block" : "inline-block"
+        props.block ? "block w-full" : "inline-block"
       } `}
       style={{
         color: props.outline ? props.color : props.txtColor,
@@ -22,6 +39,6 @@ export const Button = (props: any) => {
       <p className={`mr-4 inline-block`}>{props.leftIcon}</p>
       {props.text}
       <p className={`ml-4 inline-block`}>{props.rightIcon}</p>
-    </motion.div>
+    </motion.button>
   );
 };

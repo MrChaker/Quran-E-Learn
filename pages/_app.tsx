@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import '../styles/auth.css'
 import type { AppProps } from 'next/app'
 import { Layout } from '../FrontEnd/Layouts/layout'
 import { fontAW } from "../FrontEnd/fontawsome"
@@ -21,7 +22,7 @@ const userInterface: User = {
   info : null,
   isAuthenticated: false
 }
-const UserContext = createContext<UserInt>({
+export const UserContext = createContext<UserInt>({
   user: userInterface,
   setUser: () => userInterface
 });
