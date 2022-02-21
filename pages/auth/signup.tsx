@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { Button } from "../../FrontEnd/components/Button"
 import { useContext, useRef } from 'react'
 import { UserContext } from '../_app';
+import { useThemeContext } from "../../FrontEnd/Layouts/layout";
 import Router from 'next/router'
 import Link from 'next/link';
 import Swal from "sweetalert2";
@@ -15,6 +16,7 @@ interface SignEventTarget extends EventTarget{
 }
 
 const Signup :NextPage = () => {
+  const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const formRef = useRef<HTMLFormElement>(null!);
   const c_pass = useRef<HTMLLabelElement>(null!);
@@ -88,8 +90,17 @@ const Signup :NextPage = () => {
     Router.push('/')
   }
   return (
-    <div className="flex py-20 justify-center items-center ">
+    <div className="flex py-4 justify-center items-center text-darkColor dark:text-lightColor ">
       <div className="Auth">   
+        <p className="text-4xl mb-4">
+          أنشىء حسابك المجاني   
+        </p>
+        {<p>
+          لديك حساب ؟ 
+          <Link href="/auth/login">
+            <a> سجل الدخول </a>
+          </Link>
+        </p>}
         <form 
           dir="rtl" 
           onSubmit={(event: any)=>emailSign(event)}
@@ -105,20 +116,15 @@ const Signup :NextPage = () => {
             <input type="password" placeholder="تأكيد كلمة السّر" name="c_password" onChange={CheckPass} />
             <label htmlFor="c_passErr" ref={c_pass} ></label>
             <Button 
-              color = "var(--main-color)"
-              txtColor="#ffffff"
+              color = { !darkTheme ? "var(--main-color)" : "var(--light-color)" }
+              txtColor={ darkTheme ? "var(--main-color)" : "var(--light-color)" }
               text = "تسجيل حسابك"
               block
               size = "1.25rem"
               type = "submit"
             />
         </form>
-        {<p>
-          لديك حساب ؟ 
-          <Link href="/auth/login">
-            <a> سجل الدخول </a>
-          </Link>
-        </p>}
+        
       </div>
     </div>
   )

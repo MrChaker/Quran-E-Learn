@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { MouseEventHandler } from "react";
 import { JsxElement } from "typescript";
 import { ReactElement } from 'react';
+
 type PropsType = {
   block?: boolean,
   rounded?: boolean,
@@ -13,6 +14,7 @@ type PropsType = {
   rightIcon?: ReactElement,
   text?: string,
   type?: "button" | "submit" | "reset" | undefined,
+  dir?: "rtl" | "ltr" | undefined,
   style?: string,
   onClick?: () => MouseEventHandler<HTMLDivElement> | undefined,
 }
@@ -20,6 +22,7 @@ export const Button = (props: PropsType) => {
   return (
     <motion.button
       id="btn"
+      dir = { props.dir || "ltr"}
       type={props.type}
       initial={{ x: "-100vw", opacity: 0 }}
       onClick={props.onClick}

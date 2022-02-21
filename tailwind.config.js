@@ -6,12 +6,18 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
-        'main': ["Roboto", "sans-serif"]
+        'main': ["arabic", "Noto Sans Arabic", "tajawal", "Open Sans"],
+        'quran': ["Quran"]
       },
-      BackgroundColor:{
-        'bg-main': "#00ff00"
+      colors: {
+        'darkColor': "#022930",
+        'semiColor': "#325970",
+        'lightColor': "rgb(203 213 225)",
+        'lighterColor': "rgb(226 232 240)",
+        'themeColor': "#022930"
       }
-    },
+    }
+    
   },
   plugins: [],
   darkMode: 'class',

@@ -1,11 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family: "Quran";
+    src: url("/fonts/QuranFont.ttf");
+}
+@font-face {
+    font-family: "arabic";
+    src: url("/fonts/arabic.ttf");
+}
 * {
-    --main-color: #00ff00;
+    --main-color: #022930;
+    --semi-color: #325970;
+    --light-color: rgb(226 232 240);
+
     --txt-grey: #b3b3b3;
     --err: #d81010;
 }
 .pt {
-    padding-top: 128px;
+    padding-top: 98px;
+    min-height: 150vh;
 }

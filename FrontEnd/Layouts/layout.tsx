@@ -32,7 +32,8 @@ export const Layout: NextPage = ({ children }) => {
         <MenuCentext.Provider value={{ menu, setMenu }}>
           <NavBar />
           <div
-            className=" pt min-h-screen gap-3 overflow-hidden bg-slate-200 px-10 font-main dark:bg-slate-900 md:px-20 lg:px-40"
+            dir="rtl"
+            className=" pt gap-3 overflow-hidden bg-lighterColor px-10 font-main dark:bg-darkColor md:px-20 lg:px-40 "
             id="screen"
           >
             {children}

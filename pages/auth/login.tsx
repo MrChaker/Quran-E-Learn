@@ -4,6 +4,8 @@ import { useContext, useRef } from 'react'
 import { UserContext } from '../_app';
 import Router from 'next/router'
 import Link from 'next/link';
+import { useThemeContext } from "../../FrontEnd/Layouts/layout";
+
 interface SignEvent extends Event{
   target: SignEventTarget;
 }
@@ -14,6 +16,8 @@ interface SignEventTarget extends EventTarget{
 }
 
 const Signup :NextPage = () => {
+  const { darkTheme } = useThemeContext();
+
   const { user } = useContext(UserContext);
   const formRef = useRef<HTMLFormElement>(null!);
   const email = useRef<HTMLLabelElement>(null!);
@@ -67,8 +71,17 @@ const Signup :NextPage = () => {
     Router.push('/')
   }
   return (
-    <div className="flex py-20 justify-center items-center ">
+    <div className="flex py-4 justify-center items-center text-darkColor dark:text-lightColor">
       <div className="Auth">   
+        <p className="text-4xl mb-4">
+          تسجيل الدّخول الى حسابك   
+        </p>
+        <p>
+          ليس لديك حساب ؟ 
+          <Link href="/auth/signup">
+            <a> انشئ حساب </a>
+          </Link>
+        </p>
         <form 
           dir="rtl" 
           onSubmit={(event: any)=>emailLogin(event)}
@@ -79,20 +92,15 @@ const Signup :NextPage = () => {
             <input type="password" placeholder="كلمة السّر" name="password" onChange={CheckLength}/>
             <label htmlFor="passErr" ref={pass}></label>
             <Button 
-              color = "var(--main-color)"
-              txtColor="#ffffff"
+              color = { !darkTheme ? "var(--main-color)" : "var(--light-color)" }
+              txtColor={ darkTheme ? "var(--main-color)" : "var(--light-color)" }
               text = "تسجيل الدّخول"
               block
               size = "1.25rem"
               type = "submit"
             />
         </form>
-        <p>
-          ليس لديك حساب ؟ 
-          <Link href="/auth/signup">
-            <a> انشئ حساب </a>
-          </Link>
-        </p>
+        
       </div>
     </div>
   )
