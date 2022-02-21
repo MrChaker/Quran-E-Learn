@@ -5,7 +5,7 @@ import User from "../models/user"
 
 
 authRoute.post("/sign", async (req, res)=>{
-  
+  console.log(req.body.name)
   const alreadyExistsUser = await User.findOne({ email: req.body.email })
   console.log(alreadyExistsUser)
   if (alreadyExistsUser) {

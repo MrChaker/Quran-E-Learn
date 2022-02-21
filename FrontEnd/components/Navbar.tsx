@@ -1,17 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useMenuContext, useThemeContext } from "../Layouts/layout";
-
+import { UserContext } from '../../pages/_app'
+import { motion, AnimatePresence } from "framer-motion";
+import {Button} from "./Button"
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
+  const { darkTheme } = useThemeContext();
+  const { user } = useContext(UserContext);
+  const [ dropMenu, setDropMenu ] = useState(false);
   return (<>
       <nav
         id="nav"
         dir="rtl"
-        className="fixed top-0  z-30 flex w-screen items-center justify-between bg-lighterColor px-10 py-5 font-main font-semibold text-darkColor shadow-sm shadow-gray-400 dark:bg-darkColor  dark:text-lighterColor dark:shadow-slate-800 md:px-20 lg:px-40"
+        className="fixed top-0  z-30 flex w-screen items-center justify-between bg-lighterColor  py-5 font-main font-semibold text-darkColor shadow-sm shadow-gray-400 dark:bg-darkColor  dark:text-lighterColor dark:shadow-emerald-900 px-10 md:px-20 lg:px-40"
       >
-        <div className="  bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-5xl text-transparent sm:text-3xl font-quran ">
+        <div className="  bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text  text-4xl text-transparent sm:text-5xl font-quran ">
           <Link href="/">
             <a>
             القرآن
@@ -24,14 +29,60 @@ export const NavBar = () => {
           <NavEl text="الدّروس" />
           <NavEl text="شيوخنا" />
         </ul>
-        <div>
-          <FontAwesomeIcon
-            icon="bars"
-            className="mr-4 cursor-pointer text-2xl md:hidden"
-            onClick={() => setMenu(true)}
-          />
-          <ThemeButton />
-        </div>
+        
+          <div className="flex items-center">
+          {
+            !user.isAuthenticated && <>
+            <Link href="/auth/login">
+              <a>
+                <Button 
+                text="دخول"
+                color = { !darkTheme ? "var(--main-color)" : "var(--light-color)" }
+                outline
+                size="0.9rem"
+                style="py-2 px-0 mx-2 hidden md:inline-block"
+                />
+              </a>
+            </Link>
+            
+            <Link href="/auth/signup">
+            <a>
+              <Button 
+                text="سجلّ مجانا"
+                color = { !darkTheme ? "var(--main-color)" : "var(--light-color)" }
+                txtColor={ darkTheme ? "var(--main-color)" : "var(--light-color)" }
+                size="0.9rem"
+                style="py-2 px-0 sm:mx-2 hidden md:inline-block"
+              />
+            </a>
+            </Link>
+            </>
+          }{
+          user.isAuthenticated && <>
+          <div className="flex items-center gap-2 rounded-xl hover:bg-lightColor dark:hover:bg-semiColor cursor-pointer py-1 px-2"
+            onClick={()=>setDropMenu(!dropMenu)}
+          >
+            <div className="rounded-full border border-darkColor dark:border-lightColor w-8 h-8 ml-1 hover:">
+              
+            </div>
+            <div className="text-xl">
+            {user.info?.name}
+            </div>
+            <FontAwesomeIcon 
+              icon="caret-down" 
+            />
+          </div>
+          <DropMenu isOn={dropMenu} left='15%' top='80%' />
+          </>
+          }
+            {<ThemeButton style="mx-4" />} 
+            <FontAwesomeIcon
+              icon="bars"
+              className="cursor-pointer text-2xl md:hidden "
+              onClick={() => setMenu(true)}
+            />
+          </div>
+        
 
         <div
           className={` fixed left-0 flex h-screen w-screen justify-between bg-orange-700 p-6 md:hidden ${
@@ -40,6 +91,8 @@ export const NavBar = () => {
         >
           <ul className=" flex list-none flex-col items-center gap-6  text-4xl">
             <NavEl text="الرّئيسية" />
+            <NavEl text="تسجيل الدخول" link="/auth/login"/>
+            <NavEl text="انشاء حساب" link="/auth/signup"/>
             <NavEl text="الدّروس" />
             <NavEl text="شيوخنا" />
           </ul>
@@ -58,14 +111,41 @@ export const NavBar = () => {
 const NavEl = (props: any) => {
   return (
     <li>
-      <Link href="#">
+      <Link href={props.link || "#"}>
         <a>{props.text}</a>
       </Link>
     </li>
   );
 };
 
-export const ThemeButton = () => {
+const DropMenu = (props: any) =>{
+  const logout = (): void => {
+    location.assign('/auth/logout')
+  }
+  return(
+    <AnimatePresence>
+      {
+        props.isOn &&
+        <motion.div
+          initial = {{scale: 0}}
+          animate = {{scale: 1}}
+          exit = {{scale: 0}}
+          className = " absolute rounded-lg p-4 dark:bg-lightColor bg-darkColor h-32 w-32 opacity-80 flex justify-center"
+          style={{left: props.left, top: props.top}}
+        >
+          <div className="bg-lightColor dark:bg-darkColor rounded-lg p-2 text-sm h-fit cursor-pointer"
+            onClick={logout}
+          >
+            تسجيل الخروج
+          </div>
+        </motion.div>
+      }
+    </AnimatePresence>
+    
+  )
+}
+
+export const ThemeButton = (props: any) => {
   const { darkTheme, setDarkTheme } = useThemeContext();
   useEffect(() => {
     if (
@@ -96,7 +176,7 @@ export const ThemeButton = () => {
       icon={ darkTheme ? "sun" : "moon"}
       className={`cursor-pointer text-2xl ${
         darkTheme ? "text-yellow-400" : "text-blue-900"
-      }`}
+      } ${props.style}`}
       onClick={() => {
         setOnStorage(!darkTheme);
       }}

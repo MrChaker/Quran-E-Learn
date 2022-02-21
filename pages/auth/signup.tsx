@@ -10,7 +10,7 @@ interface SignEvent extends Event{
   target: SignEventTarget;
 }
 interface SignEventTarget extends EventTarget{
-  name: HTMLInputElement;
+  Name: HTMLInputElement;
   email: HTMLInputElement;
   password: HTMLInputElement;
 }
@@ -32,7 +32,7 @@ const Signup :NextPage = () => {
             headers:{
                  'Content-Type' : 'application/json'
             },
-            body : JSON.stringify({ name: e.target?.name.value, email: e.target?.email.value, password: e.target?.password.value })
+            body : JSON.stringify({ name: e.target?.Name.value, email: e.target?.email.value, password: e.target?.password.value })
         });
 
         const result = await res.json();

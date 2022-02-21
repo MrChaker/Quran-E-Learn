@@ -5,8 +5,11 @@ import {
   faBars,
   faTimes,
   faEnvelope,
+  faCare,
+  faCaretDown
 } from "@fortawesome/free-solid-svg-icons";
 
 export const fontAW = () => {
-  library.add(faMoon, faSun, faBars, faTimes, faEnvelope);
+  library.add(faMoon, faSun, faBars, faTimes, faEnvelope,
+    faCaretDown);
 };
