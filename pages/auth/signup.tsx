@@ -13,6 +13,7 @@ interface SignEventTarget extends EventTarget{
   Name: HTMLInputElement;
   email: HTMLInputElement;
   password: HTMLInputElement;
+  sex: HTMLInputElement
 }
 
 const Signup :NextPage = () => {
@@ -23,7 +24,6 @@ const Signup :NextPage = () => {
   const name = useRef<HTMLLabelElement>(null!);
   const email = useRef<HTMLLabelElement>(null!);
   const pass = useRef<HTMLLabelElement>(null!);
-
   const emailSign = async (e: SignEvent)=>{
     e.preventDefault();
     if( dataIsValid() ){
@@ -32,7 +32,7 @@ const Signup :NextPage = () => {
             headers:{
                  'Content-Type' : 'application/json'
             },
-            body : JSON.stringify({ name: e.target?.Name.value, email: e.target?.email.value, password: e.target?.password.value })
+            body : JSON.stringify({ name: e.target?.Name.value, email: e.target?.email.value, password: e.target?.password.value, sex: e.target?.sex.value })
         });
 
         const result = await res.json();
@@ -115,6 +115,14 @@ const Signup :NextPage = () => {
             <label htmlFor="passErr" ref={pass}></label>
             <input type="password" placeholder="تأكيد كلمة السّر" name="c_password" onChange={CheckPass} />
             <label htmlFor="c_passErr" ref={c_pass} ></label>
+            <div className="flex gap-4 items-center w-full">
+              <label htmlFor="sex" className="notErr m-2"> الجنس</label>
+              <label className="notErr mr-8"> ذكر </label>
+              <input type="radio" id="male" name="sex" value="male" checked/>
+              <label className="notErr"> أنثى </label>
+              <input type="radio" id="female" name="sex" value="female"/>
+            </div>
+            
             <Button 
               color = { !darkTheme ? "var(--main-color)" : "var(--light-color)" }
               txtColor={ darkTheme ? "var(--main-color)" : "var(--light-color)" }

@@ -14,7 +14,9 @@ authRoute.post("/sign", async (req, res)=>{
 
   const newUser = new User({ 
     name: req.body.name,
-    email: req.body.email, 
+    email: req.body.email,
+    sex: req.body.sex,
+    image: req.body.sex == "male" ? '/male.png' : "/female.png",
     isAdmin: false, 
     password: req.body.password });
   const user = await newUser.save().catch((err: Errback) => {

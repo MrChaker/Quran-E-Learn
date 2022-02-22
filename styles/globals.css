@@ -12,9 +12,9 @@
 * {
     --main-color: #022930;
     --semi-color: #325970;
-    --light-color: rgb(226 232 240);
+    --light-color: rgb(203 213 225);
 
-    --txt-grey: #b3b3b3;
+    --txt-grey: #9b9999;
     --err: #d81010;
 }
 .pt {

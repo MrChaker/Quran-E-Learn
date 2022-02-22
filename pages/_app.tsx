@@ -29,6 +29,10 @@ export const UserContext = createContext<UserInt>({
 function MyApp({ Component, pageProps }: AppProps) {
   
   const [ user, setUser ] = useState(userInterface);
+  useEffect(()=>{
+    // this is for solving ssr state problem
+    setUser(JSON.parse(localStorage.getItem('currentUser') || '{}'))
+  },[])
   const fetchUser = async () => {
     try{
       const res = await axios.get('/auth/user', { withCredentials: true} );
@@ -42,7 +46,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     const getUser = async () =>{
       const userInfo = await fetchUser();
       console.log(userInfo)
-      setUser({info: userInfo, isAuthenticated: userInfo ? true : false })
+      setUser({info: userInfo, isAuthenticated: userInfo ? true : false });
+      localStorage.setItem("currentUser", JSON.stringify({info: userInfo, isAuthenticated: userInfo ? true : false }))
     }
     getUser();
   }, [])

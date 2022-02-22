@@ -3,6 +3,6 @@ export type UserInterface = {
   email: string,
   password: string,
   image: string,
-  id: string,
+  _id: string,
   isAdmin: boolean
 }

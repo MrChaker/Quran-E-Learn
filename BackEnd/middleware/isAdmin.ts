@@ -1,11 +1,11 @@
 import jwt, {Secret} from 'jsonwebtoken'
 
-const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
 
 const CheckAuth = (req: any , res: any, next: any)=>{
-    if( req.cookie.jwt ){
+    const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
+    if( req.cookie ){
         jwt.verify(req.cookies.jwt,jwtSecret, async (err: any )=>{
-            if (err) res.redirect('/auth/signup')
+            if (err) res.redirect('/auth/login')
             else next();
         })
     }else{

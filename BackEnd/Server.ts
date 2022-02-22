@@ -8,6 +8,7 @@ import typeDefs from "./graphql/schemas";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import Connect from './Utils/dbConnect'
+import CheckAuth from "./middleware/isAdmin";
 dotenv.config();
 const PORT = process.env.PORT || 8000 ;
 const dev = process.env.NODE_ENV !== 'production';
@@ -33,7 +34,7 @@ app
     });
     await apollo_server.start();
     apollo_server.applyMiddleware({app: server, path: "/api/graphql"});
-
+    
     server.use(cookieparser());
     server.use("/auth", authRoutes );
     

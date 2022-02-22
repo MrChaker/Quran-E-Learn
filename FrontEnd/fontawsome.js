@@ -6,10 +6,10 @@ import {
   faTimes,
   faEnvelope,
   faCare,
-  faCaretDown
+  faCaretDown, faCamera
 } from "@fortawesome/free-solid-svg-icons";
 
 export const fontAW = () => {
   library.add(faMoon, faSun, faBars, faTimes, faEnvelope,
-    faCaretDown);
+    faCaretDown, faCamera);
 };
