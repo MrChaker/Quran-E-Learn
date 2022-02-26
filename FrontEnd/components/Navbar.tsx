@@ -63,7 +63,7 @@ export const NavBar = () => {
           <div className="flex items-center gap-1 sm:gap-2 rounded-xl hover:bg-lightColor dark:hover:bg-semiColor cursor-pointer py-1 px-2"
             onClick={()=>setDropMenu(!dropMenu)}
           >
-            <div className="rounded-full border border-darkColor dark:border-lightColor w-8 h-8 ml-1 hover:">
+            <div className="rounded-full border border-darkColor dark:border-lightColor w-8 h-8 ml-1 overflow-hidden">
               <Image src={user.info?.image || '/male.png'} width={32} height={32} />
             </div>
             <div className="text-md sm:text-xl">
@@ -135,7 +135,7 @@ const DropMenu = (props: any) =>{
           className = " absolute rounded-lg p-4 dark:bg-lightColor bg-darkColor h-36 w-36 opacity-80 flex flex-col items-center justify-between text-lg "
           style={{left: props.left, top: props.top}}
         >
-          <Link  href={`/profile/${user.info?._id}`}>
+          <Link  href={`/profile/myProfile`}>
           <a>
             <p className="text-lightColor dark:text-darkColor hover:text-semiColor hover:dark:text-semiColor">الحساب</p>
           </a>
