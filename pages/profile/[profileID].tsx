@@ -1,21 +1,22 @@
 import { NextPage } from 'next'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useContext, useRef } from 'react'
-import Image from 'next/image'
+import { useContext } from 'react'
+import { UserContext } from '../_app'
 import {  useQuery } from '@apollo/client'
 import { GET_User } from '../../FrontEnd/graphql/queries'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useIsAuth from '../../hooks/useIsAuth'
 import type { UserInterface } from '../../BackEnd/Utils/userInterface'
+import Photo from '../../FrontEnd/components/profile/photo'
 const Profile: NextPage = () => {
+  const { user } = useContext(UserContext);
   const Router = useRouter();
   const { profileID } = Router.query;
   const { data, loading} = useQuery(GET_User, {
     variables: { _id: profileID }
   });
   // this is the user we are visiting his page
-  const [ thisUser, setThisUser ] = useState<UserInterface>(null!);
+  const [ thisUser, setThisUser ] = useState<UserInterface | null>(null);
   useEffect(()=>{
     if(data){
       setThisUser(data.getUser)
@@ -23,19 +24,10 @@ const Profile: NextPage = () => {
   }, [loading])
 
   useIsAuth();
-  
   return (
     <div className=''>
       <div className="flex items-center md:flex-row flex-col">
-        <div className="rounded-full w-64 h-64 border border-darkColor dark:border-lightColor relative overflow-hidden" 
-        >
-          <Image
-            src={ thisUser?.image || '/male.png' } 
-            layout='fill' 
-            objectFit='contain' 
-            alt='profile Image'
-          />
-        </div>
+        <Photo user={ thisUser || user.info } profileID={profileID} loading={loading} />
       </div>
     </div>
   )

@@ -135,7 +135,7 @@ const DropMenu = (props: any) =>{
           className = " absolute rounded-lg p-4 dark:bg-lightColor bg-darkColor h-36 w-36 opacity-80 flex flex-col items-center justify-between text-lg "
           style={{left: props.left, top: props.top}}
         >
-          <Link  href={`/profile/myProfile`}>
+          <Link  href={`/profile/${user.info?._id}`}>
           <a>
             <p className="text-lightColor dark:text-darkColor hover:text-semiColor hover:dark:text-semiColor">الحساب</p>
           </a>
