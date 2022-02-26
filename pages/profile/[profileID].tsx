@@ -47,6 +47,7 @@ const Profile: NextPage = () => {
             src={ previewImage || user.info?.image || '/male.png'} 
             layout='fill' 
             objectFit='contain' 
+            alt='profile Image'
           />
           { /* this is for profile image uploading */
             user.info?._id == profileID &&

@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import Image from "next/image";
 import { ThemeCentext } from "../../Layouts/layout";
 import { useContext } from "react";
