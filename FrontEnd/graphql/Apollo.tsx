@@ -21,7 +21,7 @@ const ApolloProv: NextPage = ({children}) => {
 
     const client = new ApolloClient({
         cache: new InMemoryCache(),
-        uri : `${process.env.NEXT_PUBLIC_PORT}/api/graphql`
+        uri : `${process.env.NEXT_PUBLIC_PORT}api/graphql`
     })
     console.log(`${process.env.NEXT_PUBLIC_PORT}/api/graphql`)
        return ( 

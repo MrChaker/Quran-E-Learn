@@ -6,6 +6,7 @@ import { ApolloServer } from "apollo-server-express"
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/schemas";
 import mongoose from "mongoose";
+const cloudinary = require( 'cloudinary').v2;
 import dotenv from 'dotenv';
 import Connect from './Utils/dbConnect'
 import CheckAuth from "./middleware/isAdmin";
@@ -27,6 +28,14 @@ app
     server.use(express.json({limit: '25mb'}));
     server.use(express.urlencoded({extended: true, limit: '25mb'}));
     
+    // cloudinary for Image storing
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_SECRET,
+      secure: true,
+    });
+
     //Apollo for GrapqhQL
     const apollo_server = new ApolloServer({
       typeDefs,
