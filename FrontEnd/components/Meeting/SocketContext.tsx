@@ -30,7 +30,7 @@ interface SocketContextType {
 export const SocketCtxProvider = createContext<SocketContextType>(null!)
 
 const socket = io(process.env.NEXT_PUBLIC_URL || 'http://localhost:8000');
-
+console.log(process.env.NEXT_PUBLIC_URL)
 
 const SocketContext = ( {children, Room} : {children: any, Room: string | null } ) => {
   const [callAccepted, setCallAccepted] = useState<boolean>(false);
