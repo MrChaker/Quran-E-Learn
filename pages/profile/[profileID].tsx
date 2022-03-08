@@ -26,8 +26,9 @@ const Profile: NextPage = () => {
   useIsAuth();
   return (
     <div className=''>
-      <div className="flex items-center md:flex-row flex-col">
+      <div className="flex gap-10 sm:gap-14 items-center md:flex-row flex-col text-darkColor dark:text-lightColor text-4xl">
         <Photo user={ thisUser || user.info } profileID={profileID} loading={loading} />
+        <h1 className=''>{  thisUser?.name || 'الاسم' }</h1>
       </div>
     </div>
   )

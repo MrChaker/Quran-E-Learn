@@ -15,7 +15,7 @@ export const NavBar = () => {
       <nav
         id="nav"
         dir="rtl"
-        className="fixed top-0  z-30 flex w-screen items-center justify-between bg-lighterColor  py-5 font-main font-semibold text-darkColor shadow-sm shadow-gray-400 dark:bg-darkColor  dark:text-lighterColor dark:shadow-emerald-900 px-10 md:px-20 lg:px-40"
+        className="fixed top-0  z-30 flex w-screen items-center justify-between bg-lighterColor  py-5 font-main font-semibold text-darkColor shadow-sm shadow-gray-400 dark:bg-darkColor  dark:text-lighterColor dark:shadow-emerald-900 px-10 md:px-20 lg:px-[5.5rem]"
       >
         <div className="  bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text  text-3xl text-transparent sm:text-5xl font-quran ">
           <Link href="/">
@@ -73,7 +73,7 @@ export const NavBar = () => {
               icon="caret-down" 
             />
           </div>
-          <DropMenu isOn={dropMenu} left='15%' top='80%' />
+          <DropMenu isOn={dropMenu} left='10%' top='80%' />
           </>
           }
             {<ThemeButton style="mx-2 sm:mx-4 text-sm sm:text-2xl" />} 

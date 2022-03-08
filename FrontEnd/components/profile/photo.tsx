@@ -18,16 +18,23 @@ const Photo = (props: PropsType) => {
 
   const image = useRef<HTMLInputElement>(null!);
   const [ previewImage, setPreviewImage ] = useState<string>(null!);
+  const [ uploading, setUploading ] = useState(false)
 
-  const [ updateImage ] = useMutation(UPDATE_Image)
-  const uploadImage = (  ): void=>{
+  const [ updateImage ] = useMutation(UPDATE_Image, {
+    onCompleted(data: any){
+      setUploading(false)
+    },
+  })
+
+  const uploadImage = ( Imagefile: File | null | undefined ): void=>{
     const reader = new FileReader();
-    const file: File | null | undefined = image.current.files?.item(0);
+    const file: File | null | undefined = Imagefile;
     if ( file ) { 
       reader.readAsDataURL(file)
       reader.onloadend = () =>{
         if (  typeof reader.result === 'string'  ){
-          setPreviewImage(reader.result)
+          setUploading(true);
+          setPreviewImage(reader.result);
           updateImage({variables:{
             user_id: user.info?._id,
             file: reader.result, 
@@ -45,13 +52,19 @@ const Photo = (props: PropsType) => {
           <Image
             src={ props.loading ? '/male.png' : previewImage || props.user?.image  || '/male.png' } 
             layout='fill' 
-            objectFit='contain' 
+            objectFit='cover' 
             alt='profile Image'
+            
+            className={`${ uploading && 'filter brightness-[.2] w-16 h-16' }`}
           />
+          {
+            uploading &&
+            <FontAwesomeIcon  icon="circle-notch" size='3x' color='var(--semi-color)' className='spinner absolute top-[40%] left-[43%]' />
+          }
           {
             //check if authed user is on his profile to allow him make changes
             user.info?._id == props.profileID &&
-            <div className={` ${visibility} bg-darkColor dark:bg-lightColor opacity-90 absolute w-full h-full rounded-full`}
+            <div className={` ${visibility} bg-darkColor dark:bg-lightColor opacity-90 absolute w-full h-full rounded-full filter `}
               /* onClick={} */
             >
               <div className="absolute flex flex-col items-center justify-center gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer">
@@ -60,7 +73,7 @@ const Photo = (props: PropsType) => {
                 <p className=' text-2xl text-lightColor dark:text-darkColor ' >تغيير الصورة</p>
               </div>
               <form encType="multipart/form-data">
-                <input className='file:absolute file:w-full file:h-full file:transparent file:top-0 file:right-0 file:bg-darkColor file:opacity-10 file:cursor-pointer file:rounded-full file:text-transparent text-transparent' type='file' name='image' ref={image} onChange={uploadImage}
+                <input className='file:absolute file:w-full file:h-full file:transparent file:top-0 file:right-0 file:bg-darkColor file:opacity-10 file:cursor-pointer file:rounded-full file:text-transparent text-transparent' type='file' name='image' ref={image} onChange={()=>uploadImage(image.current.files?.item(0))}
                 />
               </form>
             </div>

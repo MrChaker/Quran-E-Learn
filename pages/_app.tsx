@@ -4,9 +4,11 @@ import type { AppProps } from 'next/app'
 import { Layout } from '../FrontEnd/Layouts/layout'
 import { fontAW } from "../FrontEnd/fontawsome"
 import ApolloProvider from "../FrontEnd/graphql/Apollo"
-import { useState, useEffect, createContext } from "react"
+import { useState, useEffect, createContext, useLayoutEffect } from "react"
 import axios from 'axios'
 import type { UserInterface } from "../BackEnd/Utils/userInterface"
+import  Router  from 'next/router'
+import { NextPage } from 'next'
 fontAW();
 type User = {
   info: UserInterface | null ,
@@ -26,6 +28,7 @@ export const UserContext = createContext<UserInt>({
   user: userInterface,
   setUser: () => userInterface
 });
+
 function MyApp({ Component, pageProps }: AppProps) {
   
   const [ user, setUser ] = useState(userInterface);
@@ -50,7 +53,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       localStorage.setItem("currentUser", JSON.stringify({info: userInfo, isAuthenticated: userInfo ? true : false }))
     }
     getUser();
-  }, [])
+  }, []);
+
+  /* const [ ChosenLayout, setChosenLayout ] = useState<NextPage>(Layout)
+  useLayoutEffect(()=>{
+    const url = Router.pathname;
+    if ( url.includes("/Meeting")) setChosenLayout(Layout)
+    else if ( url.includes("/admin")) setChosenLayout(Layout)
+    else if ( url.includes("/dashboard")) setChosenLayout(Layout)
+  }, []) */
+
   return (
     <UserContext.Provider value = {{ user, setUser }}>
       <ApolloProvider >

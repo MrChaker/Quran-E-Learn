@@ -16,7 +16,7 @@ type PropsType = {
   type?: "button" | "submit" | "reset" | undefined,
   dir?: "rtl" | "ltr" | undefined,
   style?: string,
-  onClick?: () => MouseEventHandler<HTMLDivElement> | undefined,
+  onClick?: () => any |undefined,
 }
 export const Button = (props: PropsType) => {
   return (

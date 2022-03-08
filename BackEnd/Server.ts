@@ -1,15 +1,22 @@
 import express from "express";
 import next from "next";
-import authRoutes from "./routes/authRoute";
 import cookieparser from "cookie-parser"
+
+import {Server, Socket} from 'socket.io'
+import { createServer } from 'http'
+import SocketIO from "./Utils/SocketIO";
+
 import { ApolloServer } from "apollo-server-express"
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/schemas";
-import mongoose from "mongoose";
+
+import authRoutes from "./routes/authRoute";
+
 const cloudinary = require( 'cloudinary').v2;
+
 import dotenv from 'dotenv';
 import Connect from './Utils/dbConnect'
-import CheckAuth from "./middleware/isAdmin";
+
 dotenv.config();
 const PORT = process.env.PORT || 8000 ;
 const dev = process.env.NODE_ENV !== 'production';
@@ -22,7 +29,9 @@ app
   .prepare()
   .then( async () => {
     const server = express();
-    server.listen(PORT, () => {
+    const httpServer = createServer(server);
+
+    httpServer.listen(PORT, () => {
         console.log(`> Ready on ${PORT}`);
     });
     server.use(express.json({limit: '25mb'}));
@@ -44,9 +53,19 @@ app
     await apollo_server.start();
     apollo_server.applyMiddleware({app: server, path: "/api/graphql"});
     
+    //JWT Auth
     server.use(cookieparser());
     server.use("/auth", authRoutes );
     
+    //Socket IO
+    const io = new Server(httpServer, {
+      cors:{
+        origin: "*",
+        methods: ["GET", "POST"]
+      }
+    })  
+    io.on("connection", (socket: Socket)=>SocketIO(socket, io))
+  
     server.get("*", (req: any, res: any) => {
       return handle(req, res);
     });
