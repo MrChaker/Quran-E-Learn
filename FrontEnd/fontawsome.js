@@ -6,10 +6,10 @@ import {
   faTimes,
   faEnvelope,
   faCare,
-  faCaretDown, faCamera, faCircleNotch, faSpinner
+  faCaretDown, faCamera, faCircleNotch, faSpinner, faMicrophone
 } from "@fortawesome/free-solid-svg-icons";
 
 export const fontAW = () => {
   library.add(faMoon, faSun, faBars, faTimes, faEnvelope,
-    faCaretDown, faCamera, faCircleNotch, faSpinner);
+    faCaretDown, faCamera, faCircleNotch, faSpinner, faMicrophone);
 };

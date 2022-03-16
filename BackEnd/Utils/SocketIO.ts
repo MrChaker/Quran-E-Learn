@@ -1,41 +1,42 @@
 import {Socket, Server} from "socket.io"
 import { DefaultEventsMap } from "socket.io/dist/typed-events"
-import { UserInterface } from "./userInterface";
 
-
+let joinedUsers: {user: string, socketID: string}[] = [];
 
 const SocketIO = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>, io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>): void => {
 
-  socket.on("user joined", async (room: string)=>{
-    socket.join(room);
-    const sockets = await io.in(room).fetchSockets();
-    const joinedUsers: string[] = [];
-    sockets.forEach(s=>{
-      joinedUsers.push(s.id)
-    }); 
-    io.to(room).emit("roomates", joinedUsers)
+  socket.on("send signal", ({signal, userToSignal, from})=>{
+    console.log(userToSignal)
+    io.to(userToSignal.socketID).emit("connenct with joining user",{ signal, joiningUser: from, userConnecting: userToSignal  })
   })
 
-
-  socket.on("user left", async (room)=>{
-    socket.leave(room);
-    io.to(room).emit("userLeft/client", socket.id)
-
-    const sockets = await io.in('room').fetchSockets();
-    const joinedUsers: string[] = [];
-    sockets.forEach(s=>{
-      joinedUsers.push(s.id)
-    }); 
-    
-    io.to(room).emit("roomates", joinedUsers)
+  socket.on('returning signal', ({sg: signal, joiningUser, returnedFrom })=>{
+    io.to(joiningUser.socketID).emit('recieved returning signal', { signal, returnedFrom });
   })
+
+  socket.on("user joined", async ({user, Room})=>{
+    console.log(`Room: ${Room}`)
+    socket.join(Room);
+    joinedUsers.push({user, socketID: socket.id})
+    console.log(joinedUsers)
+    io.to(socket.id).emit("roomates", joinedUsers);
+  })
+
+  /* socket.on("userLeft", async ({id, Room})=>{
+    io.to(Room).emit("roomates", joinedUsers.filter(ju =>{
+      ju.socketID != id
+    }))
+  }) */
 
   socket.emit("me", socket.id)
 
   socket.on("disconnect", ()=>{
-    socket.broadcast.emit("cancelled");
+    joinedUsers = joinedUsers.filter(ju =>
+      ju.socketID != socket.id
+    );
+    io.emit('user left', joinedUsers)
   })
-
+  
   socket.on('callUser', ({userToCall, signalData, from, name })=>{
     io.to(userToCall).emit("callUser/client", {signal: signalData, from, name})
   })

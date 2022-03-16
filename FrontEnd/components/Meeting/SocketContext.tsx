@@ -1,4 +1,4 @@
-import { io } from "socket.io-client"
+import { io, Socket } from "socket.io-client"
 import Peer from "simple-peer"
 import React, { createContext, MutableRefObject, useContext, useEffect, useRef, useState } from "react"
 import { NextPageContext } from "next"
@@ -6,148 +6,145 @@ import Router from "next/router"
 import { UserInterface } from "../../../BackEnd/Utils/userInterface"
 import { UserContext } from "../../../pages/_app"
 
-type CallType = {
-  isReceivingCall: boolean,
-  from: string,
-  name: string,
-  signal: any
-}
+type PeerUser = {user: UserInterface | null , socketID: string}
+
 interface SocketContextType {
-  call: CallType,
-  callAccepted: boolean,
-  myVideo: MutableRefObject<HTMLVideoElement>,
-  userVideo: MutableRefObject<HTMLVideoElement>,
+  teacherPeer: MutableRefObject<Peer.Instance>,
+  teacherVid: MutableRefObject<HTMLVideoElement>,
   stream: MediaStream,
-  name: string,
-  setName: (name: string) => void,
-  callEnded: boolean,
-  me: string,
-  callUser: (id: string) => void,
-  leaveCall: () => void,
-  answerCall: () => void,
-  joined: string[]
+  joined: PeerUser[],
+  peersRef: MutableRefObject<{peerUser: PeerUser,peer: Peer.Instance}[]>,
+  talkingStudent: MutableRefObject<MediaStream>
 }
 export const SocketCtxProvider = createContext<SocketContextType>(null!)
-
 const socket = io(process.env.NEXT_PUBLIC_URL || 'http://localhost:8000');
-console.log(process.env.NEXT_PUBLIC_URL)
+     
+const SocketContext = ( {children, Room, user} : {children: any, Room: string | string[] | undefined, user: UserInterface | null } ) => {
 
-const SocketContext = ( {children, Room} : {children: any, Room: string | null } ) => {
-  const [callAccepted, setCallAccepted] = useState<boolean>(false);
-  const [callEnded, setCallEnded] = useState<boolean>(false);
-  /* {id: string, state: boolean}[] */
-  const [name, setName] = useState('');
 
-  const [call, setCall] = useState<CallType>({
-    isReceivingCall: false,
-    from: '',
-    name: '',
-    signal: null
-  });
-  
-  const [me, setMe] = useState('');
-  const [ stream, setStream ] = useState<MediaStream>(null!);
+  const teacherID = useRef<string | string[] | undefined>(Room?.slice(6));
+  const [joined, setJoined] = useState<PeerUser[]>([]);
 
-  const myVideo = useRef<HTMLVideoElement>(null!)
-  const userVideo = useRef<HTMLVideoElement>(null!);
-  const connectionRef = useRef<Peer.Instance>(null!);
-  const [ joined, setJoined ] = useState<string[]>([null!]);
+  const stream = useRef<MediaStream>(null!);
+  const peersRef = useRef<{peerUser: PeerUser,peer: Peer.Instance}[]>([]);
+  const teacherPeer = useRef<Peer.Instance>(null!);
+  const teacherVid  = useRef<HTMLVideoElement>(null!);
 
-  
+  const talkingStudent = useRef<MediaStream>(null!)
+
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    if( user?._id == teacherID.current  ){
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
       .then((currentStream) => {
-        setStream(currentStream);
-        myVideo.current.srcObject = currentStream;
+        stream.current = currentStream
+        console.log(stream.current)
+        teacherVid.current.srcObject = currentStream;
+        socketLogique();
       });
-
-    socket.emit("user joined", Room)
-    
-    socket.on('roomates', (joinedUsers)=>{
-      console.log(joinedUsers);
-      setJoined(joinedUsers)
-    })
-    
-    socket.on('me', (id) =>{ 
-      setMe(id);
-    });
-    
-    socket.on('callUser/client', ({ from, name: callerName, signal }) => {
-      console.log(from + 'to' + callerName)
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
-    });
-
-    socket.on("userLeft/client", (id)=>{
-      
-    })
-
+    }else{
+      navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+      .then((currentStream) => {
+        stream.current = currentStream;
+        console.log(stream.current)
+        socketLogique();
+      });
+    }
   }, []);
 
-  const answerCall = () => {
-    setCallAccepted(true);
-    const peer = new Peer({ initiator: false, trickle: false, stream });
-    peer.on('signal', (data) => {
-      socket.emit('answerCall', { signal: data, to: call.from });
-    });
+    const socketLogique = ()=>{
+      socket.emit("user joined", {user, Room});
+      
+      socket.on('roomates', (joinedUsers)=>{
+        const peers: Peer.Instance[] = [];
+        joinedUsers.forEach((joinedUser:PeerUser) => {
 
-    peer.on('stream', (currentStream) => {
-      userVideo.current.srcObject = currentStream;
-    });
+            if( joinedUser.user?._id !== user?._id ){
+            const peer = createPeer( {user: user, socketID: socket.id} , stream.current, joinedUser);
+            peersRef.current.push({
+                peerUser: joinedUser,
+                peer,
+            })  
+            peers.push(peer);
+            if ( joinedUser.user?._id == teacherID.current){
+              teacherPeer.current = peer;
+              /* peer.on('stream', stream =>{
+                teacherVid.current.srcObject = stream
+              })  */
+            }
+          }
+        })
+        setJoined(joinedUsers.filter((j: any) => j.user._id !== user?._id))
+      })
+      
+      socket.on("connenct with joining user", ({signal, joiningUser, userConnecting})=>{
+        const peer = addPeer(signal, joiningUser, stream.current, userConnecting);
+        peersRef.current.push({
+            peerUser: joiningUser,
+            peer,
+        });
+        setJoined([...joined, joiningUser])
+      })
 
-    peer.signal(call.signal);
+      socket.on('recieved returning signal', ({signal, returnedFrom})=>{
+        const item = peersRef.current.find(p => p.peerUser.socketID == returnedFrom.socketID );
+        console.log(signal)
+        item?.peer.signal(signal);
+      })
 
-    connectionRef.current = peer;
-  };
+      socket.on("user left", (joinedUsers)=>{
+          setJoined(joinedUsers)
+      })
+    }  
 
-  const callUser = (id: string) => {
+  const createPeer = ( from: PeerUser ,stream: MediaStream, userToSignal: PeerUser)=>{
+
     const peer = new Peer({ initiator: true, trickle: false, stream });
-
-    peer.on('signal', (data) => {
-      socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
-    });
-
-    peer.on('stream', (currentStream) => {
-      userVideo.current.srcObject = currentStream;
-    });
-
-    socket.on('callAccepted', (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
-
-    connectionRef.current = peer;
-  };
-
-  const leaveCall = () => {
-    setCallEnded(true);
     
-    connectionRef.current.destroy();
-    socket.emit("user left",  Room)
-    Router.push("/");
-  };
+    peer.on('signal', (signal) => {
+      socket.emit('send signal', { signal, Room, from, userToSignal });
+    });
 
+    return peer
+  }
+
+  const addPeer = (signal: Peer.SignalData, joiningUser: PeerUser, stream: MediaStream, addTo: PeerUser )=>{
+      const peer = new Peer({
+          initiator: false, 
+          trickle: false,
+          stream,
+      });
+      console.log(stream);
+      peer.on("signal", (sg) => {
+          console.log(sg)
+          socket.emit("returning signal", { sg, joiningUser, returnedFrom: addTo })
+      })
+      
+      peer.signal(signal);
+
+      return peer;
+  }
+  
   return (
     <> 
-    <SocketCtxProvider.Provider value={{
-      call,
-      callAccepted,
-      myVideo,
-      userVideo,
-      stream,
-      name,
-      setName,
-      callEnded,
-      me,
-      callUser,
-      leaveCall,
-      answerCall,
-      joined
-    }}>
-      {children}
-    </SocketCtxProvider.Provider>
-    </>
+      <SocketCtxProvider.Provider value={{
+        
+        teacherPeer,
+
+        teacherVid,
+
+        stream: stream.current,
+        
+        joined,
+
+        peersRef,
+
+        talkingStudent
+      }}>
+        {children}
+      </SocketCtxProvider.Provider>
+      </>
   )
-  
-}
+}  
+
 
 export default SocketContext

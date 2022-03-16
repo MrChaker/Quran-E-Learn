@@ -1,14 +1,36 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useRef} from 'react'
 import { ThemeCentext } from '../../Layouts/layout'
 import { Button } from '../Button'
-import SocketContext, {SocketCtxProvider} from './SocketContext'
+import  {SocketCtxProvider} from './SocketContext'
 const VideoPlayer = () => {
-  const { myVideo, stream, callAccepted, callEnded, userVideo, me, callUser, answerCall, joined, call, leaveCall } = useContext(SocketCtxProvider)
+  const { teacherPeer, teacherVid, joined } = useContext(SocketCtxProvider)
   const {darkTheme} = useContext(ThemeCentext);
+
+  useEffect(() => {
+    if( teacherPeer.current ){
+      teacherPeer.current.on("stream", stream => {
+        teacherVid.current.srcObject = stream;
+      })
+    }
+  }, [teacherPeer, joined]);
 
   return (
   <>
-    <Button
+    <div className='absolute h-screen w-4/5 '>
+      {
+        teacherVid ? 
+        <video ref={teacherVid} muted autoPlay width='100%' height='100%'/> :
+        <div>البث منقطع حاليا</div>
+      }
+    </div>
+  </>)
+}
+
+export default VideoPlayer
+
+
+/* 
+<Button
       color={darkTheme ? "var(--light-color)" : `var(--main-color)`}
       txtColor={darkTheme ? `var(--main-color)` : "var(--light-color)"}
       text="call me"
@@ -49,24 +71,4 @@ const VideoPlayer = () => {
         }
       </div>
     }
-    {
-      stream && 
-      <div className='w-64 h-92 fixed top-[70%] right-10'>
-        <video ref={myVideo} muted autoPlay width='100%' height='100%'/>
-      </div>
-    }
-    {
-      callAccepted && !callEnded && 
-      <div className='w-1/2'>
-        <p 
-          className='absolute text-3xl text-lightColor'
-          onClick={()=>leaveCall()}
-        >X</p>
-        <video ref={userVideo} muted autoPlay width='100%' height='100%'/>
-      </div>
-    }
-
-  </>)
-}
-
-export default VideoPlayer
+*/

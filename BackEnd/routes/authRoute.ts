@@ -71,7 +71,7 @@ authRoute.get('/user', (req, res)=>{
   jwt.verify(req.cookies.jwt,jwtSecret, async (err: any, decodedToken: any )=>{
         if ( err ){
           console.log(err);
-          res.status(402).send({err: "UnAuthenticated"})
+          res.status(401).send({err: "UnAuthenticated"})
         }else{
           const user = await User.findOne({email: decodedToken.email}).catch(err => console.log(err));
           res.status(200).json(user)
