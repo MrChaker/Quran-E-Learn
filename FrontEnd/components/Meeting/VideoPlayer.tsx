@@ -3,9 +3,8 @@ import { ThemeCentext } from '../../Layouts/layout'
 import { Button } from '../Button'
 import  {SocketCtxProvider} from './SocketContext'
 const VideoPlayer = () => {
-  const { teacherPeer, teacherVid, joined } = useContext(SocketCtxProvider)
+  const { teacherPeer, teacherVid, joined, peersRef } = useContext(SocketCtxProvider)
   const {darkTheme} = useContext(ThemeCentext);
-
   useEffect(() => {
     if( teacherPeer.current ){
       teacherPeer.current.on("stream", stream => {
@@ -13,13 +12,23 @@ const VideoPlayer = () => {
       })
     }
   }, [teacherPeer, joined]);
-
+  useEffect(()=>{
+    if(peersRef.current){
+      peersRef.current.forEach(peer=>{
+        peer.peer.on('stream', stream=>{
+          const audio = new Audio();
+          audio.srcObject = stream;
+          audio.play();
+        })
+      })
+    }
+  },[peersRef])
   return (
   <>
     <div className='absolute h-screen w-4/5 '>
       {
         teacherVid ? 
-        <video ref={teacherVid} muted autoPlay width='100%' height='100%'/> :
+        <video ref={teacherVid} autoPlay width='100%' height='100%'/> :
         <div>البث منقطع حاليا</div>
       }
     </div>

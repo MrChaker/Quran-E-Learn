@@ -34,7 +34,7 @@ const SocketContext = ( {children, Room, user} : {children: any, Room: string | 
 
   useEffect(() => {
     if( user?._id == teacherID.current  ){
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         stream.current = currentStream
         console.log(stream.current)
@@ -42,7 +42,7 @@ const SocketContext = ( {children, Room, user} : {children: any, Room: string | 
         socketLogique();
       });
     }else{
-      navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         stream.current = currentStream;
         console.log(stream.current)
