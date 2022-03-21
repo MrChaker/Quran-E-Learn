@@ -1,10 +1,9 @@
 import React, {useContext, useEffect, useRef} from 'react'
-import { Button } from '../Button'
 import  {SocketCtxProvider} from '../../Context/SocketContext'
 
 const VideoPlayer = () => {
 
-  const { teacherPeer, teacherVid, joined, peersRef, teacherID } = useContext(SocketCtxProvider)
+  const { teacherPeer, teacherVid, joined, peersRef } = useContext(SocketCtxProvider)
 
   useEffect(() => {
     if( teacherPeer.current ){
