@@ -1,15 +1,15 @@
 import React, {useContext} from 'react'
-import { ThemeCentext } from '../../Layouts/layout'
+import { useThemeContext } from '../../Context/themeContext'
 import { Button } from '../Button'
-import  {SocketCtxProvider} from './SocketContext'
+import  {SocketCtxProvider} from '../../Context/SocketContext'
 import { UserInterface } from '../../../BackEnd/Utils/userInterface'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Chat = () => {
   const { joined } = useContext(SocketCtxProvider)
-  const {darkTheme} = useContext(ThemeCentext);
+  const {darkTheme} = useThemeContext();
   return (
-    <div className="absolute h-screen w-1/5 p-8 bg-lightColor dark:bg-darkColor">
+    <div className="absolute h-screen w-1/5 p-8 right-0 bg-lightColor dark:bg-darkColor -mt-8">
       <div  className='flex gap-6 justify-start items-center'>
             <div className="rounded-full border-2 border-green-600 w-8 h-8 ml-1 overflow-hidden">
             </div>

@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useContext, useEffect, useRef, useState } from "react";
-import { useMenuContext, useThemeContext } from "../Layouts/layout";
-import { UserContext } from '../../pages/_app'
+import { useContext, useEffect, useState } from "react";
+import { useMenuContext } from "../Context/menuContext";
+import { useThemeContext } from "../Context/themeContext";
+import { UserContext } from '../Context/userContext';
 import { motion, AnimatePresence } from "framer-motion";
 import {Button} from "./Button"
 import Image from "next/image";

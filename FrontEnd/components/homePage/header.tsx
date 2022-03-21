@@ -1,11 +1,11 @@
 
 import Image from "next/image";
-import { ThemeCentext } from "../../Layouts/layout";
+import { useThemeContext } from "../../Context/themeContext";
 import { useContext } from "react";
 import { Button } from "../Button";
 import Link from "next/link";
 export const Header = () => {
-  const { darkTheme } = useContext(ThemeCentext);
+  const { darkTheme } = useThemeContext();
   return (
     <>
       <div

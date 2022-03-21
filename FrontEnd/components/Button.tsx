@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { MouseEventHandler } from "react";
-import { JsxElement } from "typescript";
 import { ReactElement } from 'react';
 
 type PropsType = {

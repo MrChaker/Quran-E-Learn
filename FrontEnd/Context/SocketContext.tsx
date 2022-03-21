@@ -1,15 +1,14 @@
 import { io, Socket } from "socket.io-client"
 import Peer from "simple-peer"
-import React, { createContext, MutableRefObject, useContext, useEffect, useRef, useState } from "react"
-import { NextPageContext } from "next"
-import Router from "next/router"
-import { UserInterface } from "../../../BackEnd/Utils/userInterface"
-import { UserContext } from "../../../pages/_app"
+import React, { createContext, MutableRefObject, useEffect, useRef, useState } from "react"
+
+import { UserInterface } from "../../BackEnd/Utils/userInterface"
+import { UserContext } from "./userContext"
 
 type PeerUser = {user: UserInterface | null , socketID: string}
 
 interface SocketContextType {
-  teacherPeer: MutableRefObject<Peer.Instance>,
+  teacherPeer: MutableRefObject<{peer: Peer.Instance | null, socketID: string | null}>,
   teacherVid: MutableRefObject<HTMLVideoElement>,
   stream: MediaStream,
   joined: PeerUser[],
@@ -27,51 +26,32 @@ const SocketContext = ( {children, Room, user} : {children: any, Room: string | 
 
   const stream = useRef<MediaStream>(null!);
   const peersRef = useRef<{peerUser: PeerUser,peer: Peer.Instance}[]>([]);
-  const teacherPeer = useRef<Peer.Instance>(null!);
+  const teacherPeer = useRef<{peer: Peer.Instance | null , socketID: string | null}>(null!);
   const teacherVid  = useRef<HTMLVideoElement>(null!);
 
   const talkingStudent = useRef<MediaStream>(null!)
 
   useEffect(() => {
-    if( user?._id == teacherID.current  ){
+    
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         stream.current = currentStream
-        console.log(stream.current)
-        teacherVid.current.srcObject = currentStream;
+        if( user?._id == teacherID.current  ){
+          teacherVid.current.srcObject = currentStream;
+        }
         socketLogique();
       });
-    }else{
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
-        stream.current = currentStream;
-        console.log(stream.current)
-        socketLogique();
-      });
-    }
   }, []);
 
     const socketLogique = ()=>{
       socket.emit("user joined", {user, Room});
       
-      socket.on('roomates', (joinedUsers)=>{
-        const peers: Peer.Instance[] = [];
+      socket.on('roomates', ({joinedUsers})=>{
         joinedUsers.forEach((joinedUser:PeerUser) => {
-
-            if( joinedUser.user?._id !== user?._id ){
-            const peer = createPeer( {user: user, socketID: socket.id} , stream.current, joinedUser);
-            peersRef.current.push({
-                peerUser: joinedUser,
-                peer,
-            })  
-            peers.push(peer);
-            if ( joinedUser.user?._id == teacherID.current){
-              teacherPeer.current = peer;
-              /* peer.on('stream', stream =>{
-                teacherVid.current.srcObject = stream
-              })  */
+            if ( joinedUser.user?._id == teacherID.current && joinedUser.user?._id !== user?._id){
+              const peer = createPeer( {user: user, socketID: socket.id} , stream.current, joinedUser);
+              teacherPeer.current = {peer, socketID: joinedUser.socketID}
             }
-          }
         })
         setJoined(joinedUsers.filter((j: any) => j.user._id !== user?._id))
       })
@@ -86,23 +66,41 @@ const SocketContext = ( {children, Room, user} : {children: any, Room: string | 
       })
 
       socket.on('recieved returning signal', ({signal, returnedFrom})=>{
-        const item = peersRef.current.find(p => p.peerUser.socketID == returnedFrom.socketID );
+        /* const item = peersRef.current.find(p => p.peerUser.socketID == returnedFrom.socketID );
         console.log(signal)
-        item?.peer.signal(signal);
+        item?.peer.signal(signal); */
+        teacherPeer.current.peer?.signal(signal);
+        /* stream.current.getVideoTracks().forEach(track =>{
+          track.enabled = false
+        }) */
       })
 
-      socket.on("user left", (joinedUsers)=>{
-          setJoined(joinedUsers)
-      })
+      socket.on("user left", ({joinedUsers, socket})=>{
+          setJoined(joinedUsers.filter((j: any) => j.user._id !== user?._id));
+          const peerToDestroy = peersRef.current.find(peer => peer.peerUser.socketID === socket )
+          peerToDestroy?.peer.destroy();
+          peersRef.current = peersRef.current.filter(peer => peer.peerUser.socketID !== socket );
+          if ( teacherPeer.current.socketID === socket ){
+            teacherPeer.current.peer = null;
+            teacherPeer.current.socketID = null;
+            teacherVid.current = new HTMLVideoElement();
+            
+          }
+        })
     }  
 
   const createPeer = ( from: PeerUser ,stream: MediaStream, userToSignal: PeerUser)=>{
 
-    const peer = new Peer({ initiator: true, trickle: false, stream });
+    const peer = new Peer({ 
+      initiator: true,
+      trickle: false,
+      stream
+       });
     
     peer.on('signal', (signal) => {
       socket.emit('send signal', { signal, Room, from, userToSignal });
     });
+    
 
     return peer
   }
@@ -113,9 +111,7 @@ const SocketContext = ( {children, Room, user} : {children: any, Room: string | 
           trickle: false,
           stream,
       });
-      console.log(stream);
       peer.on("signal", (sg) => {
-          console.log(sg)
           socket.emit("returning signal", { sg, joiningUser, returnedFrom: addTo })
       })
       

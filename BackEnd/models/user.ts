@@ -1,13 +1,23 @@
 import  mongoose, { Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
-
 interface UserModel extends Model<any> {
   loginAPI(email: string, Password: string): any
 }
 
 const UserSchema = new mongoose.Schema({
-    name: String,
-    email: String,
+    name:  {
+        type : String,
+        required : true,
+        unique : true,
+        lowercase : true,
+    },
+    email: {
+        type : String,
+        required : true,
+        unique : true,
+        lowercase : true,
+        validate : /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    },
     image: String,
     oAuthID: String,
     isAdmin: Boolean,

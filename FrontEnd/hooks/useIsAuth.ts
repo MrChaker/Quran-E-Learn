@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Router from 'next/router'
-import { UserInterface } from '../BackEnd/Utils/userInterface'
+import { UserInterface } from '../../BackEnd/Utils/userInterface'
 
 const useIsAuth = () => {
   useEffect(()=>{

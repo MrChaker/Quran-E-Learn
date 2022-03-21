@@ -1,7 +1,12 @@
 import {Socket, Server} from "socket.io"
 import { DefaultEventsMap } from "socket.io/dist/typed-events"
+import {UserInterface} from "./userInterface"
 
-let joinedUsers: {user: string, socketID: string}[] = [];
+let joinedUsers: Map<string, {
+  user: UserInterface | null,
+  socketID: string
+}[] | undefined > = new Map();
+ 
 
 const SocketIO = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>, io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>): void => {
 
@@ -15,26 +20,51 @@ const SocketIO = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEven
   })
 
   socket.on("user joined", async ({user, Room})=>{
-    console.log(`Room: ${Room}`)
+
+    if (!joinedUsers.has(Room)){
+      joinedUsers.set(Room, [{user, socketID: socket.id}] );
+    }else{
+      const users = joinedUsers.get(Room);
+      users?.push({user, socketID: socket.id}) ;
+      joinedUsers.set(Room, users)
+    }
     socket.join(Room);
-    joinedUsers.push({user, socketID: socket.id})
+    
     console.log(joinedUsers)
-    io.to(socket.id).emit("roomates", joinedUsers);
+    io.to(socket.id).emit("roomates", {joinedUsers: joinedUsers.get(Room)});
   })
 
-  /* socket.on("userLeft", async ({id, Room})=>{
-    io.to(Room).emit("roomates", joinedUsers.filter(ju =>{
-      ju.socketID != id
-    }))
-  }) */
-
-  socket.emit("me", socket.id)
-
   socket.on("disconnect", ()=>{
-    joinedUsers = joinedUsers.filter(ju =>
-      ju.socketID != socket.id
-    );
-    io.emit('user left', joinedUsers)
+    console.log(joinedUsers);
+
+    joinedUsers.forEach((users, room)=>{
+      
+      let socketHere: boolean = false;
+      users?.every(u => {
+        if (u.socketID == socket.id){
+          socketHere = true;
+          return false
+        }
+        return true
+      })
+      if( socketHere ){
+        console.log(users);
+        let newRoomUsers: {
+          user: UserInterface | null;
+          socketID: string;
+        }[] = [] ;
+        
+        users?.forEach((user)=>{
+          if(user.socketID !== socket.id){
+            newRoomUsers.push(user)
+          }
+        })
+        joinedUsers.set(room, newRoomUsers);
+        console.log(joinedUsers);
+        io.to(room).emit('user left', {joinedUsers: joinedUsers.get(room), socket: socket.id });
+       
+      }
+    })
   })
   
   socket.on('callUser', ({userToCall, signalData, from, name })=>{

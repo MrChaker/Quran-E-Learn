@@ -1,6 +1,6 @@
 import { UserInterface } from '../../../BackEnd/Utils/userInterface'
-import React, { useEffect, useState } from 'react'
-import { UserContext } from '../../../pages/_app'
+import React, {  useState } from 'react'
+import { UserContext } from '../../Context/userContext'
 import { useContext, useRef } from 'react'
 import Image from 'next/image'
 import { useMutation } from '@apollo/client'

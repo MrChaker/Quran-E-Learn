@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from 'react'
-import SocketContext from '../../FrontEnd/components/Meeting/SocketContext'
+import React, { ReactElement, useContext } from 'react'
+import SocketContext from '../../FrontEnd/Context/SocketContext'
 import VideoPlayer from '../../FrontEnd/components/Meeting/VideoPlayer'
 import Chat from '../../FrontEnd/components/Meeting/Chat'
 
-import useIsAuth from '../../hooks/useIsAuth'
-import { UserContext } from '../_app'
+import useIsAuth from '../../FrontEnd/hooks/useIsAuth'
+import { UserContext } from '../../FrontEnd/Context/userContext'
 import {useRouter} from "next/router"
-const MeetRoom = () => {
+import  MeetLayout  from '../../FrontEnd/Layouts/meetLayout'
+const  MeetRoom = () => {
   useIsAuth();
   const { user } = useContext(UserContext)
   const Router = useRouter();
@@ -23,5 +24,13 @@ const MeetRoom = () => {
     </>
   )
 }
+
+/* MeetRoom.getLayout = function getLayout(page: ReactElement ) {
+  return(
+    <MeetLayout>
+      {page}
+    </MeetLayout>
+  )
+} */
 
 export default MeetRoom

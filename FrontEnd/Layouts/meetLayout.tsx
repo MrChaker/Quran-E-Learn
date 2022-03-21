@@ -1,11 +1,11 @@
-import type { NextPage } from "next";
-import { NavBar } from "../components/Navbar";
-import { useState } from "react";
+import { NextPage } from 'next'
+import React, { useState } from 'react'
 import { ThemeCentext } from "../Context/themeContext";
 import { MenuCentext } from "../Context/menuContext";
+import { NavBar } from '../components/Navbar';
 
 
-export const Layout: NextPage = ({ children }) => {
+const MeetLayout: NextPage = ({children}) => {
   const [menu, setMenu] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
 
@@ -16,7 +16,7 @@ export const Layout: NextPage = ({ children }) => {
           <NavBar />
           <div
             dir="rtl"
-            className=" pt gap-3 overflow-hidden bg-lighterColor px-10 font-main dark:bg-darkColor md:px-20 lg:px-40 "
+            className=" gap-3 overflow-hidden bg-lighterColor px-0 font-main dark:bg-darkColor "
             id="screen"
           >
             {children}
@@ -25,6 +25,6 @@ export const Layout: NextPage = ({ children }) => {
       </ThemeCentext.Provider>
     </>
   );
-};
+}
 
-
+export default MeetLayout
