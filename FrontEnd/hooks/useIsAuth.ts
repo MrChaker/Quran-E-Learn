@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import Router from 'next/router'
-import { UserInterface } from '../../BackEnd/Utils/userInterface'
 
-const useIsAuth = () => {
+const useIsAuth = (onlyAdmin?: { onlyAdmin: Boolean }) => {
   useEffect(()=>{
      const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
-    if ( !storedUser.isAuthenticated ) Router.push('/auth/login');
+    if ( !storedUser.isAuthenticated ) Router.push('/auth/login'); 
+    if ( onlyAdmin?.onlyAdmin && !storedUser.info.roles.admin ){
+      Router.push('/')
+    }
   },[])
 }
 

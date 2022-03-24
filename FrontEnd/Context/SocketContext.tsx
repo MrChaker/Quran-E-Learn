@@ -2,7 +2,7 @@ import { io, Socket } from "socket.io-client"
 import Peer from "simple-peer"
 import React, { createContext, MutableRefObject, useEffect, useRef, useState } from "react"
 
-import { UserInterface } from "../../BackEnd/Utils/userInterface"
+import { UserInterface } from "../../BackEnd/Utils/interfaces/userInterface"
 import { UserContext } from "./userContext"
 
 type PeerUser = {user: UserInterface | null , socketID: string}

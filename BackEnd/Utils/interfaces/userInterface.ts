@@ -4,7 +4,11 @@ export interface UserInterface {
   password: string,
   image: string,
   _id: string,
-  isAdmin: boolean
+  roles:{
+    student: boolean,
+    teacher: boolean,
+    admin: boolean
+  }
 }
 export interface Teacher extends UserInterface{
   

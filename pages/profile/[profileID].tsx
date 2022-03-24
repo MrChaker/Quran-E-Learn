@@ -6,7 +6,7 @@ import { UserContext } from '../../FrontEnd/Context/userContext'
 import {  useQuery } from '@apollo/client'
 import { GET_User } from '../../FrontEnd/graphql/queries'
 import useIsAuth from '../../FrontEnd/hooks/useIsAuth'
-import type { UserInterface } from '../../BackEnd/Utils/userInterface'
+import type { UserInterface } from '../../BackEnd/Utils/interfaces/userInterface'
 import Photo from '../../FrontEnd/components/profile/photo'
 const Profile: NextPage = () => {
   const { user } = useContext(UserContext);

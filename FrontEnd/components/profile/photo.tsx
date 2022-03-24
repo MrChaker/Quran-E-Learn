@@ -1,4 +1,4 @@
-import { UserInterface } from '../../../BackEnd/Utils/userInterface'
+import { UserInterface } from '../../../BackEnd/Utils/interfaces/userInterface'
 import React, {  useState } from 'react'
 import { UserContext } from '../../Context/userContext'
 import { useContext, useRef } from 'react'

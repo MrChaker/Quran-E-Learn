@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { UserInterface } from "../../BackEnd/Utils/userInterface";
+import { UserInterface } from "../../BackEnd/Utils/interfaces/userInterface";
 
 type User = {
   info: UserInterface | null ,

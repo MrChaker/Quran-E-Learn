@@ -1,6 +1,6 @@
 import {Socket, Server} from "socket.io"
 import { DefaultEventsMap } from "socket.io/dist/typed-events"
-import {UserInterface} from "./userInterface"
+import {UserInterface} from "./interfaces/userInterface"
 
 let joinedUsers: Map<string, {
   user: UserInterface | null,

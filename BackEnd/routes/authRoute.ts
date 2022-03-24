@@ -3,7 +3,10 @@ const authRoute = express.Router();
 import jwt, { Secret, JsonWebTokenError } from 'jsonwebtoken';
 import User from "../models/user"
 
-
+authRoute.get('/update', async(req, res)=>{
+  await User.updateMany({},{ $unset: {"isAdmin": 1}}, {multi: true});
+  res.end('hi')
+})
 authRoute.post("/sign", async (req, res)=>{
   console.log(req.body.name)
   const alreadyExistsUser = await User.findOne({ email: req.body.email })
@@ -17,8 +20,8 @@ authRoute.post("/sign", async (req, res)=>{
     email: req.body.email,
     sex: req.body.sex,
     image: req.body.sex == "male" ? '/male.png' : "/female.png",
-    isAdmin: false, 
     password: req.body.password });
+    
   const user = await newUser.save().catch((err: Errback) => {
     console.log("Error: ", err);
     res.status(500).json({ err });

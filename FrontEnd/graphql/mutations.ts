@@ -8,5 +8,16 @@ const UPDATE_Image = gql`
     updateImage(user_id: $user_id, file: $file)
   }
 `
+const CREATE_Request = gql`
+  mutation createRequest(
+    $userID: String,
+    $message: String,
+    $cv: String
+  ){
+    createRequest(userID: $userID, message: $message, cv: $cv){
+      _id
+    }
+  }
+`
 
-export { UPDATE_Image }
+export { UPDATE_Image, CREATE_Request }

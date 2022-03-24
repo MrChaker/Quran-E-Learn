@@ -2,7 +2,6 @@ import React, {useContext} from 'react'
 import { useThemeContext } from '../../Context/themeContext'
 import { Button } from '../Button'
 import  {SocketCtxProvider} from '../../Context/SocketContext'
-import { UserInterface } from '../../../BackEnd/Utils/userInterface'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Chat = () => {

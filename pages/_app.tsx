@@ -5,7 +5,7 @@ import { fontAW } from "../FrontEnd/fontawsome"
 import ApolloProvider from "../FrontEnd/graphql/Apollo"
 import { useState, useEffect, createContext } from "react"
 import axios from 'axios'
-import type { UserInterface } from "../BackEnd/Utils/userInterface"
+import type { UserInterface } from "../BackEnd/Utils/interfaces/userInterface"
 import { AppPropsWithLayout } from '../FrontEnd/Layouts/types'
 import  { UserContext }  from '../FrontEnd/Context/userContext'
 fontAW();

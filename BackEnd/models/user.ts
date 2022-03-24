@@ -20,8 +20,12 @@ const UserSchema = new mongoose.Schema({
     },
     image: String,
     oAuthID: String,
-    isAdmin: Boolean,
-    password: String
+    password: String,
+    roles:{
+        student: { type: Boolean, default: true },
+        teacher:{ type: Boolean, default: false },
+        admin: { type: Boolean, default: false }
+    }
 })
 UserSchema.pre('save', async function(next){
     if( this.password){

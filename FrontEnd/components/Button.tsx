@@ -14,7 +14,7 @@ type PropsType = {
   type?: "button" | "submit" | "reset" | undefined,
   dir?: "rtl" | "ltr" | undefined,
   style?: string,
-  onClick?: () => any |undefined,
+  onClick?: ( prams:any | undefined ) => any | void |undefined,
 }
 export const Button = (props: PropsType) => {
   return (
