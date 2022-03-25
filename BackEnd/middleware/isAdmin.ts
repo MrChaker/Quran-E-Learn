@@ -1,15 +1,20 @@
-import jwt, {Secret} from 'jsonwebtoken'
+import jwt, { Secret} from 'jsonwebtoken'
+import User from '../models/user';
 
 
-const CheckAuth = (req: any , res: any, next: any)=>{
+const CheckAdmin = (req: any , res: any, next: any)=>{
     const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
-    if( req.cookie ){
-        jwt.verify(req.cookies.jwt,jwtSecret, async (err: any )=>{
-            if (err) res.redirect('/auth/login')
-            else next();
-        })
-    }else{
-        res.redirect('/auth/signup')
-    }
+    jwt.verify(req.cookies?.jwt,jwtSecret, async (err: any, decoded: any ) =>{
+        if (err) res.redirect('/')
+        else {
+            const user = await User.findById(decoded.id);
+            if ( user.roles.admin ){
+                next()
+            }else{
+                res.redirect('/')
+            }
+        }
+    })
 }
-export default CheckAuth
+
+export default CheckAdmin

@@ -27,7 +27,7 @@ const Requests = () => {
   }
   return (
     <div className='flex flex-col gap-12'>
-      <h1 className='text-6xl'>لوحة التحكّم</h1>
+      <h1 className='text-5xl'>طلبات الانظمام</h1>
       {
         requests.map((req)=>(
           <Link href={`/admin/requests/${req._id}`}>

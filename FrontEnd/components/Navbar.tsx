@@ -111,10 +111,11 @@ export const NavBar = () => {
 
 
 const NavEl = (props: any) => {
+  const { setMenu } = useMenuContext();
   return (
     <li>
       <Link href={props.link || "#"}>
-        <a>{props.text}</a>
+        <a onClick={()=>setMenu(false)}>{props.text}</a>
       </Link>
     </li>
   );

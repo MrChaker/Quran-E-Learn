@@ -22,7 +22,10 @@ const RequestDetails = () => {
     }
   }, [loading])
   return (
-    <div>{request?.message}</div>
+    <div className='flex flex-col gap-12'>
+      <h1 className="text-5xl">طلب {request?.user.name}</h1>
+      {request?.message}
+    </div>
   )
 }
 RequestDetails.getLayout = function getLayout(page: ReactElement ) {

@@ -32,7 +32,7 @@ const VideoPlayer = () => {
     <div className='absolute h-[500px] w-4/5 left-0 -mt-8 '>
       {
         teacherVid ? 
-        <video ref={teacherVid} autoPlay muted width='100%' height='100%'/> :
+        <video ref={teacherVid} autoPlay width='100%' height='100%'/> :
         <div>البث منقطع حاليا</div>
       }
     </div>

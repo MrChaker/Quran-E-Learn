@@ -16,6 +16,7 @@ const cloudinary = require( 'cloudinary').v2;
 
 import dotenv from 'dotenv';
 import Connect from './Utils/dbConnect'
+import CheckAdmin from "./middleware/isAdmin";
 
 dotenv.config();
 const PORT = process.env.PORT || 8000 ;
@@ -66,6 +67,9 @@ app
     })  
     io.on("connection", (socket: Socket)=>SocketIO(socket, io))
   
+    server.get("/admin*", CheckAdmin, (req: any, res: any) => {
+      return handle(req, res);
+    });
     server.get("*", (req: any, res: any) => {
       return handle(req, res);
     });

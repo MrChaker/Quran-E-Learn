@@ -37,7 +37,11 @@ const GET_Request = gql`
     getRequest(_id: $_id){
       _id
       state
-      user
+      user{
+        _id
+        name
+        email
+      }
       message
       cv
     }
