@@ -21,7 +21,7 @@ const RequestDetails = () => {
     if(data){
       setRequest(data.getRequest);
     }
-    {console.log(request?.cv?.data)}
+    {console.log(request?.cv)}
 
   }, [loading])
 
