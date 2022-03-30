@@ -1,5 +1,6 @@
 import { MutableRefObject } from "react";
 import Swal from "sweetalert2";
+import { ReturnType } from "../../../BackEnd/Utils/authErrors";
 import { InputWithError, SignEvent } from "./types";
 
 
@@ -7,9 +8,10 @@ type DataToPost = {
   name?: string,
   email: string,
   password: string,
+  phone?: string,
   sex?: string
 }
-export const emailSign = async (e: SignEvent, validated: boolean, dataToPost: DataToPost, emailLabel: HTMLLabelElement, API_URL: string )=>{
+export const emailSign = async (e: SignEvent, validated: boolean, dataToPost: DataToPost, API_URL: string , errLabels?: HTMLLabelElement[], failLogLabel?: HTMLLabelElement )=>{
   e.preventDefault();
   if( validated ){
       const res = await fetch(API_URL, {
@@ -22,10 +24,25 @@ export const emailSign = async (e: SignEvent, validated: boolean, dataToPost: Da
 
       const result = await res.json();
       if ( result.err ) { Swal.fire('لقد حدث خطأ ، حاول مرة اخرى') }
-      emailLabel.innerText = result.emailErr || '';
-      if ( result.success ){
-          location.assign('/')
+      result.SignErrors?.forEach((Serr: ReturnType)=>{
+        if ( errLabels )
+          switch(Serr.field){
+            case 'Email':
+              errLabels[0].innerText = Serr.message;
+              break;
+            case 'Name':
+              errLabels[1].innerText = Serr.message;
+              break;
+            case 'Phone':
+              errLabels[2].innerText = Serr.message;
+              break;  
+          }
+      });
+      if ( result.LogError && failLogLabel ){
+        failLogLabel.innerText = result.LogError
       }
+      if(result.success) location.assign('/')
+
   }else{
 
   }
@@ -61,7 +78,7 @@ export const dataIsValid = ( requiredInputs?: InputWithError[], validInputs?: In
     let b = true ;
     requiredInputs?.forEach((RI)=>{
       if ( RI.input.value == '' ){
-        RI.errLabel.innerText = RI.errMessage || 'error' ;
+        RI.errLabel.innerText = RI.errMessage || 'املئ هذه الخانة ' ;
         b = false
       }else{
         RI.errLabel.innerText = '' ;
@@ -70,7 +87,8 @@ export const dataIsValid = ( requiredInputs?: InputWithError[], validInputs?: In
     })
     validInputs?.forEach((VI)=>{
       if ( !VI.options?.validation.test(VI.input.value) ){
-        VI.errLabel.innerText = VI.errMessage || 'error';
+        if( VI.input.value != '')
+          VI.errLabel.innerText = VI.errMessage || 'error';
         b = false 
       }else{
         VI.errLabel.innerText = '' ;

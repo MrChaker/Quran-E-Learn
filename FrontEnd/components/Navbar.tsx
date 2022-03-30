@@ -29,7 +29,7 @@ export const NavBar = () => {
         <ul className="hidden list-none items-center gap-6 text-lg md:flex ">
           <NavEl text="الرّئيسية" />
           <NavEl text="الدّروس" />
-          <NavEl text="شيوخنا" />
+          <NavEl text="شيوخنا" link='/contact/teaching'/>
         </ul>
         
           <div className="flex items-center">
@@ -95,8 +95,8 @@ export const NavBar = () => {
             <NavEl text="الرّئيسية" />
             <NavEl text="تسجيل الدخول" link="/auth/login"/>
             <NavEl text="انشاء حساب" link="/auth/signup"/>
-            <NavEl text="الدّروس" />
-            <NavEl text="شيوخنا" />
+            <NavEl text="الدّروس" link="/lessons/"/>
+            <NavEl text="شيوخنا" link='/contact/teaching'/>
           </ul>
           <FontAwesomeIcon
             icon="times"
@@ -142,11 +142,21 @@ const DropMenu = (props: any) =>{
             <p className="text-lightColor dark:text-darkColor hover:text-semiColor hover:dark:text-semiColor">الحساب</p>
           </a>
           </Link>
+          {
+            user.info?.roles.admin && 
+            <Link  href={`/admin`}>
+            <a>
+              <p className="text-lightColor dark:text-darkColor hover:text-semiColor hover:dark:text-semiColor">لوحة التحكم</p>
+            </a>
+          </Link>
+          }
+
           <div className="bg-lightColor text-sm dark:bg-darkColor rounded-lg p-2  h-fit cursor-pointer"
             onClick={logout}
           >
             تسجيل الخروج
           </div>
+
         </motion.div>
       }
     </AnimatePresence>

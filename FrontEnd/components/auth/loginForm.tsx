@@ -8,7 +8,6 @@ const LoginForm = () => {
   const formRef = useRef<HTMLFormElement>(null!);
   const email = useRef<HTMLLabelElement>(null!);
   const pass = useRef<HTMLLabelElement>(null!);
-
   const [ passValid, setPassValid ] = useState(false);
 
   return (
@@ -33,8 +32,9 @@ const LoginForm = () => {
               email: event.target?.email.value,
               password: event.target?.password.value
             },
-            email.current,
-            '/auth/loginAPI'
+            '/auth/loginAPI',
+            undefined,
+            pass.current
           ) 
       }
       ref={formRef}
@@ -48,7 +48,7 @@ const LoginForm = () => {
                 }))
                }
             />
-            <label htmlFor="passErr" ref={pass}>ff</label>
+            <label htmlFor="passErr" ref={pass}></label>
             <Button
               color = { !darkTheme ? "var(--main-color)" : "var(--light-color)" }
               txtColor={ darkTheme ? "var(--main-color)" : "var(--light-color)" }

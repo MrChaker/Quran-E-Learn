@@ -13,11 +13,12 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type : String,
-        required : true,
-        unique : true,
+        required : true, // handled in frontEnd
+        unique : true, // handle here
         lowercase : true,
-        validate : /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        validate : /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ // handdled in frontEnd
     },
+    phone: { type : String, validate: /[0-9]{10}/} ,
     image: String,
     oAuthID: String,
     password: String,

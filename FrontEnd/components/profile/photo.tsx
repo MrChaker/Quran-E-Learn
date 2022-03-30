@@ -43,6 +43,7 @@ const Photo = (props: PropsType) => {
       }
     }
   }
+  
 
   return (
     <div className="rounded-full w-64 h-64 border border-darkColor dark:border-lightColor relative overflow-hidden" 
@@ -65,7 +66,6 @@ const Photo = (props: PropsType) => {
             //check if authed user is on his profile to allow him make changes
             user.info?._id == props.profileID &&
             <div className={` ${visibility} bg-darkColor dark:bg-lightColor opacity-90 absolute w-full h-full rounded-full filter `}
-              /* onClick={} */
             >
               <div className="absolute flex flex-col items-center justify-center gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer">
                 <FontAwesomeIcon  icon="camera" size='2x' color='var(--semi-color)'/>
@@ -73,7 +73,9 @@ const Photo = (props: PropsType) => {
                 <p className=' text-2xl text-lightColor dark:text-darkColor ' >تغيير الصورة</p>
               </div>
               <form encType="multipart/form-data">
-                <input className='file:absolute file:w-full file:h-full file:transparent file:top-0 file:right-0 file:bg-darkColor file:opacity-10 file:cursor-pointer file:rounded-full file:text-transparent text-transparent' type='file' name='image' ref={image} onChange={()=>uploadImage(image.current.files?.item(0))}
+                <input className='file:absolute file:w-full file:h-full file:transparent file:top-0 file:right-0 file:bg-darkColor file:opacity-10 file:cursor-pointer file:rounded-full file:text-transparent text-transparent' type='file' name='image' ref={image} onChange={()=>{
+                  uploadImage(image.current.files?.item(0));
+                }}
                 />
               </form>
             </div>

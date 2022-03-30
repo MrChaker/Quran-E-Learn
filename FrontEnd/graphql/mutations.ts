@@ -12,7 +12,7 @@ const CREATE_Request = gql`
   mutation createRequest(
     $userID: String,
     $message: String,
-    $cv: String
+    $cv: String,
   ){
     createRequest(userID: $userID, message: $message, cv: $cv){
       _id

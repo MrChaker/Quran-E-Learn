@@ -3,10 +3,12 @@ import React, { ReactElement } from 'react'
 
 const SideBar: React.FC = ({children}) => {
   return (
-    <div className='h-screen bg-darkColor min-w-[80px] md:min-w-[260px] py-6 text-lightColor text-2xl relative '>
+    <div className='min-h-screen bg-darkColor min-w-[80px] md:min-w-[260px] py-6 text-lightColor text-2xl relative '>
       <div className="fixed w-[80px] md:w-[260px] flex flex-col justify-start items-center h-full">
         <div className="logo text-2xl pb-4 mb-6 border-b border-semiColor">
+          <Link href='/'><a>
           Quran
+          </a></Link>
         </div>
         <div className="w-full">
           <div className='flex flex-col '>

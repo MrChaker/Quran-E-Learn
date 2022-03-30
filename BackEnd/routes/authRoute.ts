@@ -2,25 +2,30 @@ import express, { Errback } from "express";
 const authRoute = express.Router();
 import jwt, { Secret, JsonWebTokenError } from 'jsonwebtoken';
 import User from "../models/user"
+import {uniqueValidator} from '../Utils/authErrors'
+
 
 authRoute.get('/update', async(req, res)=>{
-  await User.updateMany({},{ $unset: {"isAdmin": 1}}, {multi: true});
+  await User.updateMany({},{ phone: '0669215342'});
   res.end('hi')
 })
 authRoute.post("/sign", async (req, res)=>{
-  console.log(req.body.name)
-  const alreadyExistsUser = await User.findOne({ email: req.body.email })
-  console.log(alreadyExistsUser)
-  if (alreadyExistsUser) {
-    return res.status(409).json({ emailErr: "لقد تم التسجيل بهذا الايميل من قبل" });
+  
+  const hasToBeUnique = await uniqueValidator({
+    email: req.body.email,
+    name: req.body.name
+  }, User)
+  if (hasToBeUnique){
+    res.status(400).json( {SignErrors: hasToBeUnique} )
   }
-
   const newUser = new User({ 
     name: req.body.name,
     email: req.body.email,
     sex: req.body.sex,
     image: req.body.sex == "male" ? '/male.png' : "/female.png",
-    password: req.body.password });
+    password: req.body.password,
+    phone: req.body.phone
+  });
     
   const user = await newUser.save().catch((err: Errback) => {
     console.log("Error: ", err);
@@ -43,11 +48,11 @@ authRoute.post("/loginAPI", async (req, res) => {
   if (!user)
     return res
       .status(400)
-      .json({ failure: "البيانات خاطئة ، أعد المحاولة" });
+      .json({ LogError: "البيانات خاطئة ، أعد المحاولة" });
 
   const userLog = await User.loginAPI(email, password).catch((error: Error) =>{
     console.log(error);
-    return res.status(400).json({ failure: "البيانات خاطئة ، أعد المحاولة" });
+    return res.status(400).json({ LogError: "البيانات خاطئة ، أعد المحاولة" });
   })
   const jwtSecret: Secret = process.env.JWT_SECRET || '' ;
 

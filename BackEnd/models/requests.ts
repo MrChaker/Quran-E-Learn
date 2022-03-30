@@ -7,7 +7,10 @@ const RequestSchema = new mongoose.Schema({
       ref: User
     },
     message: String,
-    cv: String,
+    cv: {
+      data:  String,
+      fileType: String
+    },
     state: {
       type: String,
       enum: ['Waiting', 'Accepted', 'Declined'],

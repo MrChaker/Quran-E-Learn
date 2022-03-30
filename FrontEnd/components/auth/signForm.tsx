@@ -1,7 +1,8 @@
-import React, {  useRef, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 import { useThemeContext } from '../../Context/themeContext';
 import { Button } from '../Button';
 import { emailSign,  CheckLength, dataIsValid, CheckPass } from './functions';
+import { InputWithError } from './types';
 
 const SignForm = () => {
   const { darkTheme } = useThemeContext();
@@ -9,35 +10,73 @@ const SignForm = () => {
   const c_pass = useRef<HTMLLabelElement>(null!);
   const name = useRef<HTMLLabelElement>(null!);
   const email = useRef<HTMLLabelElement>(null!);
+  const phone = useRef<HTMLLabelElement>(null!);
   const pass = useRef<HTMLLabelElement>(null!);
 
   const [ passValidLength, setPassValidLength ] = useState(false);
   const [ passEqual, setPassEqual ] = useState(false);
 
+  const requiredInputs = useRef<InputWithError[]>([])
+  const validationInputs = useRef<InputWithError[]>([])
 
+   useEffect(()=>{
+    requiredInputs.current = [{
+      input: formRef.current.email,
+      errLabel: email.current
+     },
+     {
+      input: formRef.current.Name,
+      errLabel: name.current
+     },
+     {
+      input: formRef.current.phone,
+      errLabel: phone.current
+     },
+     {
+      input: formRef.current.password,
+      errLabel: pass.current
+     },
+     {
+      input: formRef.current.c_password,
+      errLabel: c_pass.current
+     }];
+
+     validationInputs.current = [{
+      input: formRef.current.email,
+      errLabel: email.current,
+      options: { validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ },
+      errMessage: "ادخل ايميل صحيح من فضلك"
+     },
+    {
+      input: formRef.current.phone,
+      errLabel: phone.current,
+      options: {validation: /0+[5-6-7]+[0-9]{8}$/},
+      errMessage: "ادخل رقم صحيح من فضلك"
+    },{
+      input: formRef.current.Name,
+      errLabel: name.current,
+      errMessage: 'الاسم يجب ان يحتوي على احرف فقط',
+      options: {validation: /^([^0-9]*)$/},
+    }]
+   },[])
   return (
-    <form 
+    <form className='pb-10'
           dir="rtl" 
           onSubmit={
             (event: any) => emailSign( 
                 event,
-                dataIsValid([{
-                  input: formRef.current.email,
-                  errLabel: email.current
-                 }],
-                 [{
-                  input: formRef.current.email,
-                  errLabel: email.current,
-                  options: { validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ }
-                 }]) && passValidLength && passEqual ,
+                dataIsValid(requiredInputs.current,
+                validationInputs.current,
+                ) && passValidLength && passEqual ,
                 {
                   name: event.target?.Name.value,
                   email: event.target?.email.value,
                   password: event.target?.password.value,
+                  phone: event.target?.phone.value,
                   sex: event.target?.sex.value
                 },
-                email.current,
-                '/auth/sign'
+                '/auth/sign',
+                [email.current, name.current]
               ) 
           }
           ref={formRef}
@@ -47,6 +86,8 @@ const SignForm = () => {
             <label htmlFor="nameErr" ref={name}></label>
             <input type="text" placeholder="الايميل" name="email"/>
             <label htmlFor="emailErr" ref={email}></label>
+            <input type="text" placeholder="رقم الهاتف" name="phone"/>
+            <label htmlFor="phoneErr" ref={phone}></label>
             <input type="password" placeholder="كلمة السّر" name="password" onChange={
                 () => setPassValidLength(CheckLength({
                   input: formRef.current.password,

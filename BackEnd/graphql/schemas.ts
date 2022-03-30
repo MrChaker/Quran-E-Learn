@@ -22,6 +22,7 @@ const typeDefs = gql`
     Accepted
     Declined
   }
+
   type RequestType{
     _id: String,
     user: UserType,
