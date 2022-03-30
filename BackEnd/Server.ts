@@ -52,7 +52,7 @@ app
       resolvers
     });
     await apollo_server.start();
-    apollo_server.applyMiddleware({app: server, path: "/api/graphql"});
+    apollo_server.applyMiddleware({app: server, path: "*/api/graphql"});
     
     //JWT Auth
     server.use(cookieparser());
