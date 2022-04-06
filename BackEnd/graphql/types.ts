@@ -1,11 +1,12 @@
-export type ImageArgs ={
-  user_id: string,
-  file: string,
-  public_id: string
-}
+import { UserInterface } from '../Utils/interfaces/userInterface';
 
 export type RequestType = {
-  userID: string,
-  message: string,
-  cv: string
-}
+  userID: string;
+  message: string;
+  cv: string;
+};
+
+export type UserUpdateArgs = {
+  _id: string;
+  query: UserInterface;
+};

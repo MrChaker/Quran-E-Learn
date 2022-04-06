@@ -84,7 +84,6 @@ const SocketContext = ( {children, Room, user} : {children: any, Room: string | 
             teacherPeer.current.peer = null;
             teacherPeer.current.socketID = null;
             teacherVid.current = new HTMLVideoElement();
-            
           }
         })
     }  

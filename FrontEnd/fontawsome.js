@@ -1,4 +1,4 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
+import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faMoon,
   faSun,
@@ -6,10 +6,30 @@ import {
   faTimes,
   faEnvelope,
   faCare,
-  faCaretDown, faCamera, faCircleNotch, faSpinner, faMicrophone, faUserGraduate
-} from "@fortawesome/free-solid-svg-icons";
+  faCaretDown,
+  faCamera,
+  faCircleNotch,
+  faSpinner,
+  faMicrophone,
+  faUserGraduate,
+  faUp,
+  faUploDown,
+  faDownload,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const fontAW = () => {
-  library.add(faMoon, faSun, faBars, faTimes, faEnvelope,
-    faCaretDown, faCamera, faCircleNotch, faSpinner, faMicrophone, faUserGraduate);
+  library.add(
+    faMoon,
+    faSun,
+    faBars,
+    faTimes,
+    faEnvelope,
+    faCaretDown,
+    faCamera,
+    faCircleNotch,
+    faSpinner,
+    faMicrophone,
+    faUserGraduate,
+    faDownload
+  );
 };

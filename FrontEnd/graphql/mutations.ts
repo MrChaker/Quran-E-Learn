@@ -1,23 +1,27 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
-const UPDATE_Image = gql`
-  mutation updateImage(
-    $user_id: String!
-    $file: String!,
-  ){
-    updateImage(user_id: $user_id, file: $file)
+const UPDATE_User = gql`
+  mutation updateUser($_id: String!, $query: UserInput!) {
+    updateUser(_id: $_id, query: $query) {
+      _id
+      email
+    }
   }
-`
+`;
+const DELETE_User = gql`
+  mutation deleteUser($_id: String!) {
+    updateUser(_id: $_id) {
+      _id
+      email
+    }
+  }
+`;
 const CREATE_Request = gql`
-  mutation createRequest(
-    $userID: String,
-    $message: String,
-    $cv: String,
-  ){
-    createRequest(userID: $userID, message: $message, cv: $cv){
+  mutation createRequest($userID: String, $message: String, $cv: String) {
+    createRequest(userID: $userID, message: $message, cv: $cv) {
       _id
     }
   }
-`
+`;
 
-export { UPDATE_Image, CREATE_Request }
+export { CREATE_Request, UPDATE_User, DELETE_User };

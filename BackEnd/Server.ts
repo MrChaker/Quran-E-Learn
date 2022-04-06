@@ -1,25 +1,25 @@
-import express from "express";
-import next from "next";
-import cookieparser from "cookie-parser"
+import express from 'express';
+import next from 'next';
+import cookieparser from 'cookie-parser';
 
-import {Server, Socket} from 'socket.io'
-import { createServer } from 'http'
-import SocketIO from "./Utils/SocketIO";
+import { Server, Socket } from 'socket.io';
+import { createServer } from 'http';
+import SocketIO from './Utils/SocketIO';
 
-import { ApolloServer } from "apollo-server-express"
-import resolvers from "./graphql/resolvers";
-import typeDefs from "./graphql/schemas";
+import { ApolloServer } from 'apollo-server-express';
+import resolvers from './graphql/resolvers/resolvers';
+import typeDefs from './graphql/schemas/schemas';
 
-import authRoutes from "./routes/authRoute";
+import authRoutes from './routes/authRoute';
 
-const cloudinary = require( 'cloudinary').v2;
+const cloudinary = require('cloudinary').v2;
 
 import dotenv from 'dotenv';
-import Connect from './Utils/dbConnect'
-import CheckAdmin from "./middleware/isAdmin";
+import Connect from './Utils/dbConnect';
+import CheckAdmin from './middleware/isAdmin';
 
 dotenv.config();
-const PORT = process.env.PORT || 8000 ;
+const PORT = process.env.PORT || 8000;
 const dev = process.env.NODE_ENV !== 'production';
 
 const app = next({ dev });
@@ -28,16 +28,16 @@ const handle = app.getRequestHandler();
 Connect();
 app
   .prepare()
-  .then( async () => {
+  .then(async () => {
     const server = express();
     const httpServer = createServer(server);
 
     httpServer.listen(PORT, () => {
-        console.log(`> Ready on ${PORT}`);
+      console.log(`> Ready on ${PORT}`);
     });
-    server.use(express.json({limit: '25mb'}));
-    server.use(express.urlencoded({extended: true, limit: '25mb'}));
-    
+    server.use(express.json({ limit: '25mb' }));
+    server.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
     // cloudinary for Image storing
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -49,34 +49,32 @@ app
     //Apollo for GrapqhQL
     const apollo_server = new ApolloServer({
       typeDefs,
-      resolvers
+      resolvers,
     });
     await apollo_server.start();
-    apollo_server.applyMiddleware({app: server, path: "*/api/graphql"});
-    
+    apollo_server.applyMiddleware({ app: server, path: '*/api/graphql' });
+
     //JWT Auth
     server.use(cookieparser());
-    server.use("/auth", authRoutes );
-    
+    server.use('/auth', authRoutes);
+
     //Socket IO
     const io = new Server(httpServer, {
-      cors:{
-        origin: "*",
-        methods: ["GET", "POST"]
-      }
-    })  
-    io.on("connection", (socket: Socket)=>SocketIO(socket, io))
-  
-    server.get("/admin*", CheckAdmin, (req: any, res: any) => {
-      return handle(req, res);
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+      },
     });
-    server.get("*", (req: any, res: any) => {
-      return handle(req, res);
-    });
+    io.on('connection', (socket: Socket) => SocketIO(socket, io));
 
-    
+    server.get('/admin*', CheckAdmin, (req: any, res: any) => {
+      return handle(req, res);
+    });
+    server.get('*', (req: any, res: any) => {
+      return handle(req, res);
+    });
   })
-  .catch((ex: any ) => {
+  .catch((ex: any) => {
     console.error(ex.stack);
     process.exit(1);
   });

@@ -1,50 +1,47 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 const GET_User = gql`
-  query getUser(
-    $_id: String!
-  ){
-    getUser( _id: $_id){
+  query getUser($_id: String!) {
+    getUser(_id: $_id) {
       name
       image
     }
   }
-`
+`;
 const GET_DocCount = gql`
-  query{
-     getCount {
+  query {
+    getCount {
       students
       teachers
     }
   }
-`
+`;
 const GET_Requests = gql`
-  query{
-    getRequests{
+  query {
+    getRequests {
       _id
-      user{
+      user {
         _id
         name
       }
       state
     }
   }
-`
+`;
 const GET_Request = gql`
-  query getRequest(
-    $_id: String!
-  ){
-    getRequest(_id: $_id){
+  query getRequest($_id: String!) {
+    getRequest(_id: $_id) {
       _id
       state
-      user{
+      user {
         _id
         name
         email
+        phone
       }
       message
       cv
     }
   }
-`
-export { GET_User, GET_DocCount, GET_Request, GET_Requests }
+`;
+export { GET_User, GET_DocCount, GET_Request, GET_Requests };
