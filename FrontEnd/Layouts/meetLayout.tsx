@@ -1,11 +1,10 @@
-import { NextPage } from 'next'
-import React, { useState } from 'react'
-import { ThemeCentext } from "../Context/themeContext";
-import { MenuCentext } from "../Context/menuContext";
-import { NavBar } from '../components/Navbar';
+import { NextPage } from 'next';
+import React, { useState } from 'react';
+import { ThemeCentext } from '../Context/themeContext';
+import { MenuCentext } from '../Context/menuContext';
+import { NavBar } from '../components/general/Navbar';
 
-
-const MeetLayout: NextPage = ({children}) => {
+const MeetLayout: NextPage = ({ children }) => {
   const [menu, setMenu] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
 
@@ -25,6 +24,6 @@ const MeetLayout: NextPage = ({children}) => {
       </ThemeCentext.Provider>
     </>
   );
-}
+};
 
-export default MeetLayout
+export default MeetLayout;

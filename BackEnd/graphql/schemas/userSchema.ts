@@ -1,28 +1,28 @@
-export const userSchema = `
-  type UserType {
+const roles = `
+    student: Boolean
+    teacher: Boolean
+    admin: Boolean
+`;
+const UserInterface = `
     name: String
-    _id: String
     email: String
     image: String
     phone: String
+`;
+export const userSchema = `
+  type UserType {
+    _id: String
+    ${UserInterface}
     roles: Roles
   }
   type Roles {
-    student: Boolean
-    teacher: Boolean
-    admin: Boolean
+    ${roles}
   }
   input RolesInput {
-    student: Boolean
-    teacher: Boolean
-    admin: Boolean
+    ${roles}
   }
   input UserInput {
-    name: String
-    email: String
-    passwoed: String
-    phone: String
-    image: String
+    ${UserInterface}
     roles: RolesInput
   }
   
@@ -34,6 +34,7 @@ export const userSchema = `
 `;
 export const userQueries = `
     getUser(_id: String): UserType
+    getUsers(query: UserInput): [UserType]
     getCount: DocCount
 `;
 

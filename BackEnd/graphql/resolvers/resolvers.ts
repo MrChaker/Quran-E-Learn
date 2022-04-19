@@ -1,9 +1,21 @@
-import { getUser, getCount, updateUser, deleteUser } from './userResolver';
-import { getRequests, getRequest, createRequest } from './requestResolver';
+import {
+  getUser,
+  getCount,
+  updateUser,
+  deleteUser,
+  getUsers,
+} from './userResolver';
+import {
+  getRequests,
+  getRequest,
+  createRequest,
+  handleRequest,
+} from './requestResolver';
 
 const resolvers = {
   Query: {
     getUser,
+    getUsers,
     getCount,
     getRequests,
     getRequest,
@@ -12,6 +24,7 @@ const resolvers = {
     updateUser,
     deleteUser,
     createRequest,
+    handleRequest,
   },
 };
 

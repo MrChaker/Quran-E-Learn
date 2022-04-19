@@ -5,8 +5,3 @@ export type RequestType = {
   message: string;
   cv: string;
 };
-
-export type UserUpdateArgs = {
-  _id: string;
-  query: UserInterface;
-};

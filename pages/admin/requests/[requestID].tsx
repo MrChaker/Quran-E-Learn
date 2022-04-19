@@ -1,11 +1,14 @@
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { useMutation, useQuery } from '@apollo/client';
+import { Router, useRouter } from 'next/router';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Request } from '../../../BackEnd/Utils/interfaces/reqInterface';
 import { GET_Request } from '../../../FrontEnd/graphql/queries';
 import AdminLayout from '../../../FrontEnd/Layouts/adminLayout';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../../../FrontEnd/components/general/Button';
+import { HANDLE_Request } from '../../../FrontEnd/graphql/mutations';
+import Swal from 'sweetalert2';
 
 const RequestDetails = () => {
   const Router = useRouter();
@@ -16,7 +19,6 @@ const RequestDetails = () => {
       _id: requestID,
     },
   });
-  const [file, setFile] = useState<File>();
   const [request, setRequest] = useState<Request>();
   useEffect(() => {
     if (data) {
@@ -27,6 +29,29 @@ const RequestDetails = () => {
     }
   }, [loading]);
 
+  const [handleRequest] = useMutation(HANDLE_Request);
+
+  const handlingReq = (id: string, accept: boolean, userID?: string) => {
+    Swal.fire({
+      icon: 'question',
+      text: `${accept ? 'تأكيد الموافقة' : 'تأكيد الرفض'} `,
+      confirmButtonText: 'تأكيد',
+      confirmButtonColor: '#0e0',
+      showDenyButton: true,
+      denyButtonText: ' الغاء',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRequest({
+          variables: {
+            _id: id,
+            accepted: accept,
+            userID,
+          },
+        });
+        Router.back();
+      }
+    });
+  };
   return (
     <div className="flex flex-col gap-12 text-2xl">
       <h1 className="text-5xl">طلب انظمام لطاقم المعلمين</h1>
@@ -45,6 +70,20 @@ const RequestDetails = () => {
         <h3 className="text-3xl mb-4">الرسالة المرفقة</h3>
         {request?.message}
       </p>
+      <div className="flex gap-8">
+        <Button
+          text="قبول الطلب"
+          color="#0e0"
+          onClick={() =>
+            handlingReq(request?._id || '', true, request?.user._id)
+          }
+        />
+        <Button
+          text="رفض الطلب"
+          color="red"
+          onClick={() => handlingReq(request?._id || '', false)}
+        />
+      </div>
     </div>
   );
 };

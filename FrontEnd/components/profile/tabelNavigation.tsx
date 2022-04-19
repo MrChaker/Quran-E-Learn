@@ -17,7 +17,7 @@ const TabelNavigation = (props: PropsType) => {
     setContent(props.navElements[index].content);
   };
   return (
-    <div className="p-4 ">
+    <div className="p-4 w-full">
       <ul className="flex list-none gap-1 sm:gap-5">
         {props.navElements.map((el, i) => (
           <li
@@ -25,7 +25,7 @@ const TabelNavigation = (props: PropsType) => {
             onClick={() => {
               handleNavChange(i);
             }}
-            className={`cursor-pointer p-4 text-sm sm:text-xl sm:min-w-[100px] text-center rounded-lg ${
+            className={`cursor-pointer p-4 text-sm  sm:text-2xl sm:min-w-[100px] text-center rounded-lg ${
               active == i || hovered == i
                 ? 'bg-darkColor dark:bg-lightColor text-lightColor dark:text-darkColor  '
                 : ''

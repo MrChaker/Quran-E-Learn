@@ -1,11 +1,11 @@
 import mongoose, { Model } from 'mongoose';
+
 import bcrypt from 'bcryptjs';
-import Request from './requests';
-interface UserModel extends Model<any> {
+export interface UserModel extends Model<any> {
   loginAPI(email: string, Password: string): any;
 }
 
-const UserSchema = new mongoose.Schema({
+export const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -28,6 +28,7 @@ const UserSchema = new mongoose.Schema({
     admin: { type: Boolean, default: false },
   },
 });
+
 UserSchema.pre('save', async function (next) {
   if (this.password) {
     const salt = await bcrypt.genSalt();

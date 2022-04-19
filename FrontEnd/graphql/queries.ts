@@ -8,6 +8,21 @@ const GET_User = gql`
     }
   }
 `;
+const GET_AllUsers = gql`
+  query getUsers($query: UserInput) {
+    getUsers(query: $query) {
+      _id
+      name
+      email
+      roles {
+        admin
+        teacher
+        student
+      }
+      phone
+    }
+  }
+`;
 const GET_DocCount = gql`
   query {
     getCount {
@@ -44,4 +59,4 @@ const GET_Request = gql`
     }
   }
 `;
-export { GET_User, GET_DocCount, GET_Request, GET_Requests };
+export { GET_User, GET_DocCount, GET_Request, GET_Requests, GET_AllUsers };

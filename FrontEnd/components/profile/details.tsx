@@ -1,22 +1,29 @@
 import React from 'react';
+import { PropsType } from './photo';
 import ProfileInfo from './profileInfo';
 import TabelNavigation from './tabelNavigation';
 
-const ProfileDetails = () => {
+const ProfileDetails = (props: PropsType) => {
   return (
     <TabelNavigation
       navElements={[
         {
           title: 'المعلومات',
-          content: <ProfileInfo />,
+          content: (
+            <ProfileInfo
+              user={props.user}
+              profileID={props.profileID}
+              loading={props.loading}
+            />
+          ),
         },
         {
           title: 'الاعدادات',
-          content: <ProfileInfo />,
+          content: <div />,
         },
         {
           title: 'الال',
-          content: <ProfileInfo />,
+          content: <div />,
         },
       ]}
     />

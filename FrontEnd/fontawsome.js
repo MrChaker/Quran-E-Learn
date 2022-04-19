@@ -12,9 +12,8 @@ import {
   faSpinner,
   faMicrophone,
   faUserGraduate,
-  faUp,
-  faUploDown,
   faDownload,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAW = () => {
@@ -30,6 +29,7 @@ export const fontAW = () => {
     faSpinner,
     faMicrophone,
     faUserGraduate,
-    faDownload
+    faDownload,
+    faUpload
   );
 };

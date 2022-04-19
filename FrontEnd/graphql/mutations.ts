@@ -10,9 +10,8 @@ const UPDATE_User = gql`
 `;
 const DELETE_User = gql`
   mutation deleteUser($_id: String!) {
-    updateUser(_id: $_id) {
+    deleteUser(_id: $_id) {
       _id
-      email
     }
   }
 `;
@@ -24,4 +23,10 @@ const CREATE_Request = gql`
   }
 `;
 
-export { CREATE_Request, UPDATE_User, DELETE_User };
+const HANDLE_Request = gql`
+  mutation handleRequest($_id: String!, $accepted: Boolean!, $userID: String) {
+    handleRequest(_id: $_id, accepted: $accepted, userID: $userID)
+  }
+`;
+
+export { CREATE_Request, UPDATE_User, DELETE_User, HANDLE_Request };

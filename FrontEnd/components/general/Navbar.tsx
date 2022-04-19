@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import { useMenuContext } from '../Context/menuContext';
-import { useThemeContext } from '../Context/themeContext';
-import { UserContext } from '../Context/userContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useMenuContext } from '../../Context/menuContext';
+import { useThemeContext } from '../../Context/themeContext';
+import { UserContext } from '../../Context/userContext';
 import { Button } from './Button';
+import DropMenu from './dropMenu';
 import Image from 'next/image';
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
@@ -123,50 +123,6 @@ const NavEl = (props: any) => {
         <a onClick={() => setMenu(false)}>{props.text}</a>
       </Link>
     </li>
-  );
-};
-
-const DropMenu = (props: any) => {
-  const logout = (): void => {
-    location.assign('/auth/logout');
-  };
-  const { user } = useContext(UserContext);
-  return (
-    <AnimatePresence>
-      {props.isOn && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0 }}
-          className=" absolute rounded-lg p-4 dark:bg-lightColor bg-darkColor h-36 w-36 opacity-80 flex flex-col items-center justify-between text-lg "
-          style={{ left: props.left, top: props.top }}
-        >
-          <Link href={`/profile/${user.info?._id}`}>
-            <a>
-              <p className="text-lightColor dark:text-darkColor hover:text-semiColor hover:dark:text-semiColor">
-                الحساب
-              </p>
-            </a>
-          </Link>
-          {user.info?.roles?.admin && (
-            <Link href={`/admin`}>
-              <a>
-                <p className="text-lightColor dark:text-darkColor hover:text-semiColor hover:dark:text-semiColor">
-                  لوحة التحكم
-                </p>
-              </a>
-            </Link>
-          )}
-
-          <div
-            className="bg-lightColor text-sm dark:bg-darkColor rounded-lg p-2  h-fit cursor-pointer"
-            onClick={logout}
-          >
-            تسجيل الخروج
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useThemeContext } from '../../Context/themeContext';
-import { Button } from '../Button';
+import { Button } from '../general/Button';
 import { emailSign,  CheckLength, dataIsValid } from './functions';
 const LoginForm = () => {
   const { darkTheme } = useThemeContext();

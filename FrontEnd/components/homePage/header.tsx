@@ -1,9 +1,8 @@
-
-import Image from "next/image";
-import { useThemeContext } from "../../Context/themeContext";
-import { useContext } from "react";
-import { Button } from "../Button";
-import Link from "next/link";
+import Image from 'next/image';
+import { useThemeContext } from '../../Context/themeContext';
+import { useContext } from 'react';
+import { Button } from '../general/Button';
+import Link from 'next/link';
 export const Header = () => {
   const { darkTheme } = useThemeContext();
   return (
@@ -20,14 +19,18 @@ export const Header = () => {
             "خيركم من تعلّم القرآن و علّمه"
           </p>
           <Link href="/auth/signup">
-            <a><Button
-              color={darkTheme ? "var(--light-color)" : `var(--main-color)`}
-              txtColor={darkTheme ? `var(--main-color)` : "var(--light-color)"}
-              text="انظمّ الى البرنامج"
-              size="1.4rem"
-              rounded
-              dir="ltr"
-            /></a>
+            <a>
+              <Button
+                color={darkTheme ? 'var(--light-color)' : `var(--main-color)`}
+                txtColor={
+                  darkTheme ? `var(--main-color)` : 'var(--light-color)'
+                }
+                text="انظمّ الى البرنامج"
+                size="1.4rem"
+                rounded
+                dir="ltr"
+              />
+            </a>
           </Link>
         </div>
 

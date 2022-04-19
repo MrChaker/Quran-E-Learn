@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_User } from '../../graphql/mutations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-type PropsType = {
+export type PropsType = {
   user: UserInterface | null;
   profileID: string | string[] | undefined;
   loading: boolean;

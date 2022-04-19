@@ -1,7 +1,8 @@
 import React from 'react';
+import { PropsType } from './photo';
 
-const ProfileInfo = () => {
-  return <>random content</>;
+const ProfileInfo = (props: PropsType) => {
+  return <></>;
 };
 
 export default ProfileInfo;

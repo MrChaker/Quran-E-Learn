@@ -24,5 +24,5 @@ export const reqQueries = `
 `;
 export const reqMutations = `
   createRequest(userID: String, message: String, cv: String): RequestType
-  updateRequest(_id: String, query: RequestInput): RequestType
+  handleRequest(_id: String!, accepted: Boolean!, userID: String): String
 `;
