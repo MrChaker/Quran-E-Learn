@@ -24,7 +24,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         ? {
             lessons: userInfo.lessons,
             teacher: userInfo.teacher,
-            progress: userInfo.progress,
           }
         : undefined,
       teacherInfo:
