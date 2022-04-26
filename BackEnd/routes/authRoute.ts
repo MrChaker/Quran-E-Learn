@@ -40,7 +40,7 @@ authRoute.post('/sign', async (req, res) => {
 });
 
 authRoute.post('/loginAPI', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password }: { email: string; password: string } = req.body;
 
   const user = await User.findOne({ email });
   if (!user)

@@ -48,7 +48,13 @@ export const emailSign = async (
     if (result.LogError && failLogLabel) {
       failLogLabel.innerText = result.LogError;
     }
-    if (result.success) location.assign('/dashboard');
+    if (result.success) {
+      localStorage.setItem(
+        'currentUser',
+        '{"info": {}, "isAuthenticated": true}'
+      );
+      location.assign('/dashboard');
+    }
   } else {
   }
 };

@@ -5,6 +5,10 @@ import { UserContext } from '../../Context/userContext';
 
 const DropMenu = (props: { isOn: boolean; left: string; top: string }) => {
   const logout = (): void => {
+    localStorage.setItem(
+      'currentUser',
+      '{ "info": null, "isAuthenticated": false}'
+    );
     location.assign('/auth/logout');
   };
   const { user } = useContext(UserContext);
