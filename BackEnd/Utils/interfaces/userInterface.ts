@@ -11,4 +11,15 @@ export interface UserInterface {
     admin?: boolean;
   };
 }
-export interface Teacher extends UserInterface {}
+export interface TeacherInfo {
+  lessons?: string[];
+  students?: string[];
+}
+
+export interface StudentInfo {
+  lessons?: {
+    title: string;
+    progress: number;
+  }[];
+  teacher: string;
+}

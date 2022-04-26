@@ -1,8 +1,7 @@
 import Request from '../../models/requests';
 import { RequestType } from '../types';
-import cloudinary from 'cloudinary';
-import Teacher from '../../models/teacher';
 import User from '../../models/user';
+import { UserInterface } from '../../Utils/interfaces/userInterface';
 
 export const getRequests = async () => {
   const requests = await Request.find().populate('user');
@@ -37,23 +36,11 @@ export const handleRequest = async (
   const req = await Request.findByIdAndUpdate(args._id, { state }); */
 
   if (args.accepted) {
-    await User.findByIdAndUpdate(args.userID, { 'roles.teacher': true })
-      .then(async (doc) => {
-        const newTeacher = new Teacher({
-          parentID: doc.id,
-          name: doc.name,
-          email: doc.email,
-          phone: doc.phone,
-          image: doc.image,
-          roles: {
-            student: true,
-            teacher: true,
-            admin: false,
-          },
-        });
-        await newTeacher.save();
-      })
-      .catch((err) => console.log(err));
+    await User.findByIdAndUpdate(args.userID, {
+      'roles.teacher': true,
+      lessons: [],
+      students: [],
+    }).catch((err) => console.log(err));
   }
   await Request.findByIdAndDelete(args._id);
 

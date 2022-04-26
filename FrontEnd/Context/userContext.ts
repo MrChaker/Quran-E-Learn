@@ -1,21 +1,27 @@
-import { createContext } from "react";
-import { UserInterface } from "../../BackEnd/Utils/interfaces/userInterface";
+import { createContext } from 'react';
+import {
+  StudentInfo,
+  TeacherInfo,
+  UserInterface,
+} from '../../BackEnd/Utils/interfaces/userInterface';
 
-type User = {
-  info: UserInterface | null ,
-  isAuthenticated: boolean,
-}
+export type User = {
+  info: UserInterface | null;
+  teacherInfo?: TeacherInfo;
+  studentInfo?: StudentInfo;
+  isAuthenticated: boolean;
+};
 
 type UserInt = {
-  user: User,
-  setUser: (user: User) => void
-}
+  user: User;
+  setUser: (user: User) => void;
+};
 
-const userInterface: User = {
-  info : null,
-  isAuthenticated: false
-}
+const initialState: User = {
+  info: null,
+  isAuthenticated: false,
+};
 export const UserContext = createContext<UserInt>({
-  user: userInterface,
-  setUser: () => userInterface
+  user: initialState,
+  setUser: () => initialState,
 });

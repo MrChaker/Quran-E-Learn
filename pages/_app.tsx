@@ -3,16 +3,12 @@ import '../FrontEnd/styles/auth.css';
 import { Layout } from '../FrontEnd/Layouts/layout';
 import { fontAW } from '../FrontEnd/fontawsome';
 import ApolloProvider from '../FrontEnd/graphql/Apollo';
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import axios from 'axios';
-import type { UserInterface } from '../BackEnd/Utils/interfaces/userInterface';
 import { AppPropsWithLayout } from '../FrontEnd/Layouts/types';
-import { UserContext } from '../FrontEnd/Context/userContext';
+import { UserContext, User } from '../FrontEnd/Context/userContext';
+
 fontAW();
-type User = {
-  info: UserInterface | null;
-  isAuthenticated: boolean;
-};
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [user, setUser] = useState<User>({
@@ -20,9 +16,26 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     isAuthenticated: false,
   });
 
-  const getUser = async () => {
+  async function getUser(setter: (value: SetStateAction<User>) => void) {
     const userInfo = await fetchUser();
-    setUser({ info: userInfo, isAuthenticated: userInfo ? true : false });
+    setter({
+      info: userInfo,
+      studentInfo: userInfo
+        ? {
+            lessons: userInfo.lessons,
+            teacher: userInfo.teacher,
+            progress: userInfo.progress,
+          }
+        : undefined,
+      teacherInfo:
+        userInfo && userInfo.roles.teacher
+          ? {
+              lessons: userInfo.lessons,
+              students: userInfo.students,
+            }
+          : undefined,
+      isAuthenticated: userInfo ? true : false,
+    });
     localStorage.setItem(
       'currentUser',
       JSON.stringify({
@@ -30,12 +43,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         isAuthenticated: userInfo ? true : false,
       })
     );
-  };
+  }
 
   useEffect(() => {
     // this is for solving ssr state problem
     setUser(JSON.parse(localStorage.getItem('currentUser') || '{}'));
-    getUser();
+    getUser(setUser);
   }, []);
 
   // If we define a layout for some pages we get it with  getLayout else we choose the default layout

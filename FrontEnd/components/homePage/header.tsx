@@ -13,7 +13,7 @@ export const Header = () => {
         <div className="min-w-[320px] lg:min-w-[400px] text-center text-4xl sm:text-5xl text-darkColor dark:text-lightColor md:text-right lg:text-6xl  ">
           <h1 className=" w-fit m-auto md:w-full md:m-0  flex items-center font-bold whitespace-nowrap">
             قال رسول الله
-            <h1>ﷺ</h1>
+            <p>ﷺ</p>
           </h1>
           <p className="my-7 text-3xl sm:text-4xl lg:text-5xl font-quran">
             "خيركم من تعلّم القرآن و علّمه"

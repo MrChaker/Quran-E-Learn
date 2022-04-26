@@ -26,7 +26,7 @@ export const NavBar = () => {
         </div>
 
         <ul className="hidden list-none items-center gap-6 text-lg md:flex ">
-          <NavEl text="الرّئيسية" />
+          <NavEl text="الرّئيسية" link="/dashboard" />
           <NavEl text="الدّروس" />
           <NavEl text="شيوخنا" link="/contact/teaching" />
         </ul>
@@ -98,7 +98,7 @@ export const NavBar = () => {
           } z-50 transition-all`}
         >
           <ul className=" flex list-none flex-col items-center gap-6  text-4xl">
-            <NavEl text="الرّئيسية" />
+            <NavEl text="الرّئيسية" link="/dashboard" />
             <NavEl text="تسجيل الدخول" link="/auth/login" />
             <NavEl text="انشاء حساب" link="/auth/signup" />
             <NavEl text="الدّروس" link="/lessons/" />

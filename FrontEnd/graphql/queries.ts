@@ -59,4 +59,31 @@ const GET_Request = gql`
     }
   }
 `;
-export { GET_User, GET_DocCount, GET_Request, GET_Requests, GET_AllUsers };
+
+const GET_Lessons = gql`
+  query {
+    getLesson {
+      title
+      thumbnail
+    }
+  }
+`;
+const GET_Lesson = gql`
+  query getLesson($title: String!) {
+    getLesson(title: $title) {
+      title
+      chapters
+      teacher
+    }
+  }
+`;
+
+export {
+  GET_User,
+  GET_DocCount,
+  GET_Request,
+  GET_Requests,
+  GET_AllUsers,
+  GET_Lessons,
+  GET_Lesson,
+};

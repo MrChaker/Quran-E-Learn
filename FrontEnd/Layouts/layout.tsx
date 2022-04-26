@@ -15,7 +15,7 @@ export const Layout: NextPage = ({ children }) => {
           <NavBar />
           <div
             dir="rtl"
-            className=" pt gap-3 overflow-hidden bg-lighterColor px-10 font-main dark:bg-darkColor md:px-20 lg:px-60 "
+            className=" pt gap-3 overflow-hidden bg-lighterColor px-10 font-main dark:bg-darkColor md:px-20 lg:px-60 text-darkColor dark:text-lightColor"
             id="screen"
           >
             {children}

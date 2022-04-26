@@ -11,7 +11,7 @@ import {
   createRequest,
   handleRequest,
 } from './requestResolver';
-
+import { getLesson, getLessons } from './lessonResolver';
 const resolvers = {
   Query: {
     getUser,
@@ -19,6 +19,8 @@ const resolvers = {
     getCount,
     getRequests,
     getRequest,
+    getLessons,
+    getLesson,
   },
   Mutation: {
     updateUser,

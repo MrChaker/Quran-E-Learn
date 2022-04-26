@@ -4,6 +4,11 @@ export const LessonSchema = new mongoose.Schema(
   {
     title: String,
     chapters: [String],
+    thumbnail: String,
+    teacher: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
