@@ -15,7 +15,7 @@ const Dashboard: NextPage = () => {
   const [newLearner, setNewLearner] = useState(false);
   useEffect(() => {
     if (data) {
-      setLessons(data);
+      setLessons(data.getLessons);
     }
     setNewLearner(
       user.studentInfo?.lessons == undefined ||
@@ -41,7 +41,7 @@ const Dashboard: NextPage = () => {
         {lessons.map((lesson, i) => (
           <LessonBox
             title={lesson.title || ''}
-            thumbnail={lesson.thumbnail || ''}
+            thumbnail={'/quran/fatiha.jpg'}
             progress={
               user.studentInfo?.lessons?.find((l) => l.title == lesson.title)
                 ?.progress || 0

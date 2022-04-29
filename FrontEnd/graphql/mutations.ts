@@ -28,5 +28,28 @@ const HANDLE_Request = gql`
     handleRequest(_id: $_id, accepted: $accepted, userID: $userID)
   }
 `;
+const CREATE_Lesson = gql`
+  mutation createLesson(
+    $title: String
+    $chapters: [ChapterInput]
+    $thumbnail: String
+    $teacherID: String
+  ) {
+    createLesson(
+      title: $title
+      chapters: $chapters
+      thumbnail: $thumbnail
+      teacherID: $teacherID
+    ) {
+      title
+    }
+  }
+`;
 
-export { CREATE_Request, UPDATE_User, DELETE_User, HANDLE_Request };
+export {
+  CREATE_Request,
+  UPDATE_User,
+  DELETE_User,
+  HANDLE_Request,
+  CREATE_Lesson,
+};

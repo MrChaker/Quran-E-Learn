@@ -11,7 +11,7 @@ import {
   createRequest,
   handleRequest,
 } from './requestResolver';
-import { getLesson, getLessons } from './lessonResolver';
+import { getLesson, getLessons, createLesson } from './lessonResolver';
 const resolvers = {
   Query: {
     getUser,
@@ -27,6 +27,7 @@ const resolvers = {
     deleteUser,
     createRequest,
     handleRequest,
+    createLesson,
   },
 };
 

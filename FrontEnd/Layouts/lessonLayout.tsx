@@ -24,8 +24,8 @@ const LessonLayout: NextPage = (props) => {
           {lesson?.chapters?.map((ch, i) => (
             <SideBarEL
               key={i}
-              link={ch}
-              name={ch}
+              link={ch.name}
+              name={ch.name}
               icon={<p>📄</p>}
               hoverColor="semiColor"
               fullWidth={false}

@@ -1,8 +1,19 @@
+const chapter = `
+  name: String,
+  content: String,
+  video: String
+`;
 export const lessonSchema = `
+  type ChapterType {
+    ${chapter}
+  }
+  input ChapterInput {
+    ${chapter}
+  }
   type LessonType{
-    title: String!,
-    chapter: [String],
-    thumbnail: String!
+    title: String,
+    chapters: [ChapterType],
+    thumbnail: String
     teacher: UserType
   }
 `;
@@ -11,5 +22,5 @@ export const lessonQueries = `
   getLesson(title: String): LessonType
 `;
 export const lessonMutations = `
-  createLesson(title: String, chapter: String, thumbnail: String ,teacherID: String): LessonType
+  createLesson(title: String, chapters: [ChapterInput], thumbnail: String ,teacherID: String): LessonType
 `;

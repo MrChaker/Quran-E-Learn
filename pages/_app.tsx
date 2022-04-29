@@ -1,5 +1,7 @@
 import '../FrontEnd/styles/globals.css';
 import '../FrontEnd/styles/auth.css';
+import 'react-quill/dist/quill.snow.css';
+
 import { Layout } from '../FrontEnd/Layouts/layout';
 import { fontAW } from '../FrontEnd/fontawsome';
 import ApolloProvider from '../FrontEnd/graphql/Apollo';
@@ -40,6 +42,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       JSON.stringify({
         info: userInfo ? userInfo._id : null,
         isAuthenticated: userInfo ? true : false,
+        isTeacher: userInfo?.roles?.teacher ? true : false,
       })
     );
   }

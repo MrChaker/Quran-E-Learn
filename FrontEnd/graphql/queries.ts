@@ -62,18 +62,21 @@ const GET_Request = gql`
 
 const GET_Lessons = gql`
   query {
-    getLesson {
+    getLessons {
       title
       thumbnail
     }
   }
 `;
 const GET_Lesson = gql`
-  query getLesson($title: String!) {
+  query getLesson($title: String) {
     getLesson(title: $title) {
       title
-      chapters
-      teacher
+      chapters {
+        name
+        content
+        video
+      }
     }
   }
 `;

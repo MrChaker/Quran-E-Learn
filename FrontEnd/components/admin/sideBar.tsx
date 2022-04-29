@@ -52,9 +52,7 @@ export const SideBarEL = (props: PropsType) => {
   return (
     <Link href={props.link}>
       <a
-        className={`flex gap-5 bg-inherit hover:bg-${
-          props.hoverColor
-        } py-4 pr-5 sm:pr-7 md:pr-8 ${
+        className={`flex gap-5 bg-inherit hover:bg-semiColor hover:text-lighterColor py-4 pr-5 sm:pr-7 md:pr-8 ${
           props.fullWidth || props.fullWidth == undefined
             ? ''
             : 'w-4/5 rounded-lg'

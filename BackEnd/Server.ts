@@ -1,6 +1,7 @@
 import express from 'express';
 import next from 'next';
 import cookieparser from 'cookie-parser';
+import path from 'path';
 
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
@@ -11,6 +12,7 @@ import resolvers from './graphql/resolvers/resolvers';
 import typeDefs from './graphql/schemas/schemas';
 
 import authRoutes from './routes/authRoute';
+import videoRoute from './routes/videoRoute';
 
 const cloudinary = require('cloudinary').v2;
 
@@ -37,7 +39,8 @@ app
     });
     server.use(express.json({ limit: '25mb' }));
     server.use(express.urlencoded({ extended: true, limit: '25mb' }));
-
+    console.log(path.join(__dirname, '/assets'));
+    server.use(express.static(path.join(__dirname, '/assets')));
     // cloudinary for Image storing
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -67,6 +70,7 @@ app
     });
     io.on('connection', (socket: Socket) => SocketIO(socket, io));
 
+    server.use('/video', videoRoute);
     server.get('/admin*', CheckAdmin, (req: any, res: any) => {
       return handle(req, res);
     });
