@@ -95,6 +95,9 @@ const NewLesson = () => {
           uploading ? <FontAwesomeIcon icon="circle-notch" spin /> : undefined
         }
       />
+      {uploadProgress.visible && (
+        <progress value={uploadProgress.progress}></progress>
+      )}
     </form>
   );
 };
