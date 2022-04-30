@@ -53,13 +53,13 @@ videoRoute.get('/:id', (req, res) => {
       const readstream = gridfsBucket.openDownloadStream(file._id);
       readstream.pipe(res);
     } else {
+      const chunksize = 10 ** 6;
       var parts = range.replace(/bytes=/, '').split('-');
       var partialstart = parts[0];
       var partialend = parts[1];
 
-      var start = parseInt(partialstart, 10);
-      var end = partialend ? parseInt(partialend, 10) : file.length - 1;
-      var chunksize = end - start + 1;
+      var start = parts[0] ? partialstart + partialend + 1 : 1;
+      var end = parts[1] ? partialend + chunksize : chunksize;
 
       res.writeHead(206, {
         'Accept-Ranges': 'bytes',
