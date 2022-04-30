@@ -19,29 +19,37 @@ const NewLesson = () => {
   const postVideo = async (video?: File | null) => {
     const formData = new FormData();
     formData.append('video', video ? video : '');
-    const res = await axios.post('/video/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    if (res.status == 200) return res.data.file.id;
-    else return null;
+    try {
+      const res = await axios.post('/video/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (res.status == 200) return res.data.file.id;
+    } catch (error) {
+      return error;
+    }
   };
 
   const [createLesson] = useMutation(CREATE_Lesson);
   const newLesson = async (event: VEvent) => {
-    const videoID: string | null = await postVideo(
+    await postVideo(
       event.target.video.files ? event.target.video.files[0] : null
-    );
-    //handle err
-    createLesson({
-      variables: {
-        title: 'new lesson',
-        thumbnail: 'image',
-        chapter: [{ name: 'chapter 1', content: data.current, video: videoID }],
-        teacherID: user.info?._id,
-      },
-    });
+    )
+      .then((videoID) => {
+        //handle err
+        createLesson({
+          variables: {
+            title: 'new lesson',
+            thumbnail: 'image',
+            chapter: [
+              { name: 'chapter 1', content: data.current, video: videoID },
+            ],
+            teacherID: user.info?._id,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <form
