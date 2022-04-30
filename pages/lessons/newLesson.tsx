@@ -1,4 +1,10 @@
-import React, { FormEvent, ReactElement, useContext, useRef } from 'react';
+import React, {
+  FormEvent,
+  ReactElement,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 import LessonLayout from '../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../FrontEnd/Layouts/layout';
 import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
@@ -10,12 +16,17 @@ import axios from 'axios';
 import { useMutation } from '@apollo/client';
 import { CREATE_Lesson } from '../../FrontEnd/graphql/mutations';
 import { UserContext } from '../../FrontEnd/Context/userContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const NewLesson = () => {
   useIsAuth(true); // true for teacher condition
   const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const data = useRef('');
-
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState({
+    visible: false,
+    progress: 0,
+  });
   const postVideo = async (video?: File | null) => {
     const formData = new FormData();
     formData.append('video', video ? video : '');
@@ -23,6 +34,10 @@ const NewLesson = () => {
       const res = await axios.post('/video/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = (progressEvent.loaded / progressEvent.total) * 50;
+          setUploadProgress({ visible: true, progress: progress });
         },
       });
       if (res.status == 200) return res.data.file.id;
@@ -33,23 +48,28 @@ const NewLesson = () => {
 
   const [createLesson] = useMutation(CREATE_Lesson);
   const newLesson = async (event: VEvent) => {
+    setUploading(true);
     await postVideo(
       event.target.video.files ? event.target.video.files[0] : null
     )
       .then((videoID) => {
+        setUploading(false);
         //handle err
         createLesson({
           variables: {
             title: 'new lesson',
             thumbnail: 'image',
-            chapter: [
+            chapters: [
               { name: 'chapter 1', content: data.current, video: videoID },
             ],
             teacherID: user.info?._id,
           },
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setUploading(false);
+        console.log(err);
+      });
   };
   return (
     <form
@@ -70,6 +90,10 @@ const NewLesson = () => {
         onClick={() => console.log(data.current)}
         style="mt-10 mx-auto block"
         type="submit"
+        disable={uploading}
+        leftIcon={
+          uploading ? <FontAwesomeIcon icon="circle-notch" spin /> : undefined
+        }
       />
     </form>
   );
