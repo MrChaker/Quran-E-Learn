@@ -46,8 +46,25 @@ videoRoute.get('/:id', (req, res) => {
       });
     }
     // Read output to browser
+    const range = req.headers.range;
+    if (!range) {
+      res.status(400).send('Requires Range header');
+    }
+    const start = Number(range?.replace(/\D/g, ''));
+    const end = Math.min(start + file.chunkSize, file.length - 1);
+    const contentLength = end - start + 1;
+    const headers = {
+      'Content-Range': `bytes ${start}-${end}/${file.length}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': contentLength,
+      'Content-Type': 'video/mp4',
+    };
+    res.writeHead(206, headers);
     /* const readstream = gfs?.createReadStream(file.filename); */
-    const readstream = gridfsBucket.openDownloadStream(file._id);
+    const readstream = gridfsBucket.openDownloadStream(file._id, {
+      start,
+      end,
+    });
     readstream.pipe(res);
   });
 });
