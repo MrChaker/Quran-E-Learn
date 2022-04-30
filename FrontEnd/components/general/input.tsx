@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-const Input = (props: {
+const FileInput = (props: {
   text?: string;
   onChange?: () => void;
   name: string;
@@ -25,4 +25,4 @@ const Input = (props: {
   );
 };
 
-export default Input;
+export default FileInput;

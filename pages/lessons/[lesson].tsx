@@ -39,7 +39,7 @@ const Lesson = () => {
       {!loading && Slesson?.chapters && (
         <video id="videoPlayer" controls className="w-full">
           <source
-            src={`${process.env.NEXT_PUBLIC_PORT}video/${Slesson.chapters[0].video} `}
+            src={`${process.env.NEXT_PUBLIC_PORT}/video/${Slesson.chapters[0].video} `}
             type="video/mp4"
           />
         </video>

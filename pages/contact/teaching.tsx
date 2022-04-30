@@ -7,7 +7,7 @@ import { CREATE_Request } from '../../FrontEnd/graphql/mutations';
 import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Input from '../../FrontEnd/components/general/input';
+import FileInput from '../../FrontEnd/components/general/input';
 const TeachingRequest = () => {
   useIsAuth();
   const { darkTheme } = useThemeContext();
@@ -55,7 +55,7 @@ const TeachingRequest = () => {
           placeholder="أكتب رسالة تتحدّث فيها عن سيرتك..."
         ></textarea>
 
-        <Input text={` ارفق ملف pdf او صورة للاجازة`} name="CVFile" />
+        <FileInput text={` ارفق ملف pdf او صورة للاجازة`} name="CVFile" />
 
         <Button
           color={darkTheme ? 'var(--light-color)' : `var(--main-color)`}

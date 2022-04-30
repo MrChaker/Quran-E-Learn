@@ -11,53 +11,35 @@ import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import QuillEditor from '../../FrontEnd/components/lesson/QuillEditor';
 import { Button } from '../../FrontEnd/components/general/Button';
 import { useThemeContext } from '../../FrontEnd/Context/themeContext';
-import Input from '../../FrontEnd/components/general/input';
-import axios from 'axios';
+import FileInput from '../../FrontEnd/components/general/input';
 import { useMutation } from '@apollo/client';
 import { CREATE_Lesson } from '../../FrontEnd/graphql/mutations';
 import { UserContext } from '../../FrontEnd/Context/userContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { usePost } from '../../FrontEnd/hooks/usePost';
 const NewLesson = () => {
   useIsAuth(true); // true for teacher condition
   const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const data = useRef('');
   const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState({
-    visible: false,
-    progress: 0,
-  });
-  const postVideo = async (video?: File | null) => {
-    const formData = new FormData();
-    formData.append('video', video ? video : '');
-    try {
-      const res = await axios.post('/video/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (progressEvent) => {
-          const progress = (progressEvent.loaded / progressEvent.total) * 50;
-          setUploadProgress({ visible: true, progress: progress });
-        },
-      });
-      if (res.status == 200) return res.data.file.id;
-    } catch (error) {
-      return error;
-    }
-  };
+  const { uploadProgress, uploadFile } = usePost('/video/upload');
 
   const [createLesson] = useMutation(CREATE_Lesson);
   const newLesson = async (event: VEvent) => {
     setUploading(true);
-    await postVideo(
-      event.target.video.files ? event.target.video.files[0] : null
-    )
+    const formData = new FormData();
+    formData.append(
+      'video',
+      event.target.video.files ? event.target.video.files[0] : ''
+    );
+    await uploadFile(formData)
       .then((videoID) => {
         setUploading(false);
         //handle err
         createLesson({
           variables: {
-            title: 'new lesson',
+            title: event.target.title.value,
             thumbnail: 'image',
             chapters: [
               { name: 'chapter 1', content: data.current, video: videoID },
@@ -81,7 +63,8 @@ const NewLesson = () => {
       /* action="/video/upload"
       method="POST" */
     >
-      <Input text="اختر ملف  فيديو للتحميل" name="video" />
+      <input type="text" name="title" className="block" />
+      <FileInput text="اختر ملف  فيديو للتحميل" name="video" />
       <QuillEditor data={data} />
       <Button
         text="نشر الدرس"
@@ -96,7 +79,10 @@ const NewLesson = () => {
         }
       />
       {uploadProgress.visible && (
-        <progress value={uploadProgress.progress}></progress>
+        <div className="flex">
+          <p>{uploadProgress.progress}%</p>
+          <progress value={uploadProgress.progress}></progress>
+        </div>
       )}
     </form>
   );
@@ -104,6 +90,7 @@ const NewLesson = () => {
 
 interface VEventTarget extends EventTarget {
   video: HTMLInputElement;
+  title: HTMLInputElement;
 }
 interface VEvent extends FormEvent<HTMLFormElement> {
   target: VEventTarget;
