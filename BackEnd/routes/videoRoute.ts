@@ -51,7 +51,7 @@ videoRoute.get('/:id', (req, res) => {
       res.status(400).send('Requires Range header');
     }
     const start = Number(range?.replace(/\D/g, ''));
-    const end = Math.min(start + file.chunkSize, file.length - 1);
+    const end = Math.min(start + 10 ** 6, file.length - 1);
     const contentLength = end - start + 1;
     const headers = {
       'Content-Range': `bytes ${start}-${end}/${file.length}`,
