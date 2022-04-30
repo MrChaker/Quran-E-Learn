@@ -48,25 +48,33 @@ videoRoute.get('/:id', (req, res) => {
     // Read output to browser
     const range = req.headers.range;
     if (!range) {
-      res.status(400).send('Requires Range header');
+      res.header('Content-Length', file.length);
+      res.header('Content-Type', file.contentType);
+      const readstream = gridfsBucket.openDownloadStream(file._id);
+      readstream.pipe(res);
+    } else {
+      var parts = range.replace(/bytes=/, '').split('-');
+      var partialstart = parts[0];
+      var partialend = parts[1];
+
+      var start = parseInt(partialstart, 10);
+      var end = partialend ? parseInt(partialend, 10) : file.length - 1;
+      var chunksize = end - start + 1;
+
+      res.writeHead(206, {
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunksize,
+        'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
+        'Content-Type': file.contentType,
+      });
+
+      /* const readstream = gfs?.createReadStream(file.filename); */
+      const readstream = gridfsBucket.openDownloadStream(file._id, {
+        start,
+        end,
+      });
+      readstream.pipe(res);
     }
-    const start = Number(range?.replace(/\D/g, ''));
-    const end = Math.min(start + 10 ** 6, file.length - 1);
-    const contentLength = end - start + 1;
-    const headers = {
-      'Content-Range': `bytes ${start}-${end}/${file.length}`,
-      'Accept-Ranges': 'bytes',
-      'Content-Length': contentLength,
-      'Content-Type': 'video/mp4',
-    };
-    res.writeHead(206, headers);
-    /* const readstream = gfs?.createReadStream(file.filename); */
-    const readstream = gridfsBucket.openDownloadStream(file._id, {
-      start,
-      end,
-    });
-    readstream.pipe(res);
   });
 });
-
 export default videoRoute;
