@@ -55,7 +55,6 @@ export const emailSign = async (
       );
       location.assign('/dashboard');
     }
-  } else {
   }
 };
 

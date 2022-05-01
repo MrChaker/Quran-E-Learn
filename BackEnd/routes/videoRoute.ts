@@ -1,21 +1,17 @@
 import express from 'express';
 import multer from 'multer';
 import { GridFsStorage } from 'multer-gridfs-storage';
-import g, { Grid } from 'gridfs-stream';
 import mongoose from 'mongoose';
 import { GFS } from '../models/lesson';
 const videoRoute = express.Router();
 
 // Init gfs
-let gfs: Grid;
+
 let gridfsBucket: any;
 mongoose.connection.once('open', () => {
   gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
     bucketName: 'uploads',
   });
-
-  gfs = g(mongoose.connection.db, mongoose.mongo);
-  gfs.collection('uploads');
 });
 
 // Create storage engine
@@ -46,35 +42,32 @@ videoRoute.get('/:id', (req, res) => {
       });
     }
     // Read output to browser
-    const range = req.headers.range;
-    if (!range) {
-      res.header('Content-Length', file.length);
-      res.header('Content-Type', file.contentType);
-      const readstream = gridfsBucket.openDownloadStream(file._id);
-      readstream.pipe(res);
-    } else {
-      const chunksize = 10 ** 6;
-      var parts = range.replace(/bytes=/, '').split('-');
-      var partialstart = parts[0];
-      var partialend = parts[1];
-
-      var start = parts[0] ? partialstart + partialend + 1 : 1;
-      var end = parts[1] ? partialend + chunksize : chunksize;
-
-      res.writeHead(206, {
-        'Accept-Ranges': 'bytes',
-        'Content-Length': chunksize,
-        'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
-        'Content-Type': file.contentType,
-      });
-
-      /* const readstream = gfs?.createReadStream(file.filename); */
+    const readstream = gridfsBucket.openDownloadStream(file._id);
+    readstream.pipe(res);
+    /* if (!range) {
+      const head = {
+        'Content-Length': file.length,
+        'Content-Type': 'video/mp4',
+      }; */
+    /* } else {
+      const parts = range.replace(/bytes=/, '').split('-');
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : file.length - 1;
+      const chunksize = end - start + 1;
       const readstream = gridfsBucket.openDownloadStream(file._id, {
         start,
         end,
       });
+      const headers = {
+        'Content-Range': `bytes ${start}-${end}/${file.length}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunksize,
+        'Content-Type': 'video/mp4',
+      };
+      res.writeHead(206, headers);
+
       readstream.pipe(res);
-    }
+    } */
   });
 });
 export default videoRoute;

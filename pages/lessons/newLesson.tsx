@@ -75,7 +75,9 @@ const NewLesson = () => {
         type="submit"
         disable={uploading}
         leftIcon={
-          uploading ? <FontAwesomeIcon icon="circle-notch" spin /> : undefined
+          uploading ? (
+            <FontAwesomeIcon icon="circle-notch" className="spinner" />
+          ) : undefined
         }
       />
       {uploadProgress.visible && (

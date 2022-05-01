@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 import { useThemeContext } from '../../Context/themeContext';
 import { Button } from '../general/Button';
@@ -66,27 +67,30 @@ const SignForm = () => {
       },
     ];
   }, []);
+  const [loading, setLoading] = useState(false);
+  const submit = (event: any) => {
+    setLoading(true);
+    emailSign(
+      event,
+      dataIsValid(requiredInputs.current, validationInputs.current) &&
+        passValidLength &&
+        passEqual,
+      {
+        name: event.target?.Name.value,
+        email: event.target?.email.value,
+        password: event.target?.password.value,
+        phone: event.target?.phone.value,
+        sex: event.target?.sex.value,
+      },
+      '/auth/sign',
+      [email.current, name.current]
+    ).then(() => setLoading(false));
+  };
   return (
     <form
       className="pb-10"
       dir="rtl"
-      onSubmit={(event: any) =>
-        emailSign(
-          event,
-          dataIsValid(requiredInputs.current, validationInputs.current) &&
-            passValidLength &&
-            passEqual,
-          {
-            name: event.target?.Name.value,
-            email: event.target?.email.value,
-            password: event.target?.password.value,
-            phone: event.target?.phone.value,
-            sex: event.target?.sex.value,
-          },
-          '/auth/sign',
-          [email.current, name.current]
-        )
-      }
+      onSubmit={(event: any) => submit(event)}
       ref={formRef}
     >
       {/* <label htmlFor="name">الاسم</label> */}
@@ -142,6 +146,11 @@ const SignForm = () => {
         block
         size="1.25rem"
         type="submit"
+        leftIcon={
+          loading ? (
+            <FontAwesomeIcon icon="circle-notch" className="spinner" />
+          ) : undefined
+        }
       />
     </form>
   );
