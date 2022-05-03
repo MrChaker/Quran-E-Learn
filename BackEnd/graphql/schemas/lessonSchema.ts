@@ -19,7 +19,7 @@ export const lessonSchema = `
 `;
 export const lessonQueries = `
   getLessons: [LessonType]
-  getLesson(title: String): LessonType
+  getLesson(title: String chapter: Int): LessonType
 `;
 export const lessonMutations = `
   createLesson(title: String, chapters: [ChapterInput], thumbnail: String ,teacherID: String): LessonType

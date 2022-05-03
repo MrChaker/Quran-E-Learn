@@ -65,12 +65,15 @@ const GET_Lessons = gql`
     getLessons {
       title
       thumbnail
+      chapters {
+        name
+      }
     }
   }
 `;
 const GET_Lesson = gql`
-  query getLesson($title: String) {
-    getLesson(title: $title) {
+  query getLesson($title: String, $chapter: Int) {
+    getLesson(title: $title, chapter: $chapter) {
       title
       chapters {
         name

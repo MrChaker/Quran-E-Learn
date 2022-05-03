@@ -1,4 +1,5 @@
 import Lesson from '../../models/lesson';
+import { LessonInterface } from '../../Utils/interfaces/lessonsInterface';
 
 export const getLessons = async () => {
   const res = await Lesson.find();
@@ -6,9 +7,14 @@ export const getLessons = async () => {
   return res;
 };
 
-export const getLesson = async (_: null, args: { title: string }) => {
+export const getLesson = async (
+  _: null,
+  args: { title: string; chapter: number }
+) => {
   const res = await Lesson.findOne({ title: args.title });
-  return res;
+  const final: LessonInterface = res;
+  final.chapters = [res.chapters[args.chapter - 1]];
+  return final;
 };
 
 export const createLesson = async (_: null, args: any) => {

@@ -17,24 +17,26 @@ type BarPropsType = {
 const SideBar: React.FC<BarPropsType> = (props) => {
   return (
     <div
-      className={`min-h-screen bg-${props.color} dark:bg-${
+      className={`h-[70px] sm:min-h-screen bg-${props.color} dark:bg-${
         props.darkColor
-      } min-w-[70px] md:min-w-[220px] py-6 text-${props.darkColor} dark:text-${
-        props.color
-      } text-${props.fSize?.md || 'lg'} md:text-${
+      } fixed  sm:relative bottom-0 left-0 w-full sm:w-[70px] sm:min-w-[70px] md:min-w-[260px] md:w-[260px] py-6 text-${
+        props.darkColor
+      } dark:text-${props.color} text-${props.fSize?.md || 'lg'} md:text-${
         props.fSize?.full || '2xl'
-      } text-lg relative border-l-2 border-lightColor dark:border-semiColor
-        mr-[-32px]  md:mr-[-52px]
+      } text-lg border-t-2 sm:border-t-0 sm:border-l-2 border-lightColor  dark:border-semiColor
+        sm:mr-[-32px]  md:mr-[-60px] 
       `}
     >
-      <div className="fixed w-[80px] md:w-[260px] flex flex-col justify-start items-center h-full">
-        <div className="logo text-2xl pb-4 mb-6 border-b border-semiColor">
+      <div className="fixed bottom-0 sm:bottom-auto  w-full sm:w-[70px] md:w-[260px] flex flex-col justify-start items-center h-[70px] sm:h-full">
+        <div className="logo text-2xl pb-4 mb-6 border-b border-semiColor hidden sm:block">
           <Link href={props.logo.link}>
             <a>{props.logo.lg}</a>
           </Link>
         </div>
-        <div className={`w-full`}>
-          <div className="flex flex-col ">{props.children}</div>
+        <div className={`w-full my-auto sm:my-0`}>
+          <div className="flex justify-center items-center  flex-row sm:flex-col ">
+            {props.children}
+          </div>
         </div>
       </div>
     </div>
@@ -52,10 +54,10 @@ export const SideBarEL = (props: PropsType) => {
   return (
     <Link href={props.link}>
       <a
-        className={`flex gap-5 bg-inherit hover:bg-semiColor hover:text-lighterColor py-4 pr-5 sm:pr-7 md:pr-8 ${
+        className={`flex gap-5 bg-inherit hover:bg-semiColor hover:text-lighterColor py-4 px-5 sm:pr-5 md:pr-8 ${
           props.fullWidth || props.fullWidth == undefined
             ? ''
-            : 'w-4/5 rounded-lg'
+            : '  sm:w-4/5 rounded-lg'
         }`}
       >
         {props.icon}

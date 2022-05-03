@@ -14,17 +14,10 @@ const LessonLayout: NextPage = (props) => {
           darkColor="darkColor"
           logo={{ lg: <></>, link: '' }}
         >
-          <SideBarEL
-            link="/lessons/lesson"
-            name="chapter 1"
-            icon={<p>📄</p>}
-            hoverColor="semiColor"
-            fullWidth={false}
-          />
           {lesson?.chapters?.map((ch, i) => (
             <SideBarEL
               key={i}
-              link={ch.name}
+              link={`${i + 1}`}
               name={ch.name}
               icon={<p>📄</p>}
               hoverColor="semiColor"
