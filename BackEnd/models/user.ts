@@ -20,6 +20,10 @@ export const UserSchema = new mongoose.Schema({
     lowercase: true,
   },
   phone: { type: String, validate: /[0-9]{10}/ },
+  sex: {
+    type: String,
+    enum: ['male', 'female'],
+  },
   image: String,
   password: {
     type: String,

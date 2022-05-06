@@ -5,6 +5,7 @@ export interface UserInterface {
   image?: string;
   _id?: string;
   phone?: string;
+  sex?: 'male' | 'female';
   roles?: {
     student?: boolean;
     teacher?: boolean;

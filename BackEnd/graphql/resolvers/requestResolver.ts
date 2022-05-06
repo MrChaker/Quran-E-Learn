@@ -1,7 +1,6 @@
 import Request from '../../models/requests';
 import { RequestType } from '../types';
 import User from '../../models/user';
-import { UserInterface } from '../../Utils/interfaces/userInterface';
 
 export const getRequests = async () => {
   const requests = await Request.find().populate('user');

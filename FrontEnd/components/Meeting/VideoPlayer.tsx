@@ -1,46 +1,46 @@
-import React, {useContext, useEffect, useRef} from 'react'
-import  {SocketCtxProvider} from '../../Context/SocketContext'
+import React, { useContext, useEffect, useRef } from 'react';
+import { SocketCtxProvider } from '../../Context/SocketContext';
 
 const VideoPlayer = () => {
-
-  const { teacherPeer, teacherVid, joined, peersRef } = useContext(SocketCtxProvider)
+  const { teacherPeer, teacherVid, joined, peersRef } =
+    useContext(SocketCtxProvider);
 
   useEffect(() => {
-    if( teacherPeer.current ){
-      teacherPeer.current.peer?.on("stream", stream => {
+    if (teacherPeer.current) {
+      teacherPeer.current.peer?.on('stream', (stream) => {
         teacherVid.current.srcObject = stream;
-      })
+      });
     }
   }, [teacherPeer, joined]);
 
-  useEffect(()=>{
-    if(peersRef.current){
-      peersRef.current.forEach(peer=>{
-        if ( peer.peer != teacherPeer.current.peer){
-        peer.peer.on('stream', stream=>{
-          const audio = new Audio();
-          audio.srcObject = stream;
-          audio.play();
-        })
-      }
-      })
+  useEffect(() => {
+    if (peersRef.current) {
+      peersRef.current.forEach((peer) => {
+        if (peer.peer != teacherPeer.current.peer) {
+          peer.peer.on('stream', (stream) => {
+            const audio = new Audio();
+            audio.srcObject = stream;
+            audio.play();
+          });
+        }
+      });
     }
-  },[peersRef])
+  }, [peersRef]);
 
   return (
-  <>
-    <div className='absolute h-[500px] w-4/5 left-0 -mt-8 '>
-      {
-        teacherVid ? 
-        <video ref={teacherVid} autoPlay width='100%' height='100%'/> :
-        <div>البث منقطع حاليا</div>
-      }
-    </div>
-  </>)
-}
+    <>
+      <div className="absolute h-[500px] w-4/5 left-0 -mt-8 ">
+        {teacherVid ? (
+          <video ref={teacherVid} autoPlay muted width="100%" height="100%" />
+        ) : (
+          <div>البث منقطع حاليا</div>
+        )}
+      </div>
+    </>
+  );
+};
 
-export default VideoPlayer
-
+export default VideoPlayer;
 
 /* 
 <Button

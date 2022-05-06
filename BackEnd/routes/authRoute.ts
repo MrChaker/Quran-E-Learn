@@ -1,6 +1,6 @@
 import express, { Errback } from 'express';
 const authRoute = express.Router();
-import jwt, { Secret, JsonWebTokenError } from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import User from '../models/user';
 import { uniqueValidator } from '../Utils/authErrors';
 
@@ -89,18 +89,17 @@ authRoute.get('/user', (req, res) => {
           email: user.email,
           phone: user.phone,
           image: user.image,
+          sex: user.sex,
           roles: user.roles,
         };
         res.status(200).json(
           user.roles.teacher
-            ? Object.assign({}, userObj, {
-                lessons: user.lessons,
-                students: user.students,
-              })
-            : Object.assign({}, userObj, {
+            ? { ...userObj, lessons: user.lessons, students: user.students }
+            : {
+                ...userObj,
                 teacher: user.teacher,
                 Slessons: user.Slessons,
-              })
+              }
         );
       }
     }

@@ -42,32 +42,30 @@ videoRoute.get('/:id', (req, res) => {
       });
     }
     // Read output to browser
-    const readstream = gridfsBucket.openDownloadStream(file._id);
-    readstream.pipe(res);
-    /* if (!range) {
-      const head = {
-        'Content-Length': file.length,
-        'Content-Type': 'video/mp4',
-      }; */
-    /* } else {
-      const parts = range.replace(/bytes=/, '').split('-');
-      const start = parseInt(parts[0], 10);
-      const end = parts[1] ? parseInt(parts[1], 10) : file.length - 1;
-      const chunksize = end - start + 1;
-      const readstream = gridfsBucket.openDownloadStream(file._id, {
-        start,
-        end,
-      });
+
+    const range = req.headers.range;
+    if (!range) {
+      res.status(400).send('Requires Range header');
+    } else {
+      // Create response headers
+      /* const start = Number(range.replace(/\D/g, ''));
+      const end = file.length - 1;
+
+      const contentLength = end - start + 1;
       const headers = {
         'Content-Range': `bytes ${start}-${end}/${file.length}`,
         'Accept-Ranges': 'bytes',
-        'Content-Length': chunksize,
+        'Content-Length': contentLength,
         'Content-Type': 'video/mp4',
       };
-      res.writeHead(206, headers);
+
+      // HTTP Status 206 for Partial Content
+      res.writeHead(206, headers); */
+
+      const readstream = gridfsBucket.openDownloadStream(file._id);
 
       readstream.pipe(res);
-    } */
+    }
   });
 });
 export default videoRoute;

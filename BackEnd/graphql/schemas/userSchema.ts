@@ -8,6 +8,7 @@ const UserInterface = `
     email: String
     image: String
     phone: String
+    sex: String
 `;
 export const userSchema = `
   type UserType {
