@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { ReactElement, useEffect, useState } from 'react';
+import useMediaQuery from '../../hooks/useMediaQ';
 type BarPropsType = {
   bgColor?: string;
   textColor?: string;
@@ -56,6 +57,7 @@ type PropsType = {
   fullWidth?: boolean;
 };
 export const SideBarEL = (props: PropsType) => {
+  const [hovered, setHovered] = useState(false);
   return (
     <Link href={props.link}>
       <a
@@ -63,10 +65,20 @@ export const SideBarEL = (props: PropsType) => {
           props.fullWidth || props.fullWidth == undefined
             ? 'w-full justify-center sm:justify-start'
             : '  sm:w-4/5 rounded-lg'
-        }`}
+        } relative`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         {props.icon}
-        <p className="hidden md:block">{props.name}</p>
+        <p
+          className={`${
+            hovered
+              ? 'text-center text-lighterColor w-32 p-4 bg-semiColor rounded-lg absolute -top-16 sm:top-0 -right-1/2 sm:left-20 sm:right-0 block z-50'
+              : 'hidden md:block'
+          } md:static md:text-start md:w-auto md:p-0`}
+        >
+          {props.name}
+        </p>
       </a>
     </Link>
   );

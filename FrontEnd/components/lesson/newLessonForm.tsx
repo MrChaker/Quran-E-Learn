@@ -107,20 +107,6 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
           />
         </div>
       )}
-      {uploadProgress.progress == 100 && (
-        <Link href={`/newLesson/${''}`}>
-          <a>
-            <Button
-              text="اضافة وحدة أخرى"
-              color={darkTheme ? 'var(--light-color)' : `var(--main-color)`}
-              txtColor={darkTheme ? `var(--main-color)` : 'var(--light-color)'}
-              style={`my-10 mx-auto block`}
-              disable={uploading}
-              block
-            />
-          </a>
-        </Link>
-      )}
     </form>
   );
 };

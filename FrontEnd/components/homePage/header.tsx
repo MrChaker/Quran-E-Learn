@@ -28,6 +28,7 @@ export const Header = () => {
                 text="انظمّ الى البرنامج"
                 size="1.4rem"
                 rounded
+                style="sm:p-5"
                 dir="ltr"
               />
             </a>

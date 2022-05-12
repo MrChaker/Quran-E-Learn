@@ -27,15 +27,16 @@ export const Button = (props: PropsType) => {
       initial={{ x: '-100vw', opacity: 0 }}
       onClick={props.onClick}
       animate={{ x: 0, opacity: 1 }}
-      className={` cursor-pointer p-3 sm:p-5 px-5 sm:px-8  ${
+      className={` cursor-pointer p-4 px-5  ${
         props.rounded ? 'rounded-full' : 'rounded-md'
-      } justify-center border border-solid ${props.style}`}
+      } justify-center border border-solid ${props.style} ${
+        props.block ? 'block w-full' : 'inline-block'
+      }`}
       style={{
         color: props.outline ? props.color : props.txtColor,
         backgroundColor: props.outline ? 'transparent' : props.color,
         fontSize: props.size || '1.25rem',
         borderColor: props.color,
-        display: props.block ? 'block w-full' : 'inline-block',
       }}
     >
       <p className={`mr-4 inline-block`}>{props.leftIcon}</p>

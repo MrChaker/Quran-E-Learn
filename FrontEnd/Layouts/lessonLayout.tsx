@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -9,9 +9,14 @@ import { LessonContext } from '../Context/lessonContext';
 const LessonLayout: NextPage = (props) => {
   const [chapters, setChapters] = useState<{ name: string }[]>([]);
   const [lesson, setLesson] = useState<string>('');
-  const { data, loading } = useQuery(GET_Chapters, {
-    variables: { title: lesson },
-  });
+  const [getChapters, { data, loading }] = useLazyQuery(GET_Chapters);
+  useEffect(() => {
+    if (lesson)
+      getChapters({
+        variables: { title: lesson },
+      });
+  }, [lesson]);
+
   useEffect(() => {
     if (data) {
       setChapters(data.getChapters.chapters);
