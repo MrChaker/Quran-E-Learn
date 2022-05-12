@@ -1,3 +1,4 @@
+import Lesson from '../../models/lesson';
 import User from '../../models/user';
 import { UserInterface } from '../../Utils/interfaces/userInterface';
 
@@ -34,12 +35,13 @@ export const getUsers = async (_: null, args: { query: UserInterface }) => {
   return users;
 };
 export const getCount = async () => {
-  const result: { students: number; teachers: number } = {
+  const result: { students: number; teachers: number; lessons: number } = {
     students: await User.countDocuments({
       'roles.student': true,
       'roles.teacher': false,
     }),
     teachers: await User.countDocuments({ 'roles.teacher': true }),
+    lessons: await Lesson.countDocuments(),
   };
   return result;
 };

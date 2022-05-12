@@ -27,7 +27,7 @@
     border-top: 1px solid var(--main-color);
     padding-top: 20px;
 }
-.Auth form > input {
+.Auth form > input, .input {
     width: 100%;
     height: 55px;
     border-radius: 10px;

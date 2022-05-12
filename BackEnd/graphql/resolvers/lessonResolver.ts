@@ -17,6 +17,11 @@ export const getLesson = async (
   return final;
 };
 
+export const getChapters = async (_: null, args: { title: string }) => {
+  const res = await Lesson.findOne({ title: args.title });
+  return res;
+};
+
 export const createLesson = async (_: null, args: any) => {
   console.log(args.chapter);
   const newLesson = new Lesson({

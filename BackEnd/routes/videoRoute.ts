@@ -2,21 +2,14 @@ import express from 'express';
 import multer from 'multer';
 import { GridFsStorage } from 'multer-gridfs-storage';
 import mongoose from 'mongoose';
-import { GFS } from '../models/lesson';
+import Lesson, { GFS } from '../models/lesson';
+import imageFromText from '../Utils/imageGenerator';
+
 const videoRoute = express.Router();
-
-// Init gfs
-
-let gridfsBucket: any;
-mongoose.connection.once('open', () => {
-  gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-    bucketName: 'uploads',
-  });
-});
 
 // Create storage engine
 const storage = new GridFsStorage({
-  url: process.env.MONGO_URI || 'mongo://',
+  url: process.env.MONGO_URI || 'mongodb://localhost:27017/Quran',
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       console.log(file.originalname);
@@ -30,9 +23,49 @@ const storage = new GridFsStorage({
   },
 });
 
-videoRoute.post('/upload', multer({ storage }).single('video'), (req, res) => {
-  res.status(200).json({ file: req.file });
-});
+videoRoute.post(
+  '/upload',
+  multer({ storage }).single('video'),
+  async (req, res) => {
+    const video: any = req.file;
+    if (req.body.isNew == 'true') {
+      const newLesson = new Lesson({
+        title: req.body.title,
+        chapters: [
+          {
+            name: req.body.chapter,
+            video: video.id,
+            content: req.body.content,
+          },
+        ],
+        thumbnail: await imageFromText(req.body.title),
+        teacher: req.body.teacherID,
+      });
+      const nl = await newLesson
+        .save()
+        .catch(() => res.status(404).json({ failure: 'not saved' }));
+
+      res.status(200).json({ lessonTitle: nl.title });
+    } else {
+      const lesson = await Lesson.findOne({ title: req.body.title });
+
+      const updated = await Lesson.findOneAndUpdate(
+        { title: req.body.title },
+        {
+          chapters: [
+            ...lesson.chapters,
+            {
+              name: req.body.chapter,
+              video: video.id,
+              content: req.body.content,
+            },
+          ],
+        }
+      ).catch((err) => res.status(404).json({ failure: 'not saved' }));
+      res.status(200).json({ lessonTitle: req.body.title });
+    }
+  }
+);
 videoRoute.get('/:id', (req, res) => {
   GFS.findById(req.params.id, (err: any, file: any) => {
     // Check if file
@@ -61,7 +94,12 @@ videoRoute.get('/:id', (req, res) => {
 
       // HTTP Status 206 for Partial Content
       res.writeHead(206, headers); */
-
+      let gridfsBucket = new mongoose.mongo.GridFSBucket(
+        mongoose.connection.db,
+        {
+          bucketName: 'uploads',
+        }
+      );
       const readstream = gridfsBucket.openDownloadStream(file._id);
 
       readstream.pipe(res);

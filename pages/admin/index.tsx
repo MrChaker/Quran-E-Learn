@@ -7,7 +7,7 @@ const Admin: {
   getLayout(page: ReactElement): JSX.Element;
 } = () => {
   return (
-    <div className="dashboard flex flex-col gap-12">
+    <div className="dashboard flex flex-col gap-12 min-h-screen">
       <h1 className="text-6xl">لوحة التحكّم</h1>
       <StatCardCont />
     </div>

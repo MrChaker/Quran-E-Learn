@@ -30,6 +30,7 @@ export const userSchema = `
   type DocCount {
     students: Int
     teachers: Int
+    lessons: Int
   }
 
 `;

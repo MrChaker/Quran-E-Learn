@@ -1,23 +1,35 @@
+import { gql, useQuery } from '@apollo/client';
 import { NextPage } from 'next';
-import React, { useState } from 'react';
+import Router from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { LessonInterface } from '../../BackEnd/Utils/interfaces/lessonsInterface';
-import SideBar, { SideBarEL } from '../components/admin/sideBar';
-import { LessonCentext } from '../Context/lessonContext';
+import SideBar, { SideBarEL } from '../components/general/sideBar';
+import { LessonContext } from '../Context/lessonContext';
 
 const LessonLayout: NextPage = (props) => {
-  const [lesson, setLesson] = useState<LessonInterface>(null!);
+  const [chapters, setChapters] = useState<{ name: string }[]>([]);
+  const [lesson, setLesson] = useState<string>('');
+  const { data, loading } = useQuery(GET_Chapters, {
+    variables: { title: lesson },
+  });
+  useEffect(() => {
+    if (data) {
+      setChapters(data.getChapters.chapters);
+    }
+  }, [loading]);
   return (
-    <LessonCentext.Provider value={{ lesson, setLesson }}>
+    <LessonContext.Provider value={{ lesson, setLesson }}>
       <div className="flex ">
         <SideBar
-          color="lighterColor"
-          darkColor="darkColor"
+          bgColor="lighterColor"
+          textColor="darkColor"
           logo={{ lg: <></>, link: '' }}
+          extraStyle="sm:mr-[-32px]  md:mr-[-60px] "
         >
-          {lesson?.chapters?.map((ch, i) => (
+          {chapters?.map((ch, i) => (
             <SideBarEL
               key={i}
-              link={`${i + 1}`}
+              link={`../${lesson}/${i + 1}`}
               name={ch.name}
               icon={<p>📄</p>}
               hoverColor="semiColor"
@@ -27,7 +39,18 @@ const LessonLayout: NextPage = (props) => {
         </SideBar>
         {props.children}
       </div>
-    </LessonCentext.Provider>
+    </LessonContext.Provider>
   );
 };
+
+const GET_Chapters = gql`
+  query getChapters($title: String) {
+    getChapters(title: $title) {
+      chapters {
+        name
+      }
+    }
+  }
+`;
+
 export default LessonLayout;

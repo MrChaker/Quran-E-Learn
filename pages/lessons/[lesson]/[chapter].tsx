@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import Router, { useRouter } from 'next/router';
 import React, {
   ReactElement,
@@ -15,14 +15,18 @@ import LessonLayout from '../../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../../FrontEnd/Layouts/layout';
 import { useLessonContext } from '../../../FrontEnd/Context/lessonContext';
 const Lesson = () => {
+  const [Slesson, setLesson] = useState<LessonInterface>(null!);
   const { lesson, chapter } = useRouter().query;
+  const { setLesson: setLCtx } = useLessonContext();
+  setLCtx((typeof lesson == 'string' && lesson) || '');
+
   const { data, loading } = useQuery(GET_Lesson, {
     variables: {
       title: lesson,
       chapter: Number(chapter),
     },
   });
-  const { lesson: Slesson, setLesson } = useLessonContext();
+
   const content = useRef<HTMLDivElement>(null!);
   useEffect(() => {
     if (data) {
@@ -60,4 +64,5 @@ Lesson.getLayout = function getLayout(page: ReactElement) {
     </Layout>
   );
 };
+
 export default Lesson;

@@ -10,7 +10,7 @@ export const Header = () => {
       <div
         className={` flex flex-col-reverse items-center   justify-between gap-10 md:flex-row`}
       >
-        <div className="min-w-[320px] lg:min-w-[400px] text-center text-4xl sm:text-5xl text-darkColor dark:text-lightColor md:text-right lg:text-6xl  ">
+        <div className="min-w-[320px] lg:min-w-[400px] text-center text-4xl sm:text-5xl md:text-right lg:text-6xl  ">
           <h1 className=" w-fit m-auto md:w-full md:m-0  flex items-center font-bold whitespace-nowrap">
             قال رسول الله
             <p>ﷺ</p>
@@ -36,7 +36,7 @@ export const Header = () => {
 
         <div className={`relative -mb-5 sm:mb-0`}>
           <div className="relative min-h-[350px] min-w-[280px] lg:min-h-[470px] lg:min-w-[350px]">
-            <Image src="/quran.png" alt="me" width={450} height={470} />
+            <Image src="/quran/Reading.png" alt="me" width={460} height={470} />
           </div>
         </div>
       </div>

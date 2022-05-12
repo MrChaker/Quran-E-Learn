@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import g from 'gridfs-stream';
 const connection = {};
 
 export default async function Connect() {
@@ -11,6 +11,13 @@ export default async function Connect() {
     useNewUrlParser: true,
   });
   connection.isConnected = db.connection.readyState;
+
+  mongoose.connection.once('open', () => {
+    let gfs = g(mongoose.connection.db, mongoose.mongo);
+    gfs.collection('uploads');
+
+    console.log('connection made successfully');
+  });
 
   console.log(process.env.MONGO_URI);
 }

@@ -28,6 +28,7 @@ const GET_DocCount = gql`
     getCount {
       students
       teachers
+      lessons
     }
   }
 `;

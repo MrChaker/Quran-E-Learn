@@ -1,10 +1,11 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 
 export const GFS = mongoose.model(
   'GFS',
   new mongoose.Schema({}, { strict: false }),
   'uploads.files'
 );
+
 export const LessonSchema = new mongoose.Schema(
   {
     title: String,
@@ -29,5 +30,12 @@ export const LessonSchema = new mongoose.Schema(
   }
 );
 
-const Lesson = mongoose.model<any, Model<any>>('Lesson', LessonSchema);
+LessonSchema.pre('remove', function (next) {
+  this.chapters.forEach(async (chapter: any) => {
+    await GFS.findByIdAndDelete(chapter.video);
+  });
+  next();
+});
+
+const Lesson = mongoose.model<any, mongoose.Model<any>>('Lesson', LessonSchema);
 export default Lesson;

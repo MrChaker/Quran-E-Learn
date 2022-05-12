@@ -1,11 +1,15 @@
 import { NextPage } from 'next';
 import Image from 'next/image';
 import React from 'react';
-import SideBar, { SideBarEL } from '../components/admin/sideBar';
+import SideBar, { SideBarEL } from '../components/general/sideBar';
 const AdminLayout: NextPage = ({ children }) => {
   return (
     <div className="font-main flex" dir="rtl">
-      <SideBar color="darkColor" logo={{ lg: <>Quran</>, link: '/dashboard' }}>
+      <SideBar
+        bgColor="darkColor"
+        textColor="lighterColor"
+        logo={{ lg: <>Quran</>, link: '/dashboard' }}
+      >
         <SideBarEL
           name="لوحة التحكم"
           link="/admin"
