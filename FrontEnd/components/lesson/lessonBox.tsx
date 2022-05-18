@@ -5,7 +5,7 @@ import Link from 'next/link';
 const LessonBox = (props: {
   title: string;
   thumbnail: string;
-  progress: number;
+  progress?: number;
 }) => {
   return (
     <div className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 ">

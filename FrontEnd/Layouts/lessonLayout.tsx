@@ -1,8 +1,6 @@
 import { gql, useLazyQuery } from '@apollo/client';
 import { NextPage } from 'next';
-import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { LessonInterface } from '../../BackEnd/Utils/interfaces/lessonsInterface';
 import SideBar, { SideBarEL } from '../components/general/sideBar';
 import { LessonContext } from '../Context/lessonContext';
 

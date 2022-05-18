@@ -18,7 +18,7 @@ export const lessonSchema = `
   }
 `;
 export const lessonQueries = `
-  getLessons: [LessonType]
+  getLessons(userID: String, forTeacher: Boolean): [LessonType]
   getLesson(title: String chapter: Int): LessonType
   getChapters(title: String): LessonType
 `;

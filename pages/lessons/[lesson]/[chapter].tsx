@@ -1,16 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
-import Router, { useRouter } from 'next/router';
-import React, {
-  ReactElement,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { GET_Lesson } from '../../../FrontEnd/graphql/queries';
-import { UserContext } from '../../../FrontEnd/Context/userContext';
-import { LessonInterface } from '../../../BackEnd/Utils/interfaces/lessonsInterface';
+import { LessonInterface } from '../../../interfaces/lessonsInterface';
 import LessonLayout from '../../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../../FrontEnd/Layouts/layout';
 import { useLessonContext } from '../../../FrontEnd/Context/lessonContext';

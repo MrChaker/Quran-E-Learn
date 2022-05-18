@@ -2,14 +2,14 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 
 export default async function imageFromText(text) {
   // width and height
-  registerFont(`E:/projects/e-quran/public/fonts/QuranFont.ttf`, {
+  registerFont(`E:/projects/e-quran/public/fonts/quran3.ttf`, {
     family: 'Quran',
   });
   const image = await loadImage(
     `${process.env.NEXT_PUBLIC_PORT}quran/background.jpg`
   );
-  const width = 650;
-  const height = 400;
+  const width = 180;
+  const height = 100;
   const canvas = createCanvas(width, height);
 
   const context = canvas.getContext('2d');
@@ -17,7 +17,7 @@ export default async function imageFromText(text) {
   // Background color
   context.drawImage(image, 0, 0, width, height);
 
-  context.font = 'bold 144px Quran';
+  context.font = 'bolder 144px Quran';
   context.textAlign = 'center';
 
   // Set text color

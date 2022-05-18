@@ -6,10 +6,9 @@ import { UserContext } from '../../FrontEnd/Context/userContext';
 import { CREATE_Request } from '../../FrontEnd/graphql/mutations';
 import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import Swal from 'sweetalert2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FileInput from '../../FrontEnd/components/general/input';
 const TeachingRequest = () => {
-  useIsAuth();
+  useIsAuth(true); //must be authed and not already a teacher
   const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const message = useRef<HTMLTextAreaElement>(null!);
@@ -41,6 +40,8 @@ const TeachingRequest = () => {
       });
     };
   };
+  if (user.info?.roles?.teacher)
+    return <p className="text-5xl p-8">أنت مسجّل معنا كشيخ</p>;
   return (
     <div className="text-darkColor dark:text-lightColor text-xl flex flex-col gap-10  w-2/3 m-auto mt-8">
       <h1 className="text-5xl">تقديم طلب للانظمام كمعلّم قرآن</h1>

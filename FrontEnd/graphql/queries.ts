@@ -19,6 +19,7 @@ const GET_AllUsers = gql`
         teacher
         student
       }
+      image
       phone
     }
   }
@@ -62,8 +63,8 @@ const GET_Request = gql`
 `;
 
 const GET_Lessons = gql`
-  query {
-    getLessons {
+  query getLessons($userID: String, $forTeacher: Boolean) {
+    getLessons(userID: $userID, forTeacher: $forTeacher) {
       title
       thumbnail
       chapters {

@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 
-import { UserInterface } from '../../BackEnd/Utils/interfaces/userInterface';
+import { UserInterface } from '../../interfaces/userInterface';
 import { UserContext } from './userContext';
 
 type PeerUser = { user: UserInterface | null; socketID: string };

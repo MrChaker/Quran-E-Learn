@@ -1,6 +1,6 @@
 import Lesson from '../../models/lesson';
 import User from '../../models/user';
-import { UserInterface } from '../../Utils/interfaces/userInterface';
+import { UserInterface } from '../../../interfaces/userInterface';
 
 //queries
 export const getUser = async (_: null, args: { _id: string }) => {
@@ -61,6 +61,30 @@ export const updateUser = async (
 export const deleteUser = async (_: null, args: { _id: String }) => {
   const res = await User.findByIdAndDelete(args._id);
   return res;
+};
+
+export const joinTeacher = async (
+  _: null,
+  args: { teacherID: string; studentID: string }
+) => {
+  try {
+    const teacher = await User.findByIdAndUpdate(args.teacherID, {
+      $push: { students: args.studentID },
+    });
+
+    const student = await User.findByIdAndUpdate(args.studentID);
+    student.teachers.push(args.teacherID);
+    if (teacher.lessons.length > 0) {
+      teacher.lessons.forEach((lesson: any) => {
+        student.Slessons.push({ lesson, progress: 0 });
+      });
+    }
+    student.save();
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 //**image requires extra work
 /* export const updateImage = async (_: null, args: ImageArgs) => {

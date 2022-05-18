@@ -46,10 +46,16 @@ const CREATE_Lesson = gql`
   }
 `;
 
+const JOIN_Teacher = gql`
+  mutation joinTeacher($teacherID: String, $studentID: String) {
+    joinTeacher(teacherID: $teacherID, studentID: $studentID)
+  }
+`;
 export {
   CREATE_Request,
   UPDATE_User,
   DELETE_User,
   HANDLE_Request,
   CREATE_Lesson,
+  JOIN_Teacher,
 };

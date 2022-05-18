@@ -6,7 +6,7 @@ import { UserContext } from '../../FrontEnd/Context/userContext';
 import { useQuery } from '@apollo/client';
 import { GET_User } from '../../FrontEnd/graphql/queries';
 import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
-import type { UserInterface } from '../../BackEnd/Utils/interfaces/userInterface';
+import type { UserInterface } from '../../interfaces/userInterface';
 import Photo from '../../FrontEnd/components/profile/photo';
 import ProfileDetails from '../../FrontEnd/components/profile/details';
 const Profile: NextPage = () => {

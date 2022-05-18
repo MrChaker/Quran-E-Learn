@@ -1,10 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Router, useRouter } from 'next/router';
 import React, { ReactElement, useEffect, useState } from 'react';
-import { Request } from '../../../BackEnd/Utils/interfaces/reqInterface';
+import { Request } from '../../../interfaces/reqInterface';
 import { GET_Request } from '../../../FrontEnd/graphql/queries';
 import AdminLayout from '../../../FrontEnd/Layouts/adminLayout';
-import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../../FrontEnd/components/general/Button';
 import { HANDLE_Request } from '../../../FrontEnd/graphql/mutations';

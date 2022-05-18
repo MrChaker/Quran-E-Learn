@@ -1,12 +1,32 @@
 import Lesson from '../../models/lesson';
-import { LessonInterface } from '../../Utils/interfaces/lessonsInterface';
+import { LessonInterface } from '../../../interfaces/lessonsInterface';
+import User from '../../models/user';
 
-export const getLessons = async () => {
-  const res = await Lesson.find();
-  console.log(res);
-  return res;
+export const getLessons = async (
+  _: null,
+  args: { userID?: string; forTeacher?: boolean }
+) => {
+  if (args.userID) {
+    // if we want to get lessons related to a user ( created by 'teacher' or getting studied by 'student' )
+    const res = await User.findById(args.userID, {
+      Slessons: 1,
+      lessons: 1,
+    });
+    const lessons: LessonInterface[] = [];
+    const teacherOrStudent = args.forTeacher
+      ? [...res.lessons]
+      : [...res.Slessons];
+    teacherOrStudent.forEach((l: any) => {
+      lessons.push(args.forTeacher ? l : l.lesson);
+    });
+    console.log(lessons);
+    const lessonsRes = await Lesson.find({ _id: { $in: lessons } });
+    return lessonsRes;
+  }
+
+  const lessons = await Lesson.find();
+  return lessons;
 };
-
 export const getLesson = async (
   _: null,
   args: { title: string; chapter: number }
@@ -31,5 +51,15 @@ export const createLesson = async (_: null, args: any) => {
     teacher: args.teacherID,
   });
   const res = await newLesson.save();
+  // push it to teacher lessons
+  const teacher = await User.findById(args.teacherID).populate('students');
+  console.log(teacher);
+  teacher.lessons.push(res.id);
+  teacher.students.forEach((student: any) => {
+    student.Slessons.push(res.id);
+  });
+  teacher.save();
+  // put lesson to students db
+
   return res;
 };

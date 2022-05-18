@@ -3,7 +3,7 @@ import {
   StudentInfo,
   TeacherInfo,
   UserInterface,
-} from '../../BackEnd/Utils/interfaces/userInterface';
+} from '../../interfaces/userInterface';
 
 export type User = {
   info: UserInterface | null;

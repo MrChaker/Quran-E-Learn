@@ -28,7 +28,7 @@ export const NavBar = () => {
         <ul className="hidden list-none items-center gap-6 text-lg md:flex ">
           <NavEl text="الرّئيسية" link="/dashboard" />
           <NavEl text="الدّروس" />
-          <NavEl text="شيوخنا" link="/contact/teaching" />
+          <NavEl text="شيوخنا" link="/teachers" />
         </ul>
 
         <div className="flex items-center">
@@ -102,7 +102,7 @@ export const NavBar = () => {
             <NavEl text="تسجيل الدخول" link="/auth/login" />
             <NavEl text="انشاء حساب" link="/auth/signup" />
             <NavEl text="الدّروس" link="/lessons/" />
-            <NavEl text="شيوخنا" link="/contact/teaching" />
+            <NavEl text="شيوخنا" link="/teachers" />
           </ul>
           <FontAwesomeIcon
             icon="times"

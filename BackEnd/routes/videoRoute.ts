@@ -4,6 +4,7 @@ import { GridFsStorage } from 'multer-gridfs-storage';
 import mongoose from 'mongoose';
 import Lesson, { GFS } from '../models/lesson';
 import imageFromText from '../Utils/imageGenerator';
+import User from '../models/user';
 
 const videoRoute = express.Router();
 
@@ -23,6 +24,21 @@ const storage = new GridFsStorage({
   },
 });
 
+const updateLessonArrays = async (teacherID: string, lessonID: string) => {
+  const teacher = await User.findById(teacherID);
+  const hisStudents = await User.find({ _id: { $in: teacher.students } });
+  teacher.lessons.push(lessonID);
+  hisStudents.forEach((student: any) => {
+    student.Slessons.push({ lesson: lessonID, progress: 0 });
+    student.save();
+  });
+  teacher.save();
+};
+
+videoRoute.post('/i', async (req, res) => {
+  const i = await imageFromText('fatiha');
+  res.json({ d: i });
+});
 videoRoute.post(
   '/upload',
   multer({ storage }).single('video'),
@@ -45,21 +61,19 @@ videoRoute.post(
         .save()
         .catch(() => res.status(404).json({ failure: 'not saved' }));
 
+      await updateLessonArrays(req.body.teacherID, nl.id);
       res.status(200).json({ lessonTitle: nl.title });
     } else {
-      const lesson = await Lesson.findOne({ title: req.body.title });
-
-      const updated = await Lesson.findOneAndUpdate(
+      await Lesson.findOneAndUpdate(
         { title: req.body.title },
         {
-          chapters: [
-            ...lesson.chapters,
-            {
+          $push: {
+            chapters: {
               name: req.body.chapter,
               video: video.id,
               content: req.body.content,
             },
-          ],
+          },
         }
       ).catch((err) => res.status(404).json({ failure: 'not saved' }));
       res.status(200).json({ lessonTitle: req.body.title });

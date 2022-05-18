@@ -42,5 +42,6 @@ export const userQueries = `
 
 export const userMutations = `
   updateUser(_id: String, query: UserInput): UserType
-  deleteUser(_id: String): UserType
+  deleteUser(_id: String): UserType,
+  joinTeacher(teacherID: String, studentID: String): Boolean
 `;

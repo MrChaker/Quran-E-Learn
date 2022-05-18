@@ -40,19 +40,22 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
     }
 
     await uploadFile(formData)
-      .then((lessonTitle) => {
+      .then((data) => {
         setUploading(false);
         Swal.fire({
           text: 'تمّ انشاء الدرس ، يمكنك الخروج الان او اضافة وحدات اخرى للدرس',
           confirmButtonText: 'اضافة وحدة أخرى',
           confirmButtonColor: 'var(--main-color)',
           denyButtonText: 'حفظ الدرس ',
+          showDenyButton: true,
           denyButtonColor: 'var(--semi-color)',
         }).then((res) => {
           if (res.isConfirmed || res.isDismissed) {
-            Router.push(`/lessons/newChapter/${lessonTitle}`);
+            Router.push(
+              `/lessons/newChapter/${event.target.title.value || props.title}`
+            );
           } else if (res.isDenied) {
-            Router.push(`/lessons/${lessonTitle}`);
+            Router.push(`/lessons/${event.target.title.value}/1`);
           }
         });
       })
@@ -99,9 +102,9 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
       />
       {uploadProgress.visible && (
         <div className="flex justify-between items-center">
-          <p>{uploadProgress.progress}%</p>
+          <p>{Math.round(uploadProgress.progress * 2)}%</p>
           <Progress
-            percent={uploadProgress.progress}
+            percent={Math.round(uploadProgress.progress * 2)}
             strokeWidth={5}
             strokeColor="Blue"
           />

@@ -22,5 +22,5 @@ export interface StudentInfo {
     title: string;
     progress: number;
   }[];
-  teacher: string;
+  teachers: string[];
 }

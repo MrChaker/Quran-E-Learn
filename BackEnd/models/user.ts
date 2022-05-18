@@ -1,7 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 
 import bcrypt from 'bcryptjs';
-import { UserInterface } from '../Utils/interfaces/userInterface';
+import { UserInterface } from '../../interfaces/userInterface';
 export interface UserModel extends Model<any> {
   loginAPI(email: string, Password: string): any;
 }
@@ -44,34 +44,24 @@ export const UserSchema = new mongoose.Schema({
       progress: { type: Number, default: 0 },
     },
   ],
-
-  teacher: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    default: null,
-  },
-
+  teachers: [String], // this is suppose to ref to User but seems not an easy task to do, so we'll do it the stupid way
   // teacher properties
-  students: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      default: null,
-    },
-  ],
+  students: [String], // this is suppose to ref to User but seems not an easy task to do, so we'll do it the stupid way
   lessons: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Lesson',
       default: null,
     },
   ],
 });
 
-UserSchema.pre<UserInterface>('save', async function (next) {
-  if (this.password) {
+UserSchema.pre('save', async function (next) {
+  if (this.password && this.__v == 0) {
     const salt = await bcrypt.genSalt();
+    console.log(this.password);
     this.password = await bcrypt.hash(this.password, salt);
+    console.log(this.password);
   }
   next();
 });
@@ -85,7 +75,9 @@ UserSchema.static(
   async function loginAPI(Email: string, Password: string) {
     const user = await this.findOne({ email: Email });
     if (user) {
+      console.log(Password);
       const pass = await bcrypt.compare(Password, user.password);
+      console.log(pass);
       if (pass) {
         return user;
       }
@@ -96,4 +88,5 @@ UserSchema.static(
 );
 
 const User: UserModel = mongoose.model<any, UserModel>('User', UserSchema);
+
 export default User;

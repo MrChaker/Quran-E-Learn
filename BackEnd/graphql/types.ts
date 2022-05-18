@@ -1,4 +1,4 @@
-import { UserInterface } from '../Utils/interfaces/userInterface';
+import { UserInterface } from '../../interfaces/userInterface';
 
 export type RequestType = {
   userID: string;

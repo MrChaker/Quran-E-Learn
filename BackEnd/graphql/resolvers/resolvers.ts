@@ -4,6 +4,7 @@ import {
   updateUser,
   deleteUser,
   getUsers,
+  joinTeacher,
 } from './userResolver';
 import {
   getRequests,
@@ -34,6 +35,7 @@ const resolvers = {
     createRequest,
     handleRequest,
     createLesson,
+    joinTeacher,
   },
 };
 

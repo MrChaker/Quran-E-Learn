@@ -14,6 +14,7 @@ import {
   faUserGraduate,
   faDownload,
   faUpload,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAW = () => {
@@ -30,6 +31,7 @@ export const fontAW = () => {
     faMicrophone,
     faUserGraduate,
     faDownload,
-    faUpload
+    faUpload,
+    faPlus
   );
 };
