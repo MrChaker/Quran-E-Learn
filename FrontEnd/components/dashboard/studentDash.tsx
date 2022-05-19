@@ -29,25 +29,18 @@ const StudentDashboard: React.FC = () => {
       }`}</h1>
 
       <div className="flex gap-12 flex-wrap">
-        {newLearner && (
-          <>
-            <LessonBox
-              title="سورة الفاتحة"
-              thumbnail="/quran/fatiha.jpg"
-              progress={15}
-            />
-          </>
-        )}
         {lessons.map((lesson, i) => (
-          <LessonBox
-            key={i}
-            title={lesson.title || ''}
-            thumbnail={lesson.thumbnail || ''}
-            progress={
-              user.studentInfo?.lessons?.find((l) => l.title == lesson.title)
-                ?.progress || 0
-            }
-          />
+          <div className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 ">
+            <LessonBox
+              key={i}
+              title={lesson.title || ''}
+              thumbnail={lesson.thumbnail || ''}
+              progress={
+                user.studentInfo?.lessons?.find((l) => l.title == lesson.title)
+                  ?.progress || 0
+              }
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -7,7 +7,7 @@ export const getLessons = async (
   args: { userID?: string; forTeacher?: boolean }
 ) => {
   if (args.userID) {
-    // if we want to get lessons related to a user ( created by 'teacher' or getting studied by 'student' )
+    // if we want to get lessons related to a user ( created by 'teacher' forTeacher :true or getting studied by 'student' forTeacher: false)
     const res = await User.findById(args.userID, {
       Slessons: 1,
       lessons: 1,
@@ -19,7 +19,6 @@ export const getLessons = async (
     teacherOrStudent.forEach((l: any) => {
       lessons.push(args.forTeacher ? l : l.lesson);
     });
-    console.log(lessons);
     const lessonsRes = await Lesson.find({ _id: { $in: lessons } });
     return lessonsRes;
   }

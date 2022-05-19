@@ -18,6 +18,8 @@ const TeacherDash = () => {
   useEffect(() => {
     if (data) setLessons(data.getLessons);
   }, [loading]);
+
+  const showOptions = () => {};
   return (
     <div className="text-xl sm:p-6">
       <h1 className=" text-2xl sm:text-3xl md:text-5xl mb-6 sm:mb-10 ">
@@ -37,13 +39,21 @@ const TeacherDash = () => {
       <h2 className="text-xl sm:text-2xl md:text-3xl my-6 sm:my-10">
         الدروس المقدمة
       </h2>
-      <div className="flex flex-wrap gap-5">
+      <div className="flex flex-wrap gap-14">
         {lessons.map((lesson, i) => (
-          <LessonBox
-            key={i}
-            title={lesson.title || ''}
-            thumbnail={lesson.thumbnail || ''}
-          />
+          <div className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 ">
+            <p
+              className=" w-fit text-3xl mr-auto ml-4 pb-2 px-2 rounded-full hover:bg-lightColor cursor-pointer"
+              onClick={showOptions}
+            >
+              ...
+            </p>
+            <LessonBox
+              key={i}
+              title={lesson.title || ''}
+              thumbnail={lesson.thumbnail || ''}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import express, { Errback } from 'express';
 const authRoute = express.Router();
 import jwt, { Secret } from 'jsonwebtoken';
+import Lesson from '../models/lesson';
 import User from '../models/user';
 import { uniqueValidator } from '../Utils/authErrors';
 
@@ -15,6 +16,12 @@ authRoute.post('/sign', async (req, res) => {
   if (hasToBeUnique) {
     res.status(400).json({ SignErrors: hasToBeUnique });
   }
+  // getting surah el fatiha for new students
+  const firstLesson = await Lesson.findOne(
+    { title: 'سورة الفاتحة' },
+    { _id: 1 }
+  );
+
   const newUser = new User({
     name: req.body.name,
     email: req.body.email,
@@ -22,6 +29,7 @@ authRoute.post('/sign', async (req, res) => {
     image: req.body.sex == 'male' ? '/male.png' : '/female.png',
     password: req.body.password,
     phone: req.body.phone,
+    Slessons: [firstLesson._id],
   });
 
   const user = await newUser.save().catch((err: Errback) => {

@@ -8,7 +8,7 @@ const LessonBox = (props: {
   progress?: number;
 }) => {
   return (
-    <div className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 ">
+    <>
       <Link href={`lessons/${props.title}/1`}>
         <a className="overflow-hidden w-full h-full block rounded-3xl shadow-lg hover:shadow-2x ">
           <motion.div
@@ -28,9 +28,9 @@ const LessonBox = (props: {
       </Link>
       <div className="flex justify-between text-xl px-4 mt-2">
         <p className="">{props.title}</p>
-        <p>{props.progress}%</p>
+        {props.progress != undefined && <p>{props.progress}%</p>}
       </div>
-    </div>
+    </>
   );
 };
 
