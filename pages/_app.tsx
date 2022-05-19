@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       studentInfo: userInfo
         ? {
             lessons: userInfo.lessons,
-            teacher: userInfo.teacher,
+            teachers: userInfo.teachers,
           }
         : undefined,
       teacherInfo:
