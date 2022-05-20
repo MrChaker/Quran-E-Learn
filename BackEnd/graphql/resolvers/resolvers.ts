@@ -17,6 +17,7 @@ import {
   getLessons,
   createLesson,
   getChapters,
+  deleteLesson,
 } from './lessonResolver';
 const resolvers = {
   Query: {
@@ -36,6 +37,7 @@ const resolvers = {
     handleRequest,
     createLesson,
     joinTeacher,
+    deleteLesson,
   },
 };
 

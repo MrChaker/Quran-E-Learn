@@ -70,6 +70,10 @@ const GET_Lessons = gql`
       chapters {
         name
       }
+      teacher {
+        _id
+        name
+      }
     }
   }
 `;

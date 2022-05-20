@@ -24,4 +24,5 @@ export const lessonQueries = `
 `;
 export const lessonMutations = `
   createLesson(title: String, chapters: [ChapterInput], thumbnail: String ,teacherID: String): LessonType
+  deleteLesson(title: String): LessonType
 `;

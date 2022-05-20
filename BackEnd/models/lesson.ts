@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import User from './user';
 
 export const GFS = mongoose.model(
   'GFS',
@@ -22,7 +23,7 @@ export const LessonSchema = new mongoose.Schema(
     thumbnail: String,
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: User,
     },
   },
   {
@@ -30,10 +31,23 @@ export const LessonSchema = new mongoose.Schema(
   }
 );
 
-LessonSchema.pre('remove', function (next) {
-  this.chapters.forEach(async (chapter: any) => {
-    await GFS.findByIdAndDelete(chapter.video);
-  });
+LessonSchema.pre('remove', async function (next) {
+  try {
+    this.chapters.forEach(async (chapter: any) => {
+      await GFS.findByIdAndDelete(chapter.video);
+    });
+    const teacher = await User.findByIdAndUpdate(this.teacher, {
+      $pull: { lessons: this._id },
+    });
+    const students = await User.updateMany(
+      { Slessons: this._id },
+      {
+        $pull: { Slessons: this._id },
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
   next();
 });
 

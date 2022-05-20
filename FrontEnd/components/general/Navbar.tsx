@@ -5,13 +5,20 @@ import { useMenuContext } from '../../Context/menuContext';
 import { useThemeContext } from '../../Context/themeContext';
 import { UserContext } from '../../Context/userContext';
 import { Button } from './Button';
-import DropMenu from './dropMenu';
+import DropMenu, { DropMenuLink } from './dropMenu';
 import Image from 'next/image';
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
   const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const [dropMenu, setDropMenu] = useState(false);
+  const logout = (): void => {
+    localStorage.setItem(
+      'currentUser',
+      '{ "info": null, "isAuthenticated": false}'
+    );
+    location.assign('/auth/logout');
+  };
   return (
     <>
       <nav
@@ -81,7 +88,16 @@ export const NavBar = () => {
                 <div className="text-md sm:text-xl">{user.info?.name}</div>
                 <FontAwesomeIcon icon="caret-down" />
               </div>
-              <DropMenu isOn={dropMenu} left="10%" top="80%" />
+              <DropMenu isOn={dropMenu} left="10%" top="80%">
+                <DropMenuLink
+                  name="الحساب"
+                  link={`/profile/${user.info?._id}`}
+                />
+                {user.info?.roles?.admin && (
+                  <DropMenuLink name="لوحة التحكم" link={`/admin`} />
+                )}
+                <DropMenuLink name="تسجيل الخروج" isButton onClick={logout} />
+              </DropMenu>
             </>
           )}
           {<ThemeButton style="mx-2 sm:mx-4 text-sm sm:text-2xl" />}

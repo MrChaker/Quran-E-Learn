@@ -1,3 +1,5 @@
+import { TeacherInfo, UserInterface } from './userInterface';
+
 export interface LessonInterface {
   title?: string;
   chapters?: {
@@ -6,5 +8,5 @@ export interface LessonInterface {
     video: string;
   }[];
   thumbnail?: string;
-  teacher?: string;
+  teacher?: UserInterface & TeacherInfo;
 }

@@ -13,8 +13,8 @@ export interface UserInterface {
   };
 }
 export interface TeacherInfo {
-  lessons?: string[];
-  students?: string[];
+  lessons?: string[]; // id[]
+  students?: (UserInterface & StudentInfo)[];
 }
 
 export interface StudentInfo {
@@ -22,5 +22,5 @@ export interface StudentInfo {
     title: string;
     progress: number;
   }[];
-  teachers: string[];
+  teachers: string[]; // id[]
 }

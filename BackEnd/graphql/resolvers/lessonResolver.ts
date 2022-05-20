@@ -19,11 +19,13 @@ export const getLessons = async (
     teacherOrStudent.forEach((l: any) => {
       lessons.push(args.forTeacher ? l : l.lesson);
     });
-    const lessonsRes = await Lesson.find({ _id: { $in: lessons } });
+    const lessonsRes = await Lesson.find({ _id: { $in: lessons } }).populate(
+      'teacher'
+    );
     return lessonsRes;
   }
 
-  const lessons = await Lesson.find();
+  const lessons = await Lesson.find().populate('teacher', { name: 1 });
   return lessons;
 };
 export const getLesson = async (
@@ -60,5 +62,11 @@ export const createLesson = async (_: null, args: any) => {
   teacher.save();
   // put lesson to students db
 
+  return res;
+};
+
+export const deleteLesson = async (_: null, args: { title: string }) => {
+  const res = await Lesson.findOne({ title: args.title });
+  res.remove();
   return res;
 };

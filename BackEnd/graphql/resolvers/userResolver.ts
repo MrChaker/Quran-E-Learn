@@ -59,7 +59,8 @@ export const updateUser = async (
 };
 
 export const deleteUser = async (_: null, args: { _id: String }) => {
-  const res = await User.findByIdAndDelete(args._id);
+  const res = await User.findById(args._id);
+  res.remove();
   return res;
 };
 
@@ -79,7 +80,7 @@ export const joinTeacher = async (
         student.Slessons.push({ lesson, progress: 0 });
       });
     }
-    student.save();
+    await student.save();
     return true;
   } catch (error) {
     console.log(error);

@@ -3,15 +3,12 @@ import Link from 'next/link';
 import { useContext } from 'react';
 import { UserContext } from '../../Context/userContext';
 
-const DropMenu = (props: { isOn: boolean; left: string; top: string }) => {
-  const logout = (): void => {
-    localStorage.setItem(
-      'currentUser',
-      '{ "info": null, "isAuthenticated": false}'
-    );
-    location.assign('/auth/logout');
-  };
-  const { user } = useContext(UserContext);
+type PropsType = {
+  isOn: boolean;
+  left: string;
+  top: string;
+};
+const DropMenu: React.FC<PropsType> = (props) => {
   return (
     <AnimatePresence>
       {props.isOn && (
@@ -19,21 +16,17 @@ const DropMenu = (props: { isOn: boolean; left: string; top: string }) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0 }}
-          className=" absolute rounded-lg p-4 dark:bg-lightColor bg-darkColor h-36 w-36 opacity-80 flex flex-col items-center justify-between text-lg "
+          className=" absolute rounded-lg p-4 dark:bg-lightColor bg-darkColor h-36 w-36 opacity-80 flex flex-col items-center justify-between text-lg z-50"
           style={{ left: props.left, top: props.top }}
         >
-          <DropMenuLink name="الحساب" link={`/profile/${user.info?._id}`} />
-          {user.info?.roles?.admin && (
-            <DropMenuLink name="لوحة التحكم" link={`/admin`} />
-          )}
-          <DropMenuLink name="تسجيل الخروج" isButton onClick={logout} />
+          {props.children}
         </motion.div>
       )}
     </AnimatePresence>
   );
 };
 
-const DropMenuLink = (props: {
+export const DropMenuLink = (props: {
   name: string;
   link?: string;
   isButton?: boolean;
