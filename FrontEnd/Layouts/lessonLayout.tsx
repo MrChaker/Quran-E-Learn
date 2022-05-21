@@ -17,7 +17,7 @@ const LessonLayout: NextPage = (props) => {
 
   useEffect(() => {
     if (data) {
-      setChapters(data.getChapters.chapters);
+      setChapters(data.getChapters && data.getChapters.chapters);
     }
   }, [loading]);
   return (
@@ -29,16 +29,17 @@ const LessonLayout: NextPage = (props) => {
           logo={{ lg: <></>, link: '' }}
           extraStyle="sm:mr-[-32px]  md:mr-[-60px] "
         >
-          {chapters?.map((ch, i) => (
-            <SideBarEL
-              key={i}
-              link={`../${lesson}/${i + 1}`}
-              name={ch.name}
-              icon={<p>📄</p>}
-              hoverColor="semiColor"
-              fullWidth={false}
-            />
-          ))}
+          {chapters &&
+            chapters?.map((ch, i) => (
+              <SideBarEL
+                key={i}
+                link={`../${lesson}/${i + 1}`}
+                name={ch.name}
+                icon={<p>📄</p>}
+                hoverColor="semiColor"
+                fullWidth={false}
+              />
+            ))}
         </SideBar>
         {props.children}
       </div>
