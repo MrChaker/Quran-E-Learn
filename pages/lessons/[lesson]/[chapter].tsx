@@ -23,15 +23,13 @@ const Lesson = () => {
   useEffect(() => {
     if (data) {
       setLesson(data.getLesson);
-      content.current.innerHTML = Slesson?.chapters
-        ? Slesson.chapters[0].content
-        : '';
+      content.current.innerHTML = data.getLesson.chapters[0].content;
     }
   }, [loading]);
 
   return (
     <div className="p-6 w-full">
-      <h1 className="text-xl sm:text-3xl mb-4">{Slesson?.title}</h1>
+      <h1 className="text-xl sm:text-4xl mb-4">{Slesson?.title}</h1>
       {!loading && Slesson?.chapters && (
         <video
           id="videoPlayer"
@@ -44,7 +42,7 @@ const Lesson = () => {
           />
         </video>
       )}
-      <div ref={content} className=" sm:mt-6"></div>
+      <div ref={content} className=" sm:mt-6 text-lg sm:text-2xl"></div>
     </div>
   );
 };

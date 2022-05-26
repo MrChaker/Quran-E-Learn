@@ -49,43 +49,65 @@ const TeacherDash = () => {
         {' '}
         لوحة التحكم في الدروس التي تقدمها{' '}
       </h1>
-      <Link href="/lessons/newLesson">
-        <a className=" min-w-[200px] w-2/6 bg-slate-400 py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
-          <FontAwesomeIcon
-            icon="plus"
-            size="2x"
-            className="block bg-slate-500 p-4 rounded-full "
-          />
-          <p>اضافة درس جديد</p>
-        </a>
-      </Link>
-      <h2 className="text-xl sm:text-2xl md:text-3xl my-6 sm:my-10">
-        الدروس المقدمة
-      </h2>
-      <div className="flex flex-wrap gap-14">
-        {lessons.map((lesson, i) => (
-          <div className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 relative">
-            <p
-              className=" w-fit text-3xl mr-auto ml-4 pb-2 px-2 rounded-full hover:bg-lightColor cursor-pointer"
-              onClick={() => setMenu((prev) => (i == prev ? -1 : i))}
-            >
-              ...
-            </p>
-            <DropMenu isOn={i === menu} left={'-10%'} top="20%">
-              <DropMenuLink
-                name="حذف الدرس"
-                isButton
-                onClick={() => DeleteLesson(lesson.title || '')}
-              />
-            </DropMenu>
-            <LessonBox
-              key={i}
-              title={lesson.title || ''}
-              thumbnail={lesson.thumbnail || ''}
+      <div className="flex gap-6">
+        <Link href="/lessons/newLesson">
+          <a className=" min-w-[200px] w-2/6 bg-slate-400 py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
+            <FontAwesomeIcon
+              icon="plus"
+              size="2x"
+              className="block bg-slate-500 p-4 rounded-full "
             />
-          </div>
-        ))}
+            <p>اضافة درس جديد</p>
+          </a>
+        </Link>
+        <Link href="/room/planMeeting">
+          <a className=" min-w-[200px] w-2/6 bg-slate-400 py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
+            <FontAwesomeIcon
+              icon="circle"
+              color="red"
+              shake
+              size="2x"
+              className="block bg-slate-500 p-4 rounded-full "
+            />
+            <p>بث مباشر</p>
+          </a>
+        </Link>
       </div>
+      {lessons.length == 0 ? (
+        <p className="text-xl sm:text-2xl md:text-3xl my-6 sm:my-10">
+          لم تقدم أي درس حتى الان
+        </p>
+      ) : (
+        <>
+          <h2 className="text-xl sm:text-2xl md:text-3xl my-6 sm:my-10">
+            الدروس المقدمة
+          </h2>
+          <div className="flex flex-wrap gap-14">
+            {lessons.map((lesson, i) => (
+              <div className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 relative">
+                <p
+                  className=" w-fit text-3xl mr-auto ml-4 pb-2 px-2 rounded-full hover:bg-lightColor cursor-pointer"
+                  onClick={() => setMenu((prev) => (i == prev ? -1 : i))}
+                >
+                  ...
+                </p>
+                <DropMenu isOn={i === menu} left={'-10%'} top="20%">
+                  <DropMenuLink
+                    name="حذف الدرس"
+                    isButton
+                    onClick={() => DeleteLesson(lesson.title || '')}
+                  />
+                </DropMenu>
+                <LessonBox
+                  key={i}
+                  title={lesson.title || ''}
+                  thumbnail={lesson.thumbnail || ''}
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

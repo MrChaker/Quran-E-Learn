@@ -8,8 +8,8 @@ export default async function imageFromText(text) {
   const image = await loadImage(
     `${process.env.NEXT_PUBLIC_PORT}quran/background.jpg`
   );
-  const width = 180;
-  const height = 100;
+  const width = 280;
+  const height = 180;
   const canvas = createCanvas(width, height);
 
   const context = canvas.getContext('2d');
@@ -17,7 +17,7 @@ export default async function imageFromText(text) {
   // Background color
   context.drawImage(image, 0, 0, width, height);
 
-  context.font = 'bolder 144px Quran';
+  context.font = 'bolder 62px Quran';
   context.textAlign = 'center';
 
   // Set text color

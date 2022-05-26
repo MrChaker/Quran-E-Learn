@@ -27,7 +27,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-Connect();
+Connect(process.env.MONGO_URI);
 app
   .prepare()
   .then(async () => {

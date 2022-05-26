@@ -5,6 +5,13 @@ import Lesson from '../models/lesson';
 import User from '../models/user';
 import { uniqueValidator } from '../Utils/authErrors';
 
+/* authRoute.get('/f', async (req, res) => {
+  const firstLesson = await Lesson.findOne(
+    { title: 'سورة الفاتحة' },
+    { _id: 1 }
+  );
+  res.json(firstLesson);
+}); */
 authRoute.post('/sign', async (req, res) => {
   const hasToBeUnique = await uniqueValidator(
     {
@@ -29,7 +36,7 @@ authRoute.post('/sign', async (req, res) => {
     image: req.body.sex == 'male' ? '/male.png' : '/female.png',
     password: req.body.password,
     phone: req.body.phone,
-    Slessons: [firstLesson._id],
+    Slessons: firstLesson ? [{ lesson: firstLesson._id, progress: 0 }] : null,
   });
 
   const user = await newUser.save().catch((err: Errback) => {
@@ -67,7 +74,7 @@ authRoute.post('/loginAPI', async (req, res) => {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3 * 1000,
   });
-  res.status(200).send({ success: true });
+  res.status(200).send({ success: true, isAdmin: user.roles.admin });
 });
 
 authRoute.get('/logout', (req, res) => {
@@ -105,7 +112,7 @@ authRoute.get('/user', (req, res) => {
             ? { ...userObj, lessons: user.lessons, students: user.students }
             : {
                 ...userObj,
-                teacher: user.teacher,
+                teachers: user.teachers,
                 Slessons: user.Slessons,
               }
         );

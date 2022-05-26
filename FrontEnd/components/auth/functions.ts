@@ -53,7 +53,7 @@ export const emailSign = async (
         'currentUser',
         '{"info": {}, "isAuthenticated": true}'
       );
-      location.assign('/dashboard');
+      location.assign(result.isAdmin ? '/admin' : '/dashboard');
     }
   }
 };
@@ -96,7 +96,6 @@ export const dataIsValid = (
       b = false;
     } else {
       RI.errLabel.innerText = '';
-      b = true;
     }
   });
   validInputs?.forEach((VI) => {
@@ -106,7 +105,6 @@ export const dataIsValid = (
       b = false;
     } else {
       VI.errLabel.innerText = '';
-      b = true;
     }
   });
 

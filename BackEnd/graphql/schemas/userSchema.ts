@@ -33,6 +33,9 @@ export const userSchema = `
     lessons: Int
   }
 
+  type Response{
+    message: String
+  }
 `;
 export const userQueries = `
     getUser(_id: String): UserType
@@ -43,5 +46,5 @@ export const userQueries = `
 export const userMutations = `
   updateUser(_id: String, query: UserInput): UserType
   deleteUser(_id: String): UserType,
-  joinTeacher(teacherID: String, studentID: String): Boolean
+  joinTeacher(teacherID: String, studentID: String): Response
 `;

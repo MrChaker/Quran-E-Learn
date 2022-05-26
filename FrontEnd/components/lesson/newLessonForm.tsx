@@ -55,7 +55,7 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
               `/lessons/newChapter/${event.target.title.value || props.title}`
             );
           } else if (res.isDenied) {
-            Router.push(`/lessons/${event.target.title.value}/1`);
+            Router.push(`/dashboard`);
           }
         });
       })

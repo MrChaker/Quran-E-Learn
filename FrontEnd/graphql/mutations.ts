@@ -54,7 +54,18 @@ const DELETE_Lesson = gql`
 `;
 const JOIN_Teacher = gql`
   mutation joinTeacher($teacherID: String, $studentID: String) {
-    joinTeacher(teacherID: $teacherID, studentID: $studentID)
+    joinTeacher(teacherID: $teacherID, studentID: $studentID) {
+      message
+    }
+  }
+`;
+
+const PLAN_Meeting = gql`
+  mutation planMeeting($title: String, $teacherID: String, $date: String) {
+    planMeeting(title: $title, teacherID: $teacherID, date: $date) {
+      _id
+      title
+    }
   }
 `;
 export {

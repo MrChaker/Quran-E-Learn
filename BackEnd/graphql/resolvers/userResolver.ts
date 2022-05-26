@@ -69,22 +69,29 @@ export const joinTeacher = async (
   args: { teacherID: string; studentID: string }
 ) => {
   try {
-    const teacher = await User.findByIdAndUpdate(args.teacherID, {
-      $push: { students: args.studentID },
-    });
+    const student = await User.findById(args.studentID);
 
-    const student = await User.findByIdAndUpdate(args.studentID);
+    if (student.teachers.length > 2) throw new Error('max reached');
+    const teacher = await User.findById(args.teacherID);
+
+    if (teacher.students.includes(args.studentID)) {
+      throw new Error('already in');
+    } else {
+      teacher.students.push(args.studentID);
+      teacher.save();
+    }
     student.teachers.push(args.teacherID);
     if (teacher.lessons.length > 0) {
       teacher.lessons.forEach((lesson: any) => {
         student.Slessons.push({ lesson, progress: 0 });
       });
     }
+
     await student.save();
-    return true;
+    return { message: 'done' };
   } catch (error) {
     console.log(error);
-    return false;
+    return { message: error };
   }
 };
 //**image requires extra work

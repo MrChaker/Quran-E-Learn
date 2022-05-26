@@ -85,22 +85,32 @@ const UserListing = (props: {
   // regular users methods
   const [joinTeacher] = useMutation(JOIN_Teacher, {
     onCompleted: () => {
-      Swal.fire(
-        'تمّ الاتحاق بنجاح ، يمكنك الان الاطلاع على الدروس التي يقدما الشيخ'
-      );
+      Swal.fire({
+        text: 'تمّ الاتحاق بنجاح ، يمكنك الان الاطلاع على الدروس التي يقدما الشيخ',
+        icon: 'success',
+      });
     },
-    onError: () => {
-      Swal.fire('حدث خطأ ، أعد المحاولة لاحقا');
+    onError: (error) => {
+      console.log(error.message);
+      switch (error.message) {
+        case 'already in':
+          Swal.fire({ text: ' أنت بالفعل منظم الى الشيخ', icon: 'error' });
+          break;
+        case 'max reached':
+          Swal.fire({
+            text: 'عذرا ، يمكنك الالتحاق بشيخين كحد أقصى',
+            icon: 'error',
+          });
+          break;
+        default:
+          Swal.fire({ text: 'حدث خطأ ، أعد المحاولة لاحقا', icon: 'error' });
+      }
     },
   });
   const JoinTeacher = (teacherID?: string) => {
-    if (user.studentInfo?.teachers && user.studentInfo?.teachers.length > 1) {
-      Swal.fire('عذرا ، يمكنك الالتحاق بشيخين كحد أقصى');
-    } else {
-      joinTeacher({
-        variables: { teacherID, studentID: user.info?._id },
-      });
-    }
+    joinTeacher({
+      variables: { teacherID, studentID: user.info?._id },
+    });
   };
   if (props.forAdmin)
     return (
@@ -154,34 +164,42 @@ const UserListing = (props: {
           </h1>
           <div className="flex flex-wrap gap-5 m-auto sm:m-0">
             {users.map((teacher, i) => (
-              <Link href={`/profile/${teacher._id}`} key={i}>
-                <a className=" shadow-lg hover:shadow-xl rounded-2xl flex gap-3 flex-col items-center  p-8 w-[30%] min-h-[320px] min-w-[250px] ">
-                  <div className="rounded-full w-52 h-52 relative overflow-hidden ">
-                    <Image
-                      src={teacher.image || '/Male.png'}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
-                  <div className="border-t border-semiColor w-full text-lg">
-                    <p className="text-center">{teacher.name}</p>
-                    <p className="text-center">{teacher.phone}</p>
-                    <Button
-                      text="انظمّ الى طلابه"
-                      color={
-                        !darkTheme ? 'var(--main-color)' : 'var(--light-color)'
-                      }
-                      txtColor={
-                        darkTheme ? 'var(--main-color)' : 'var(--light-color)'
-                      }
-                      block
-                      onClick={() => {
-                        JoinTeacher(teacher._id);
-                      }}
-                    />
-                  </div>
-                </a>
-              </Link>
+              <>
+                {teacher.name !== 'المنصة' && (
+                  <Link href={`#`} key={i}>
+                    <a className=" shadow-lg hover:shadow-xl rounded-2xl flex gap-3 flex-col items-center  p-8 w-[30%] min-h-[320px] min-w-[250px] ">
+                      <div className="rounded-full w-52 h-52 relative overflow-hidden ">
+                        <Image
+                          src={teacher.image || '/Male.png'}
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+                      <div className="border-t border-semiColor w-full text-lg">
+                        <p className="text-center">{teacher.name}</p>
+                        <p className="text-center">{teacher.phone}</p>
+                        <Button
+                          text="انظمّ الى طلابه"
+                          color={
+                            !darkTheme
+                              ? 'var(--main-color)'
+                              : 'var(--light-color)'
+                          }
+                          txtColor={
+                            darkTheme
+                              ? 'var(--main-color)'
+                              : 'var(--light-color)'
+                          }
+                          block
+                          onClick={() => {
+                            JoinTeacher(teacher._id);
+                          }}
+                        />
+                      </div>
+                    </a>
+                  </Link>
+                )}
+              </>
             ))}
           </div>
         </div>

@@ -1,6 +1,9 @@
 import '../FrontEnd/styles/globals.css';
 import '../FrontEnd/styles/auth.css';
 import 'react-quill/dist/quill.snow.css';
+import '../FrontEnd/styles/quillEditor.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../FrontEnd/styles/datepicker.css';
 
 import { Layout } from '../FrontEnd/Layouts/layout';
 import { fontAW } from '../FrontEnd/fontawsome';
@@ -9,6 +12,7 @@ import { useState, useEffect, SetStateAction } from 'react';
 import axios from 'axios';
 import { AppPropsWithLayout } from '../FrontEnd/Layouts/types';
 import { UserContext, User } from '../FrontEnd/Context/userContext';
+import Head from 'next/head';
 
 fontAW();
 
@@ -58,9 +62,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     Component.getLayout ?? ((compenent) => <Layout>{compenent}</Layout>);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <ApolloProvider>{getLayout(<Component {...pageProps} />)}</ApolloProvider>
-    </UserContext.Provider>
+    <>
+      <Head>
+        <title>Quraani</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <UserContext.Provider value={{ user, setUser }}>
+        <ApolloProvider>
+          {getLayout(<Component {...pageProps} />)}
+        </ApolloProvider>
+      </UserContext.Provider>
+    </>
   );
 }
 

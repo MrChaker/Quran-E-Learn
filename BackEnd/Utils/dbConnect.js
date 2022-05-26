@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 import g from 'gridfs-stream';
 const connection = {};
 
-export default async function Connect() {
+export default async function Connect(url) {
   Object.keys(mongoose.connection.models).forEach((key) => {
     delete mongoose.connection.models[key];
   });
-  const db = await mongoose.connect(process.env.MONGO_URI, {
+  const db = await mongoose.connect(url, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
@@ -19,5 +19,5 @@ export default async function Connect() {
     console.log('connection made successfully');
   });
 
-  console.log(process.env.MONGO_URI);
+  console.log(url);
 }

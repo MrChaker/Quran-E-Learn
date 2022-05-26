@@ -19,6 +19,7 @@ import {
   getChapters,
   deleteLesson,
 } from './lessonResolver';
+import { getMeetings, getMeeting, planMeeting } from './meetingResolver';
 const resolvers = {
   Query: {
     getUser,
@@ -29,6 +30,8 @@ const resolvers = {
     getLessons,
     getLesson,
     getChapters,
+    getMeetings,
+    getMeeting,
   },
   Mutation: {
     updateUser,
@@ -38,6 +41,7 @@ const resolvers = {
     createLesson,
     joinTeacher,
     deleteLesson,
+    planMeeting,
   },
 };
 

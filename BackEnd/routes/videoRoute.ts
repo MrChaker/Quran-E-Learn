@@ -35,9 +35,17 @@ const updateLessonArrays = async (teacherID: string, lessonID: string) => {
   teacher.save();
 };
 
-videoRoute.post('/i', async (req, res) => {
-  const i = await imageFromText('fatiha');
-  res.json({ d: i });
+//test image generator
+videoRoute.get('/i', async (req, res) => {
+  await imageFromText('سورة الفاتحة')
+    .then(async (image) => {
+      const ress = await Lesson.findOneAndUpdate(
+        { title: 'سورة الفاتحة' },
+        { thumbnail: image }
+      );
+      res.json({ ress });
+    })
+    .catch((err) => console.log(err));
 });
 videoRoute.post(
   '/upload',

@@ -7,6 +7,7 @@ import { UserContext } from '../../Context/userContext';
 import { Button } from './Button';
 import DropMenu, { DropMenuLink } from './dropMenu';
 import Image from 'next/image';
+import Logo from './logo';
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
   const { darkTheme } = useThemeContext();
@@ -26,11 +27,7 @@ export const NavBar = () => {
         dir="rtl"
         className="fixed top-0  z-30 flex w-screen items-center justify-between bg-lighterColor  py-5 font-main font-semibold text-darkColor shadow-sm shadow-gray-400 dark:bg-darkColor  dark:text-lighterColor dark:shadow-emerald-900 px-10 md:px-20 lg:px-[5.5rem]"
       >
-        <div className="  bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text  text-3xl text-transparent sm:text-5xl font-quran ">
-          <Link href="/">
-            <a>القرآن</a>
-          </Link>
-        </div>
+        <Logo />
 
         <ul className="hidden list-none items-center gap-6 text-lg md:flex ">
           <NavEl text="الرّئيسية" link="/dashboard" />

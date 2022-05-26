@@ -1,0 +1,36 @@
+.react-datepicker__input-container input{
+  background: transparent;
+  width: fit-content;
+}
+.react-datepicker {
+  font-size: 1.05rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.react-datepicker__time-container, .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box{
+  width: 104px;
+}
+.react-datepicker__navigation--next--with-time:not(.react-datepicker__navigation--next--with-today-button){
+  right: 110px;
+  top: 15px;
+}
+.react-datepicker__navigation-icon--previous{
+  top: 12px
+}
+.react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range, .react-datepicker__month-text--selected, .react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range, .react-datepicker__year-text--in-range {
+  border-radius: 1rem;
+  background-color: var(--main-color);
+  color: #fff;
+}
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected{
+  background-color: var(--main-color);
+  padding-bottom: 38px;
+}
+.react-datepicker__day--selected:hover, .react-datepicker__day--in-selecting-range:hover, .react-datepicker__day--in-range:hover, .react-datepicker__month-text--selected:hover, .react-datepicker__month-text--in-selecting-range:hover, .react-datepicker__month-text--in-range:hover, .react-datepicker__quarter-text--selected:hover, .react-datepicker__quarter-text--in-selecting-range:hover, .react-datepicker__quarter-text--in-range:hover, .react-datepicker__year-text--selected:hover, .react-datepicker__year-text--in-selecting-range:hover, .react-datepicker__year-text--in-range:hover {
+  background-color: var(--semi-color);
+}
+.react-datepicker__day:hover, .react-datepicker__month-text:hover, .react-datepicker__quarter-text:hover, .react-datepicker__year-text:hover {
+  border-radius: 1rem;
+  background-color: var(--semi-color);
+  color: white
+}

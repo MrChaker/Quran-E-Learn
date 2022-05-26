@@ -15,6 +15,7 @@ import {
   faDownload,
   faUpload,
   faPlus,
+  faCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAW = () => {
@@ -32,6 +33,7 @@ export const fontAW = () => {
     faUserGraduate,
     faDownload,
     faUpload,
-    faPlus
+    faPlus,
+    faCircle
   );
 };

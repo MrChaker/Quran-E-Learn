@@ -4,8 +4,6 @@ import { LessonInterface } from '../../../interfaces/lessonsInterface';
 import LessonBox from '../lesson/lessonBox';
 import { UserContext } from '../../Context/userContext';
 import { GET_Lessons } from '../../graphql/queries';
-import { TeacherInfo, UserInterface } from '../../../interfaces/userInterface';
-import { Set } from 'typescript';
 
 const StudentDashboard: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -19,12 +17,13 @@ const StudentDashboard: React.FC = () => {
   useEffect(() => {
     if (data) {
       setLessons(data.getLessons);
+      let tracker: string[] = [];
       data.getLessons.forEach((l: LessonInterface) => {
-        if (l.teacher?.name && !teachers.includes(l.teacher?.name)) {
+        if (l.teacher?.name && !tracker.includes(l.teacher?.name)) {
           setTeachers((prev) => [...prev, l.teacher?.name || '']);
+          tracker.push(l.teacher?.name);
         }
       });
-      console.log(teachers);
     }
     setNewLearner(
       user.studentInfo?.lessons == undefined ||
@@ -40,28 +39,31 @@ const StudentDashboard: React.FC = () => {
       <div className="flex gap-12 flex-wrap">
         {teachers.map((name, index) => (
           <div className="w-full" key={index}>
-            <h2 className="mb-4 p-4 rounded-lg text-xl sm:text-3xl bg-lightColor">{`دروس الشيخ ${name}`}</h2>
-
-            {lessons.map((lesson, i) => (
-              <>
-                {lesson.teacher?.name == name && (
-                  <div
-                    key={i}
-                    className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48 "
-                  >
-                    <LessonBox
-                      title={lesson.title || ''}
-                      thumbnail={lesson.thumbnail || ''}
-                      progress={
-                        user.studentInfo?.lessons?.find(
-                          (l) => l.title == lesson.title
-                        )?.progress || 0
-                      }
-                    />
-                  </div>
-                )}
-              </>
-            ))}
+            <h2 className="mb-4 p-4 rounded-lg text-xl sm:text-3xl bg-lightColor">
+              {name !== 'المنصة' ? `دروس الشيخ ${name}` : 'دروس المنصة'}
+            </h2>
+            <div className="flex gap-6">
+              {lessons.map((lesson, i) => (
+                <>
+                  {lesson.teacher?.name == name && (
+                    <div
+                      key={i}
+                      className=" l min-w-[220px] h-32 w-1/3 md:w-80 md:h-48"
+                    >
+                      <LessonBox
+                        title={lesson.title || ''}
+                        thumbnail={lesson.thumbnail || ''}
+                        progress={
+                          user.studentInfo?.lessons?.find(
+                            (l) => l.title == lesson.title
+                          )?.progress || 0
+                        }
+                      />
+                    </div>
+                  )}
+                </>
+              ))}
+            </div>
           </div>
         ))}
       </div>
