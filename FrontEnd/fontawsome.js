@@ -16,6 +16,8 @@ import {
   faUpload,
   faPlus,
   faCircle,
+  faDoorOpen,
+  faCalendar,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAW = () => {
@@ -34,6 +36,8 @@ export const fontAW = () => {
     faDownload,
     faUpload,
     faPlus,
-    faCircle
+    faCircle,
+    faDoorOpen,
+    faCalendar
   );
 };

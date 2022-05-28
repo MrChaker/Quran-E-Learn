@@ -110,3 +110,11 @@ export const dataIsValid = (
 
   return b;
 };
+
+export const logout = (): void => {
+  localStorage.setItem(
+    'currentUser',
+    '{ "info": null, "isAuthenticated": false}'
+  );
+  location.assign('/auth/logout');
+};

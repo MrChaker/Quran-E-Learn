@@ -4,5 +4,5 @@ export interface Meeting {
   _id: string;
   title?: string;
   teacher?: UserInterface & TeacherInfo;
-  date?: Date;
+  date?: string | Date;
 }

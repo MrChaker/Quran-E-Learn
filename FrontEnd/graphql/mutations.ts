@@ -68,6 +68,14 @@ const PLAN_Meeting = gql`
     }
   }
 `;
+
+const CANCEL_Meeting = gql`
+  mutation cancelMeeting($_id: String) {
+    cancelMeeting(_id: $_id) {
+      _id
+    }
+  }
+`;
 export {
   CREATE_Request,
   UPDATE_User,
@@ -76,4 +84,6 @@ export {
   CREATE_Lesson,
   JOIN_Teacher,
   DELETE_Lesson,
+  PLAN_Meeting,
+  CANCEL_Meeting,
 };

@@ -15,6 +15,12 @@ function Credits() {
         Islam icons created by Freepik - Flaticon
       </a>
       <a href="https://pngtree.com/so/moslem">moslem png from pngtree.com/</a>
+      <a
+        href="https://www.flaticon.com/free-icons/calendar"
+        title="calendar icons"
+      >
+        Calendar icons created by Freepik - Flaticon
+      </a>
     </div>
   );
 }

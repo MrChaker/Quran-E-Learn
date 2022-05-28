@@ -87,7 +87,19 @@ const GET_Lesson = gql`
     }
   }
 `;
-
+const GET_Meetings = gql`
+  query getMeetins($teachersIDs: [String]) {
+    getMeetings(teachersIDs: $teachersIDs) {
+      _id
+      title
+      date
+      teacher {
+        _id
+        name
+      }
+    }
+  }
+`;
 export {
   GET_User,
   GET_DocCount,
@@ -96,4 +108,5 @@ export {
   GET_AllUsers,
   GET_Lessons,
   GET_Lesson,
+  GET_Meetings,
 };

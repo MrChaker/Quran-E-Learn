@@ -3,16 +3,17 @@ export const meetingSchema = `
     _id: String
     title: String
     teacher: UserType
-    data: String
+    date: String
   }
 `;
 
 export const meetingQueries = `
-  getMeetings(teacherID: String): [MeetingType]
+  getMeetings(teachersIDs: [String]): [MeetingType]
   getMeeting(_id: String): MeetingType
 
 `;
 
 export const meetingMutations = `
   planMeeting(title: String, teacherID: String, date: String): MeetingType
+  cancelMeeting(_id: String): MeetingType
 `;

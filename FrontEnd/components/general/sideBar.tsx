@@ -55,6 +55,7 @@ type PropsType = {
   hoverColor?: string;
   icon: ReactElement;
   fullWidth?: boolean;
+  onClick?: () => void;
 };
 export const SideBarEL = (props: PropsType) => {
   const [hovered, setHovered] = useState(false);
@@ -68,6 +69,7 @@ export const SideBarEL = (props: PropsType) => {
         } relative`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={props.onClick}
       >
         {props.icon}
         <p

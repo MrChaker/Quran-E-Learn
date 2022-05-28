@@ -8,18 +8,13 @@ import { Button } from './Button';
 import DropMenu, { DropMenuLink } from './dropMenu';
 import Image from 'next/image';
 import Logo from './logo';
+import { logout } from '../auth/functions';
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
   const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const [dropMenu, setDropMenu] = useState(false);
-  const logout = (): void => {
-    localStorage.setItem(
-      'currentUser',
-      '{ "info": null, "isAuthenticated": false}'
-    );
-    location.assign('/auth/logout');
-  };
+
   return (
     <>
       <nav

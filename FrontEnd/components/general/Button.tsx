@@ -27,11 +27,13 @@ export const Button = (props: PropsType) => {
       initial={{ x: '-100vw', opacity: 0 }}
       onClick={props.onClick}
       animate={{ x: 0, opacity: 1 }}
-      className={` cursor-pointer p-4 px-5  ${
+      className={` ${
+        props.disable ? 'cursor-not-allowed' : 'cursor-pointer'
+      } p-4 px-5  ${
         props.rounded ? 'rounded-full' : 'rounded-md'
       } justify-center border border-solid ${props.style} ${
         props.block ? 'block w-full' : 'inline-block'
-      }`}
+      } `}
       style={{
         color: props.outline ? props.color : props.txtColor,
         backgroundColor: props.outline ? 'transparent' : props.color,

@@ -4,6 +4,7 @@ import { LessonInterface } from '../../../interfaces/lessonsInterface';
 import LessonBox from '../lesson/lessonBox';
 import { UserContext } from '../../Context/userContext';
 import { GET_Lessons } from '../../graphql/queries';
+import MeetingsList from './meetingsList';
 
 const StudentDashboard: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -35,14 +36,14 @@ const StudentDashboard: React.FC = () => {
       <h1 className=" text-2xl sm:text-3xl md:text-5xl mb-6 sm:mb-10 ">{` ${
         newLearner ? 'ابدأ رحلة التعلم' : 'أكمل رحلة التعلم'
       }`}</h1>
-
       <div className="flex gap-12 flex-wrap">
         {teachers.map((name, index) => (
           <div className="w-full" key={index}>
             <h2 className="mb-4 p-4 rounded-lg text-xl sm:text-3xl bg-lightColor">
               {name !== 'المنصة' ? `دروس الشيخ ${name}` : 'دروس المنصة'}
             </h2>
-            <div className="flex gap-6">
+            <div className="flex gap-12 sm:gap-6 flex-wrap">
+              <MeetingsList top={100} left={40} />
               {lessons.map((lesson, i) => (
                 <>
                   {lesson.teacher?.name == name && (

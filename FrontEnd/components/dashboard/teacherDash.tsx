@@ -10,6 +10,7 @@ import DropMenu, { DropMenuLink } from '../general/dropMenu';
 import { DELETE_Lesson } from '../../graphql/mutations';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
+import MeetingsList from './meetingsList';
 const TeacherDash = () => {
   const { user } = useContext(UserContext);
   const [lessons, setLessons] = useState<LessonInterface[]>([]);
@@ -43,13 +44,15 @@ const TeacherDash = () => {
   }, [loading]);
 
   const [menu, setMenu] = useState<number>(-1);
+  // meetings
+
   return (
-    <div className="text-xl sm:p-6">
+    <div className="text-xl sm:p-6 ">
       <h1 className=" text-2xl sm:text-3xl md:text-5xl mb-6 sm:mb-10 ">
         {' '}
         لوحة التحكم في الدروس التي تقدمها{' '}
       </h1>
-      <div className="flex gap-6">
+      <div className="flex gap-6 relative flex-wrap">
         <Link href="/lessons/newLesson">
           <a className=" min-w-[200px] w-2/6 bg-slate-400 py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
             <FontAwesomeIcon
@@ -72,6 +75,7 @@ const TeacherDash = () => {
             <p>بث مباشر</p>
           </a>
         </Link>
+        <MeetingsList forTeacher top={0} left={-42} />
       </div>
       {lessons.length == 0 ? (
         <p className="text-xl sm:text-2xl md:text-3xl my-6 sm:my-10">

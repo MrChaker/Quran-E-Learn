@@ -1,6 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import React from 'react';
+import { logout } from '../components/auth/functions';
 import SideBar, { SideBarEL } from '../components/general/sideBar';
 const AdminLayout: NextPage = ({ children }) => {
   return (
@@ -29,10 +31,23 @@ const AdminLayout: NextPage = ({ children }) => {
           icon={<Image src="/iconly/chiekh.svg" width={24} height={24} />}
         />
         <SideBarEL
+          name="الدروس"
+          link="/admin/lessons"
+          hoverColor="semiColor"
+          icon={<p>📑</p>}
+        />
+        <SideBarEL
           name="طلبات الانظمام"
           link="/admin/requests"
           hoverColor="semiColor"
           icon={<Image src="/iconly/Paper.svg" width={24} height={24} />}
+        />
+        <SideBarEL
+          name="تسجيل الخروج"
+          link="#"
+          onClick={logout}
+          hoverColor="semiColor"
+          icon={<FontAwesomeIcon icon="door-open" />}
         />
       </SideBar>
       <div className="bg-lighterColor p-8 text-darkColor min-h-screen w-full">
