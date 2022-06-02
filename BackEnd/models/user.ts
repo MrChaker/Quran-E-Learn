@@ -28,6 +28,7 @@ export const UserSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  isConfirmed: { type: Boolean, default: false },
   roles: {
     student: { type: Boolean, default: true },
     teacher: { type: Boolean, default: false },

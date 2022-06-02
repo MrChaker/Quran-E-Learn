@@ -54,7 +54,7 @@ const TeacherDash = () => {
       </h1>
       <div className="flex gap-6 relative flex-wrap">
         <Link href="/lessons/newLesson">
-          <a className=" min-w-[200px] w-2/6 bg-slate-400 py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
+          <a className=" min-w-[200px] w-2/6 bg-slate-400 dark:text-darkColor py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
             <FontAwesomeIcon
               icon="plus"
               size="2x"
@@ -64,7 +64,7 @@ const TeacherDash = () => {
           </a>
         </Link>
         <Link href="/room/planMeeting">
-          <a className=" min-w-[200px] w-2/6 bg-slate-400 py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
+          <a className=" min-w-[200px] w-2/6 bg-slate-400 dark:text-darkColor py-5 sm:py-10 shadow-sm hover:shadow-2xl grid place-items-center rounded-xl">
             <FontAwesomeIcon
               icon="circle"
               color="red"

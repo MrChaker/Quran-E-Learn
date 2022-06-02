@@ -51,9 +51,15 @@ export const emailSign = async (
     if (result.success) {
       localStorage.setItem(
         'currentUser',
-        '{"info": {}, "isAuthenticated": true}'
+        `{"info": {}, "isAuthenticated": true, "isConfirmed": ${result.isConfirmed}}`
       );
-      location.assign(result.isAdmin ? '/admin' : '/dashboard');
+      location.assign(
+        result.isAdmin
+          ? '/admin'
+          : result.isConfirmed
+          ? '/dashboard'
+          : '/confirmation'
+      );
     }
   }
 };

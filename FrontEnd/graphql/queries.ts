@@ -97,6 +97,7 @@ const GET_Meetings = gql`
         _id
         name
       }
+      duration
     }
   }
 `;

@@ -4,6 +4,7 @@ export const meetingSchema = `
     title: String
     teacher: UserType
     date: String
+    duration: Int
   }
 `;
 
@@ -14,6 +15,6 @@ export const meetingQueries = `
 `;
 
 export const meetingMutations = `
-  planMeeting(title: String, teacherID: String, date: String): MeetingType
+  planMeeting(title: String, teacherID: String, date: String, duration: Int): MeetingType
   cancelMeeting(_id: String): MeetingType
 `;

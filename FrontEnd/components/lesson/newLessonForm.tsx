@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { usePost } from '../../hooks/usePost';
 import { Line as Progress } from 'rc-progress';
 import { useThemeContext } from '../../Context/themeContext';
-import Link from 'next/link';
 import { UserContext } from '../../Context/userContext';
 import Swal from 'sweetalert2';
 import Router from 'next/router';
@@ -22,6 +21,7 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
   const quillContent = useRef('');
   const { darkTheme } = useThemeContext();
 
+  const [titleErr, setTitleErr] = useState('');
   const newLesson = async (event: VEvent) => {
     setUploading(true);
     const formData = new FormData();
@@ -40,24 +40,32 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
     }
 
     await uploadFile(formData)
-      .then((data) => {
-        setUploading(false);
-        Swal.fire({
-          text: 'تمّ انشاء الدرس ، يمكنك الخروج الان او اضافة وحدات اخرى للدرس',
-          confirmButtonText: 'اضافة وحدة أخرى',
-          confirmButtonColor: 'var(--main-color)',
-          denyButtonText: 'حفظ الدرس ',
-          showDenyButton: true,
-          denyButtonColor: 'var(--semi-color)',
-        }).then((res) => {
-          if (res.isConfirmed || res.isDismissed) {
-            Router.push(
-              `/lessons/newChapter/${event.target.title.value || props.title}`
-            );
-          } else if (res.isDenied) {
-            Router.push(`/dashboard`);
+      .then((data: any) => {
+        if (!data.error) {
+          Swal.fire({
+            text: 'تمّ انشاء الدرس ، يمكنك الخروج الان او اضافة وحدات اخرى للدرس',
+            confirmButtonText: 'اضافة وحدة أخرى',
+            confirmButtonColor: 'var(--main-color)',
+            denyButtonText: 'حفظ الدرس ',
+            showDenyButton: true,
+            denyButtonColor: 'var(--semi-color)',
+          }).then((res) => {
+            if (res.isConfirmed || res.isDismissed) {
+              Router.push(
+                `/lessons/newChapter/${event.target.title.value || props.title}`
+              );
+            } else if (res.isDenied) {
+              Router.push(`/dashboard`);
+            }
+          });
+        } else {
+          if (data.error === 'title must be unique') {
+            setTitleErr('هذا العنوان مستعمل من قبل');
+          } else {
+            Swal.fire({ text: 'لقد حدث خطأ، حاول من جديد', icon: 'error' });
           }
-        });
+        }
+        setUploading(false);
       })
       .catch((err) => {
         setUploading(false);
@@ -78,6 +86,7 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
         <>
           <label>عنوان الدرس</label>
           <input type="text" name="title" className="input " />
+          <div className=" text-red-800 ">{titleErr}</div>
         </>
       )}
       <label>عنوان الوحدة </label>

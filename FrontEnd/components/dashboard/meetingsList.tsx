@@ -69,7 +69,7 @@ const MeetingsList = (props: {
       >
         {meetings.map((mt, i) => (
           <div
-            className=" shadow-3xl bg-lightColor p-4 mb-6 block border-t-8 border-t-rose-700"
+            className=" shadow-3xl bg-lightColor dark:text-darkColor p-4 mb-6 block border-t-8 border-t-rose-700"
             key={i}
           >
             <p className="text-center text-2xl mb-4">بث مباشر</p>
@@ -88,6 +88,12 @@ const MeetingsList = (props: {
               {new Date(Number(mt.date!)).getHours() > 12 ? ' مساءا' : ' صباحا'}
             </p>
             <p className="text-center">{mt.title}</p>
+            <p className="text-center">
+              مدّة البث
+              {` ${Math.round(mt.duration / 60)} ساعة و ${
+                mt.duration % 60
+              } دقيقة`}{' '}
+            </p>
             <p className="text-center">مع الشيخ {mt.teacher?.name}</p>
 
             <Link href={`/room/${mt.teacher?._id}`}>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const usePost = (url: string) => {
   const [uploadProgress, setUploadProgress] = useState({
@@ -11,22 +11,21 @@ export const usePost = (url: string) => {
     /* const formData = new FormData();
     formData.append('video', video ? video : ''); */
     try {
-      await axios
-        .post(url, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = (progressEvent.loaded / progressEvent.total) * 50;
-            setUploadProgress({ visible: true, progress: progress });
-          },
-        })
-        .then((res) => {
-          setUploadProgress({ visible: false, progress: 100 });
-          if (res.status == 200) return res.data;
-        });
-    } catch (error) {
-      return error;
+      const res = await axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = (progressEvent.loaded / progressEvent.total) * 50;
+          setUploadProgress({ visible: true, progress: progress });
+        },
+      });
+
+      setUploadProgress({ visible: false, progress: 100 });
+      return res.data;
+    } catch (error: any) {
+      setUploadProgress({ visible: false, progress: 0 });
+      return error.response.data;
     }
   };
 

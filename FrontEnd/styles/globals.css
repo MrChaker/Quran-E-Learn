@@ -18,8 +18,7 @@
   --err: #d81010;
 }
 .pt {
-  padding-top: 98px;
-  min-height: 170vh;
+  padding: 98px 0 100px 0;
 }
 .spinner {
   animation: spin infinite 3s linear;

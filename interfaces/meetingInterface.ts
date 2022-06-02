@@ -5,4 +5,5 @@ export interface Meeting {
   title?: string;
   teacher?: UserInterface & TeacherInfo;
   date?: string | Date;
+  duration: number;
 }

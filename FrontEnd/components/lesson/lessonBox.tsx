@@ -10,7 +10,7 @@ const LessonBox = (props: {
   return (
     <>
       <Link href={`lessons/${props.title}/1`}>
-        <a className="overflow-hidden w-full h-full block rounded-3xl shadow-lg hover:shadow-2x ">
+        <a className="overflow-hidden w-full h-full block rounded-3xl shadow-lg hover:shadow-2xl dark:shadow-light">
           <motion.div
             initial={{ scale: 1.06 }}
             whileHover={{ scale: 1.2 }}

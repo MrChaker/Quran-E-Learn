@@ -163,6 +163,7 @@ const UserListing = (props: {
             يمكنك تقديم طلب للتعلم لثلاث شيوخ كحد أقصى
           </h1>
           <div className="flex flex-wrap gap-5 m-auto sm:m-0">
+            {loading && <p className="text-3xl">...الرجاء الانتظار</p>}
             {users.map((teacher, i) => (
               <>
                 {teacher.name !== 'المنصة' && (
@@ -179,7 +180,13 @@ const UserListing = (props: {
                         <p className="text-center">{teacher.name}</p>
                         <p className="text-center">{teacher.phone}</p>
                         <Button
-                          text="انظمّ الى طلابه"
+                          text={
+                            !user.studentInfo?.teachers.includes(
+                              teacher._id ?? ''
+                            )
+                              ? 'انظمّ الى طلابه'
+                              : 'انت بالفعل منظم الى هذا الشيخ'
+                          }
                           color={
                             !darkTheme
                               ? 'var(--main-color)'
@@ -190,6 +197,9 @@ const UserListing = (props: {
                               ? 'var(--main-color)'
                               : 'var(--light-color)'
                           }
+                          disable={user.studentInfo?.teachers.includes(
+                            teacher._id ?? ''
+                          )}
                           block
                           onClick={() => {
                             JoinTeacher(teacher._id);

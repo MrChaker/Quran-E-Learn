@@ -9,6 +9,7 @@ const UserInterface = `
     image: String
     phone: String
     sex: String
+    isConfirmed: Boolean
 `;
 export const userSchema = `
   type UserType {

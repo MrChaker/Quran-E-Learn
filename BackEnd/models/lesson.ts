@@ -9,7 +9,7 @@ export const GFS = mongoose.model(
 
 export const LessonSchema = new mongoose.Schema(
   {
-    title: String,
+    title: { type: String, unique: true },
     chapters: [
       {
         name: String,

@@ -4,7 +4,7 @@ import Logo from './logo';
 
 const Footer = () => {
   return (
-    <footer className="bg-darkColor dark:bg-semiColor min-h-[500px] p-6 px-10 md:px-20 lg:px-50 text-lighterColor text-xl">
+    <footer className="bg-darkColor dark:bg-semiColor min-h-[200px] p-6 px-10 md:px-20 lg:px-50 text-lighterColor text-xl">
       <div className="flex justify-between">
         <Logo />
         <div dir="rtl">

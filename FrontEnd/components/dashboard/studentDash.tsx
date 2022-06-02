@@ -39,7 +39,7 @@ const StudentDashboard: React.FC = () => {
       <div className="flex gap-12 flex-wrap">
         {teachers.map((name, index) => (
           <div className="w-full" key={index}>
-            <h2 className="mb-4 p-4 rounded-lg text-xl sm:text-3xl bg-lightColor">
+            <h2 className="mb-4 p-4 rounded-lg text-xl sm:text-3xl bg-lightColor dark:text-darkColor">
               {name !== 'المنصة' ? `دروس الشيخ ${name}` : 'دروس المنصة'}
             </h2>
             <div className="flex gap-12 sm:gap-6 flex-wrap">

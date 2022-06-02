@@ -46,7 +46,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       JSON.stringify({
         info: userInfo ? userInfo._id : null,
         isAuthenticated: userInfo ? true : false,
-        isTeacher: userInfo?.roles?.teacher ? true : false,
+        isTeacher: userInfo?.roles?.teacher,
+        isConfirmed: userInfo?.isConfirmed,
       })
     );
   }

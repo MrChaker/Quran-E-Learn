@@ -4,14 +4,8 @@ import jwt, { Secret } from 'jsonwebtoken';
 import Lesson from '../models/lesson';
 import User from '../models/user';
 import { uniqueValidator } from '../Utils/authErrors';
+import nodemailer from 'nodemailer';
 
-/* authRoute.get('/f', async (req, res) => {
-  const firstLesson = await Lesson.findOne(
-    { title: 'سورة الفاتحة' },
-    { _id: 1 }
-  );
-  res.json(firstLesson);
-}); */
 authRoute.post('/sign', async (req, res) => {
   const hasToBeUnique = await uniqueValidator(
     {
@@ -44,14 +38,31 @@ authRoute.post('/sign', async (req, res) => {
     res.status(500).json({ err });
   });
   const jwtSecret: Secret = process.env.JWT_SECRET || '';
-  const jwtToken = jwt.sign({ id: user._id, email: user.email }, jwtSecret, {
-    expiresIn: 60 * 60 * 24 * 3,
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
+    },
+  });
+  const jwtToken: string = jwt.sign(
+    { id: user._id, email: user.email },
+    jwtSecret,
+    {
+      expiresIn: 60 * 60 * 24 * 3,
+    }
+  );
+  const url = `${process.env.NEXT_PUBLIC_PORT}auth/confirmation/${jwtToken}`;
+  await transporter.sendMail({
+    to: req.body.email,
+    subject: 'تأكيد الايميل',
+    html: `انقر على هذا الرابط لتأكيد بريدك الالكتروني: <a href="${url}">${url}</a>`,
   });
   res.cookie('jwt', jwtToken, {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3 * 1000,
   });
-  res.status(200).send({ success: true });
+  res.status(200).send({ success: true, isConfirmed: false });
 });
 
 authRoute.post('/loginAPI', async (req, res) => {
@@ -74,7 +85,11 @@ authRoute.post('/loginAPI', async (req, res) => {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3 * 1000,
   });
-  res.status(200).send({ success: true, isAdmin: user.roles.admin });
+  res.status(200).send({
+    success: true,
+    isAdmin: user.roles.admin,
+    isConfirmed: user.isConfirmed,
+  });
 });
 
 authRoute.get('/logout', (req, res) => {
@@ -106,6 +121,7 @@ authRoute.get('/user', (req, res) => {
           image: user.image,
           sex: user.sex,
           roles: user.roles,
+          isConfirmed: user.isConfirmed,
         };
         res.status(200).json(
           user.roles.teacher
@@ -119,6 +135,13 @@ authRoute.get('/user', (req, res) => {
       }
     }
   );
+});
+
+authRoute.get('/confirmation/:token', async (req, res) => {
+  const token = jwt.decode(req.params.token);
+  if (typeof token !== 'string')
+    await User.findByIdAndUpdate(token?.id, { isConfirmed: true });
+  res.redirect('/auth/logout');
 });
 
 export default authRoute;

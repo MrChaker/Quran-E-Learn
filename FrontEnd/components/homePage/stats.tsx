@@ -30,7 +30,7 @@ const Stats: React.FC = () => {
   return (
     <div className="mt-24 min-h-[300px] w-full relative">
       <div
-        className={`absolute bg-darkColor h-full left-1/2 -translate-x-1/2 p-10 text-3xl md:text-5xl text-lightColor text-left pt-40`}
+        className={`absolute bg-darkColor dark:bg-lightColor h-full left-1/2 -translate-x-1/2 p-10 text-3xl md:text-5xl text-lightColor dark:text-darkColor text-left pt-40`}
         style={{ width }}
         ref={animatedBox}
       >
@@ -53,7 +53,7 @@ const Stats: React.FC = () => {
             initial={{ x: '100%', opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
-            className="absolute -top-1/4 h-2/3 bg-lighterColor shadow-3xl left-[20%] md:left-1/2 w-2/3 rounded-3xl p-4 pr-16 flex flex-col sm:flex-row items-center"
+            className="absolute -top-1/4 h-2/3 bg-lighterColor dark:text-darkColor shadow-3xl left-[20%] md:left-1/2 w-2/3 rounded-3xl p-4 pr-16 flex flex-col sm:flex-row items-center"
           >
             <div className="flex flex-col items-center w-1/3 text-4xl">
               <h1>الطّلاب</h1>

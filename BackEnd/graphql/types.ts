@@ -10,4 +10,5 @@ export type MeetingArgs = {
   title: string;
   teacherID: string;
   date: string;
+  duration: number;
 };

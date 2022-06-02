@@ -8,7 +8,9 @@ import { Button } from '../../FrontEnd/components/general/Button';
 import { useThemeContext } from '../../FrontEnd/Context/themeContext';
 import { UserContext } from '../../FrontEnd/Context/userContext';
 import { PLAN_Meeting } from '../../FrontEnd/graphql/mutations';
+import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 const PlanMeeting: NextPage = () => {
+  useIsAuth(true);
   const [selected, setSelected] = useState<Date | null>(new Date());
   const [planMeeting] = useMutation(PLAN_Meeting, {
     onCompleted: () => {
@@ -27,6 +29,9 @@ const PlanMeeting: NextPage = () => {
   const { user } = useContext(UserContext);
   const dp = useRef<DatePicker>(null!);
   const title = useRef<HTMLInputElement>(null!);
+  const mins = useRef<HTMLSelectElement>(null!);
+  const hrs = useRef<HTMLSelectElement>(null!);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     planMeeting({
@@ -34,12 +39,12 @@ const PlanMeeting: NextPage = () => {
         title: title.current.value,
         teacherID: user.info?._id,
         date: selected,
+        duration: Number(mins.current.value) + Number(hrs.current.value) * 60,
       },
     });
   };
   const handleDate = (date: Date) => {
     setSelected(date);
-    console.log(date);
   };
   const { darkTheme } = useThemeContext();
   return (
@@ -64,6 +69,20 @@ const PlanMeeting: NextPage = () => {
           className="cursor-pointer input"
           ref={dp}
         />
+      </div>
+      <label>مدّة البثّ</label>
+      <div className="flex gap-4">
+        <select name="minutes" id="mins" value={0} className="input" ref={mins}>
+          <option value="15">د15 </option>
+          <option value="30">د30 </option>
+          <option value="45">د45 </option>
+        </select>{' '}
+        :
+        <select name="hours" id="hours" value={0} className="input" ref={hrs}>
+          <option value="1"> ساعة 1</option>
+          <option value="2"> ساعة 2</option>
+          <option value="3"> ساعة 3</option>
+        </select>
       </div>
       <Button
         text="حفظ"

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { SocketCtxProvider } from '../../Context/SocketContext';
 
 const VideoPlayer = () => {
@@ -29,7 +29,7 @@ const VideoPlayer = () => {
 
   return (
     <>
-      <div className="absolute h-[500px] w-4/5 left-0 -mt-8 ">
+      <div className=" h-screen w-4/5 left-0  ">
         {teacherVid ? (
           <video ref={teacherVid} autoPlay muted width="100%" height="100%" />
         ) : (

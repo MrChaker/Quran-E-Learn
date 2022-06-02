@@ -8,6 +8,7 @@ const MeetingSchema = new mongoose.Schema({
     ref: User,
   },
   date: Date,
+  duration: Number,
 });
 
 export const Meeting = mongoose.model<any>('Meeting', MeetingSchema);

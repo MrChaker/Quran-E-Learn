@@ -65,9 +65,14 @@ videoRoute.post(
         thumbnail: await imageFromText(req.body.title),
         teacher: req.body.teacherID,
       });
-      const nl = await newLesson
-        .save()
-        .catch(() => res.status(404).json({ failure: 'not saved' }));
+      const nl = await newLesson.save().catch((err: any) => {
+        if (err.code == 11000) {
+          // title exists
+          res.status(400).json({ error: 'title must be unique' });
+        } else {
+          res.status(400).json({ error: 'another err' });
+        }
+      });
 
       await updateLessonArrays(req.body.teacherID, nl.id);
       res.status(200).json({ lessonTitle: nl.title });

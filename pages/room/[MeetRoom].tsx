@@ -1,29 +1,30 @@
-import React, { ReactElement, useContext } from 'react'
-import SocketContext from '../../FrontEnd/Context/SocketContext'
-import VideoPlayer from '../../FrontEnd/components/Meeting/VideoPlayer'
-import Chat from '../../FrontEnd/components/Meeting/Chat'
+import React, { ReactElement, useContext } from 'react';
+import SocketContext from '../../FrontEnd/Context/SocketContext';
+import VideoPlayer from '../../FrontEnd/components/Meeting/VideoPlayer';
+import Chat from '../../FrontEnd/components/Meeting/Chat';
 
-import useIsAuth from '../../FrontEnd/hooks/useIsAuth'
-import { UserContext } from '../../FrontEnd/Context/userContext'
-import {useRouter} from "next/router"
-import  MeetLayout  from '../../FrontEnd/Layouts/meetLayout'
-const  MeetRoom = () => {
+import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
+import { UserContext } from '../../FrontEnd/Context/userContext';
+import { useRouter } from 'next/router';
+import MeetLayout from '../../FrontEnd/Layouts/meetLayout';
+const MeetRoom = () => {
   useIsAuth();
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
   const Router = useRouter();
-  const { MeetRoom } = Router.query
+  const { MeetRoom } = Router.query;
   return (
     <>
-      {
-        user.info && MeetRoom &&
-        <SocketContext user={user.info} Room = { `room//${MeetRoom}` }  >
-          <VideoPlayer />
-          <Chat />
+      {user.info && MeetRoom && (
+        <SocketContext user={user.info} Room={`room//${MeetRoom}`}>
+          <div className="flex flex-row-reverse justify-between h-screen w-full ">
+            <VideoPlayer />
+            <Chat />
+          </div>
         </SocketContext>
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
 /* MeetRoom.getLayout = function getLayout(page: ReactElement ) {
   return(
@@ -33,4 +34,4 @@ const  MeetRoom = () => {
   )
 } */
 
-export default MeetRoom
+export default MeetRoom;

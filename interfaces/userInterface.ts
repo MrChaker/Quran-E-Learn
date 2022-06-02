@@ -1,3 +1,5 @@
+import { BooleanLiteral } from 'typescript';
+
 export interface UserInterface {
   name?: string;
   email?: string;
@@ -5,6 +7,7 @@ export interface UserInterface {
   image?: string;
   _id?: string;
   phone?: string;
+  isConfirmed?: boolean;
   sex?: 'male' | 'female';
   roles?: {
     student?: boolean;

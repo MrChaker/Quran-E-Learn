@@ -8,7 +8,7 @@ import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import Swal from 'sweetalert2';
 import FileInput from '../../FrontEnd/components/general/input';
 const TeachingRequest = () => {
-  useIsAuth(true); //must be authed and not already a teacher
+  useIsAuth();
   const { darkTheme } = useThemeContext();
   const { user } = useContext(UserContext);
   const message = useRef<HTMLTextAreaElement>(null!);
@@ -25,7 +25,6 @@ const TeachingRequest = () => {
       Swal.fire('', 'عذرا لقد حدث خطأ ، أعد المحاولة بعد قليل', 'error');
     },
   });
-  const inp = useRef<HTMLInputElement>(null!);
   const uploadFile = (Imagefile: File | null | undefined): void => {
     const reader = new FileReader();
     const file: any = Imagefile;
@@ -41,7 +40,9 @@ const TeachingRequest = () => {
     };
   };
   if (user.info?.roles?.teacher)
-    return <p className="text-5xl p-8">أنت مسجّل معنا كشيخ</p>;
+    return (
+      <p className="text-5xl text-center p-8 mb-40">أنت مسجّل معنا كشيخ</p>
+    );
   return (
     <div className="text-darkColor dark:text-lightColor text-xl flex flex-col gap-10  w-2/3 m-auto mt-8">
       <h1 className="text-5xl">تقديم طلب للانظمام كمعلّم قرآن</h1>

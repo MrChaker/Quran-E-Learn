@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useThemeContext } from '../../Context/themeContext';
-import { Button } from '../general/Button';
 import { SocketCtxProvider } from '../../Context/SocketContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -8,7 +7,7 @@ const Chat = () => {
   const { joined } = useContext(SocketCtxProvider);
   const { darkTheme } = useThemeContext();
   return (
-    <div className="absolute h-screen w-1/5 p-8 right-0 bg-lightColor dark:bg-darkColor -mt-8">
+    <div className="h-screen w-1/5 p-8 right-0 bg-lightColor dark:bg-semiColor ">
       {joined &&
         joined.map((j, i) => (
           <div key={i} className="flex gap-6 justify-start items-center">
