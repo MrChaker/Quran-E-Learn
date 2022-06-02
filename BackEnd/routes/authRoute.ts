@@ -52,7 +52,7 @@ authRoute.post('/sign', async (req, res) => {
       expiresIn: 60 * 60 * 24 * 3,
     }
   );
-  const url = `${process.env.NEXT_PUBLIC_PORT}auth/confirmation/${jwtToken}`;
+  const url = `${process.env.NEXT_PUBLIC_URL}/auth/confirmation/${jwtToken}`;
   await transporter.sendMail({
     to: req.body.email,
     subject: 'تأكيد الايميل',

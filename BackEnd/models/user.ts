@@ -67,7 +67,10 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 UserSchema.pre<UserInterface>('remove', async function (next) {
-  await mongoose.model('Request').findByIdAndDelete(this._id);
+  await mongoose.model('Request').findOneAndDelete({ user: this._id });
+  await mongoose.model('Meeting').deleteMany({ teacher: this._id });
+  const lessons = await mongoose.model('Lesson').find({ teacher: this._id });
+  lessons.forEach(async (l) => await l.remove()); // to proc remove hook on lesson model
   next();
 });
 // log in function
