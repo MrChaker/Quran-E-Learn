@@ -3,7 +3,6 @@ import multer from 'multer';
 import { GridFsStorage } from 'multer-gridfs-storage';
 import mongoose from 'mongoose';
 import Lesson, { GFS } from '../models/lesson';
-import imageFromText from '../Utils/imageGenerator';
 import User from '../models/user';
 
 const videoRoute = express.Router();
@@ -35,18 +34,6 @@ const updateLessonArrays = async (teacherID: string, lessonID: string) => {
   teacher.save();
 };
 
-//test image generator
-videoRoute.get('/i', async (req, res) => {
-  await imageFromText('سورة الفاتحة')
-    .then(async (image) => {
-      const ress = await Lesson.findOneAndUpdate(
-        { title: 'سورة الفاتحة' },
-        { thumbnail: image }
-      );
-      res.json({ ress });
-    })
-    .catch((err) => console.log(err));
-});
 videoRoute.post(
   '/upload',
   multer({ storage }).single('video'),
@@ -62,7 +49,7 @@ videoRoute.post(
             content: req.body.content,
           },
         ],
-        thumbnail: await imageFromText(req.body.title),
+        thumbnail: req.body.thumbnail,
         teacher: req.body.teacherID,
       });
       const nl = await newLesson.save().catch((err: any) => {

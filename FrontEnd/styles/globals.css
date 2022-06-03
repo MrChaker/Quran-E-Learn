@@ -9,6 +9,10 @@
   font-family: 'arabic';
   src: url('/fonts/arabic.ttf');
 }
+@font-face {
+  font-family: 'othmani';
+  src: url('/fonts/quran3.ttf');
+}
 * {
   --main-color: #022930;
   --semi-color: #325970;

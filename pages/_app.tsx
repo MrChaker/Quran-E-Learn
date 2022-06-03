@@ -13,6 +13,7 @@ import axios from 'axios';
 import { AppPropsWithLayout } from '../FrontEnd/Layouts/types';
 import { UserContext, User } from '../FrontEnd/Context/userContext';
 import Head from 'next/head';
+import imageDrawer from '../FrontEnd/components/lesson/canvas';
 
 fontAW();
 

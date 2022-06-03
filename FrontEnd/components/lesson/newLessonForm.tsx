@@ -9,6 +9,7 @@ import { useThemeContext } from '../../Context/themeContext';
 import { UserContext } from '../../Context/userContext';
 import Swal from 'sweetalert2';
 import Router from 'next/router';
+import imageDrawer from './canvas';
 
 type PropsType = {
   isNew?: boolean;
@@ -32,8 +33,16 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
     );
     formData.append('chapter', event.target.chapter.value);
     formData.append('content', quillContent.current);
+
     if (props.isNew) {
       formData.append('title', event.target.title.value);
+      formData.append(
+        'thumbnail',
+        await imageDrawer(
+          document.createElement('canvas'),
+          event.target.title.value
+        )
+      );
       formData.append('teacherID', user.info?._id || '');
     } else {
       formData.append('title', props.title || '');
