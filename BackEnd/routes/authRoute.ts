@@ -6,6 +6,14 @@ import User from '../models/user';
 import { uniqueValidator } from '../Utils/authErrors';
 import nodemailer from 'nodemailer';
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
+
 authRoute.post('/sign', async (req, res) => {
   const hasToBeUnique = await uniqueValidator(
     {
@@ -38,13 +46,7 @@ authRoute.post('/sign', async (req, res) => {
     res.status(500).json({ err });
   });
   const jwtSecret: Secret = process.env.JWT_SECRET || '';
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS,
-    },
-  });
+
   const jwtToken: string = jwt.sign(
     { id: user._id, email: user.email },
     jwtSecret,
@@ -56,13 +58,13 @@ authRoute.post('/sign', async (req, res) => {
   await transporter.sendMail({
     to: req.body.email,
     subject: 'تأكيد الايميل',
-    html: `انقر على هذا الرابط لتأكيد بريدك الالكتروني: <a href="${url}">${url}</a>`,
+    html: `انقر على هذا الرابط لتأكيد بريدك الالكتروني: <a target="_blank" href="${url}">${url}</a>`,
   });
-  res.cookie('jwt', jwtToken, {
+  /*  res.cookie('jwt', jwtToken, {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3 * 1000,
-  });
-  res.status(200).send({ success: true, isConfirmed: false });
+  }); */
+  res.status(200).send({ success: true, confirmed: false });
 });
 
 authRoute.post('/loginAPI', async (req, res) => {
@@ -76,19 +78,25 @@ authRoute.post('/loginAPI', async (req, res) => {
     console.log(error);
     return res.status(400).json({ LogError: 'البيانات خاطئة ، أعد المحاولة' });
   });
-  const jwtSecret: Secret = process.env.JWT_SECRET || '';
 
-  const jwtToken = jwt.sign({ id: user._id, email: user.email }, jwtSecret, {
-    expiresIn: 60 * 60 * 24 * 3,
-  });
-  res.cookie('jwt', jwtToken, {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 3 * 1000,
-  });
+  if (user.isConfirmed) {
+    const jwtSecret: Secret = process.env.JWT_SECRET || '';
+    const jwtToken = jwt.sign({ id: user._id, email: user.email }, jwtSecret, {
+      expiresIn: 60 * 60 * 24 * 3,
+    });
+    res.cookie('jwt', jwtToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 3 * 1000,
+    });
+    res.status(200).send({
+      success: true,
+      isAdmin: user.roles.admin,
+      confirmed: true,
+    });
+  }
   res.status(200).send({
     success: true,
-    isAdmin: user.roles.admin,
-    isConfirmed: user.isConfirmed,
+    confirmed: false,
   });
 });
 
@@ -99,7 +107,28 @@ authRoute.get('/logout', (req, res) => {
 
   res.redirect('/auth/login');
 });
+authRoute.post('/resendEmail', async (req, res) => {
+  const user = await User.findOne({ email: req.body.email }, { email: 1 });
 
+  if (user) {
+    const jwtSecret: Secret = process.env.JWT_SECRET || '';
+    const jwtToken = jwt.sign(
+      { id: user._id, email: req.body.email },
+      jwtSecret,
+      {
+        expiresIn: 60 * 60 * 24 * 3,
+      }
+    );
+    const url = `${process.env.NEXT_PUBLIC_URL}/auth/confirmation/${jwtToken}`;
+    await transporter.sendMail({
+      to: req.body.email,
+      subject: 'تأكيد الايميل',
+      html: `انقر على هذا الرابط لتأكيد بريدك الالكتروني: <a target="_blank" href="${url}">${url}</a>`,
+    });
+    res.status(200).json({});
+  }
+  res.status(400).json({ message: 'email not signed' });
+});
 authRoute.get('/user', (req, res) => {
   const jwtSecret: Secret = process.env.JWT_SECRET || '';
   jwt.verify(
@@ -141,7 +170,8 @@ authRoute.get('/confirmation/:token', async (req, res) => {
   const token = jwt.decode(req.params.token);
   if (typeof token !== 'string')
     await User.findByIdAndUpdate(token?.id, { isConfirmed: true });
-  res.redirect('/auth/logout');
+
+  res.redirect('/logout');
 });
 
 export default authRoute;

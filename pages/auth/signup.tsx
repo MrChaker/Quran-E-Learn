@@ -13,7 +13,6 @@ const Signup: NextPage = () => {
   return (
     <>
       <AuthLayout page="signUp" form={<SignForm />} />
-      <div className="mb-40"></div>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { ReturnType } from '../../../BackEnd/Utils/authErrors';
+import { crypt } from '../../../BackEnd/Utils/crypting';
 import { InputWithError, SignEvent } from './types';
 
 type DataToPost = {
@@ -14,10 +15,13 @@ export const emailSign = async (
   validated: boolean,
   dataToPost: DataToPost,
   API_URL: string,
+  confirmation: HTMLDivElement | null,
   errLabels?: HTMLLabelElement[],
   failLogLabel?: HTMLLabelElement
 ) => {
   e.preventDefault();
+  if (confirmation) confirmation.style.display = 'none';
+  console.log(validated);
   if (validated) {
     const res = await fetch(API_URL, {
       method: 'POST',
@@ -49,17 +53,18 @@ export const emailSign = async (
       failLogLabel.innerText = result.LogError;
     }
     if (result.success) {
-      localStorage.setItem(
-        'currentUser',
-        `{"info": {}, "isAuthenticated": true, "isConfirmed": ${result.isConfirmed}}`
-      );
-      location.assign(
-        result.isAdmin
-          ? '/admin'
-          : result.isConfirmed
-          ? '/dashboard'
-          : '/confirmation'
-      );
+      if (!result.confirmed && confirmation) {
+        confirmation.style.display = 'block';
+      } else {
+        localStorage.setItem(
+          'currentUser',
+          crypt(
+            `{"info": {}, "isAuthenticated": true}`,
+            process.env.NEXT_PUBLIC_CRYPT
+          )
+        );
+        location.assign(result.isAdmin ? '/admin' : '/dashboard');
+      }
     }
   }
 };
@@ -120,7 +125,10 @@ export const dataIsValid = (
 export const logout = (): void => {
   localStorage.setItem(
     'currentUser',
-    '{ "info": null, "isAuthenticated": false}'
+    crypt(
+      '{ "info": null, "isAuthenticated": false}',
+      process.env.NEXT_PUBLIC_CRYPT
+    )
   );
   location.assign('/auth/logout');
 };

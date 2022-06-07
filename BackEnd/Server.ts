@@ -1,5 +1,8 @@
 import express from 'express';
 import next from 'next';
+import dotenv from 'dotenv';
+dotenv.config();
+
 import cookieparser from 'cookie-parser';
 import path from 'path';
 
@@ -16,11 +19,10 @@ import videoRoute from './routes/videoRoute';
 
 const cloudinary = require('cloudinary').v2;
 
-import dotenv from 'dotenv';
 import Connect from './Utils/dbConnect';
 import CheckAdmin from './middleware/isAdmin';
+import meetingsRoute from './routes/meetingsRoute';
 
-dotenv.config();
 const PORT = process.env.PORT || 8000;
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -70,6 +72,7 @@ app
     });
     io.on('connection', (socket: Socket) => SocketIO(socket, io));
 
+    server.use('/meeting', meetingsRoute);
     server.use('/video', videoRoute);
     server.get('/admin*', CheckAdmin, (req: any, res: any) => {
       return handle(req, res);

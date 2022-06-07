@@ -13,8 +13,7 @@ import axios from 'axios';
 import { AppPropsWithLayout } from '../FrontEnd/Layouts/types';
 import { UserContext, User } from '../FrontEnd/Context/userContext';
 import Head from 'next/head';
-import imageDrawer from '../FrontEnd/components/lesson/canvas';
-
+import { crypt, deCrypt } from '../BackEnd/Utils/crypting';
 fontAW();
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -44,18 +43,28 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     });
     localStorage.setItem(
       'currentUser',
-      JSON.stringify({
-        info: userInfo ? userInfo._id : null,
-        isAuthenticated: userInfo ? true : false,
-        isTeacher: userInfo?.roles?.teacher,
-        isConfirmed: userInfo?.isConfirmed,
-      })
+      crypt(
+        JSON.stringify({
+          info: userInfo ? userInfo._id : null,
+          isAuthenticated: userInfo ? true : false,
+          isTeacher: userInfo?.roles?.teacher,
+        }),
+        process.env.NEXT_PUBLIC_CRYPT
+      )
     );
   }
 
   useEffect(() => {
     // this is for solving ssr state problem
-    setUser(JSON.parse(localStorage.getItem('currentUser') || '{}'));
+
+    setUser(
+      JSON.parse(
+        deCrypt(
+          localStorage.getItem('currentUser') || '',
+          process.env.NEXT_PUBLIC_CRYPT
+        ) || '{}'
+      )
+    );
     getUser(setUser);
   }, []);
 

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useThemeContext } from '../../Context/themeContext';
 import { Button } from '../general/Button';
 import { emailSign, CheckLength, dataIsValid, CheckPass } from './functions';
+import ResendBox from './resendBox';
 import { InputWithError } from './types';
 
 const SignForm = () => {
@@ -14,12 +15,15 @@ const SignForm = () => {
   const phone = useRef<HTMLLabelElement>(null!);
   const pass = useRef<HTMLLabelElement>(null!);
 
+  const confirmation = useRef<HTMLDivElement>(null!);
+
   const [passValidLength, setPassValidLength] = useState(false);
   const [passEqual, setPassEqual] = useState(false);
 
   const requiredInputs = useRef<InputWithError[]>([]);
   const validationInputs = useRef<InputWithError[]>([]);
 
+  const [resendEmail, setResendEmail] = useState(false);
   useEffect(() => {
     requiredInputs.current = [
       {
@@ -69,11 +73,15 @@ const SignForm = () => {
   }, []);
   const [loading, setLoading] = useState(false);
   const submit = (event: any) => {
+    let passValidOnSubmit = CheckLength({
+      input: formRef.current.password,
+      errLabel: pass.current,
+    });
     setLoading(true);
     emailSign(
       event,
       dataIsValid(requiredInputs.current, validationInputs.current) &&
-        passValidLength &&
+        (passValidLength || passValidOnSubmit) &&
         passEqual,
       {
         name: event.target?.Name.value,
@@ -83,17 +91,17 @@ const SignForm = () => {
         sex: event.target?.sex.value,
       },
       '/auth/sign',
+      confirmation.current,
       [email.current, name.current]
     ).then(() => setLoading(false));
   };
   return (
     <form
-      className="pb-10"
+      className="pb-10 relative"
       dir="rtl"
       onSubmit={(event: any) => submit(event)}
       ref={formRef}
     >
-      {/* <label htmlFor="name">الاسم</label> */}
       <input type="text" placeholder="الاسم" name="Name" />
       <label htmlFor="nameErr" ref={name}></label>
       <input type="text" placeholder="الايميل" name="email" />
@@ -152,6 +160,22 @@ const SignForm = () => {
           ) : undefined
         }
       />
+      <div
+        ref={confirmation}
+        className="p-4 bg-green-100 rounded-lg border border-green-600 text-center w-full hidden"
+      >
+        تم التسجيل بنجاح ، عليك تأكيد البريد الالكتروني للدخول <br></br> لم تصلك
+        رسالة ؟
+        <span
+          className="cursor-pointer text-blue-700 mr-2"
+          onClick={() => {
+            setResendEmail(true);
+          }}
+        >
+          اعادة ارسال رسالة التأكيد
+        </span>
+      </div>
+      {resendEmail && <ResendBox />}
     </form>
   );
 };
