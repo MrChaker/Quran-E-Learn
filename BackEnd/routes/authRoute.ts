@@ -171,7 +171,7 @@ authRoute.get('/confirmation/:token', async (req, res) => {
   if (typeof token !== 'string')
     await User.findByIdAndUpdate(token?.id, { isConfirmed: true });
 
-  res.redirect('/logout');
+  res.redirect('/login');
 });
 
 export default authRoute;
