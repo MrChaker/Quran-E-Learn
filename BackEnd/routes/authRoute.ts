@@ -74,7 +74,7 @@ authRoute.post('/loginAPI', async (req, res) => {
   if (!user)
     return res.status(400).json({ LogError: 'البيانات خاطئة ، أعد المحاولة' });
 
-  const userLog = await User.loginAPI(email, password).catch((error: Error) => {
+  await User.loginAPI(email, password).catch((error: Error) => {
     console.log(error);
     return res.status(400).json({ LogError: 'البيانات خاطئة ، أعد المحاولة' });
   });
@@ -88,7 +88,7 @@ authRoute.post('/loginAPI', async (req, res) => {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 3 * 1000,
     });
-    res.status(200).send({
+    return res.status(200).send({
       success: true,
       isAdmin: user.roles.admin,
       confirmed: true,
@@ -137,7 +137,7 @@ authRoute.get('/user', (req, res) => {
     async (err: any, decodedToken: any) => {
       if (err) {
         console.log(err);
-        res.status(401).send({ err: 'UnAuthenticated' });
+        return res.status(401).send({ err: 'UnAuthenticated' });
       } else {
         const user = await User.findOne({ email: decodedToken.email }).catch(
           (err) => console.log(err)
