@@ -47,7 +47,7 @@ const TeacherDash = () => {
   // meetings
 
   return (
-    <div className="text-xl sm:p-6 ">
+    <div className="text-xl sm:p-6 min-h-screen">
       <h1 className=" text-2xl sm:text-3xl md:text-5xl mb-6 sm:mb-10 ">
         {' '}
         لوحة التحكم في الدروس التي تقدمها{' '}

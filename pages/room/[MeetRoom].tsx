@@ -6,7 +6,6 @@ import Chat from '../../FrontEnd/components/Meeting/Chat';
 import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import { UserContext } from '../../FrontEnd/Context/userContext';
 import { useRouter } from 'next/router';
-import MeetLayout from '../../FrontEnd/Layouts/meetLayout';
 const MeetRoom = () => {
   useIsAuth();
   const { user } = useContext(UserContext);

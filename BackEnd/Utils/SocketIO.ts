@@ -16,7 +16,6 @@ const SocketIO = (
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 ): void => {
   socket.on('send signal', ({ signal, userToSignal, from }) => {
-    console.log(userToSignal);
     io.to(userToSignal.socketID).emit('connenct with joining user', {
       signal,
       joiningUser: from,

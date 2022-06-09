@@ -38,22 +38,24 @@ const SocketContext = ({
 }) => {
   const teacherID = useRef<string | string[] | undefined>(Room?.slice(6));
   const [joined, setJoined] = useState<PeerUser[]>([]);
-
   const stream = useRef<MediaStream>(null!);
   const peersRef = useRef<{ peerUser: PeerUser; peer: Peer.Instance }[]>([]);
   const teacherPeer = useRef<{
     peer: Peer.Instance | null;
     socketID: string | null;
   }>(null!);
+
   const teacherVid = useRef<HTMLVideoElement>(null!);
 
   const talkingStudent = useRef<MediaStream>(null!);
 
   useEffect(() => {
+    console.log(teacherID.current);
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         stream.current = currentStream;
+        console.log(user?._id == teacherID.current);
         if (user?._id == teacherID.current) {
           teacherVid.current.srcObject = currentStream;
         }
