@@ -56,6 +56,8 @@ const SocketContext = ({
       .then((currentStream) => {
         stream.current = currentStream;
         console.log(user?._id == teacherID.current);
+        console.log(user?._id);
+
         if (user?._id == teacherID.current) {
           teacherVid.current.srcObject = currentStream;
         }
