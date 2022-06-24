@@ -32,7 +32,7 @@ export async function getUserProps(
 
 const fetchUser = async (cookie: string) => {
   try {
-    const res = await axios.get(`http://localhost:8000/auth/user`, {
+    const res = await axios.get(`${process.env.NEXT_URL}auth/user`, {
       withCredentials: true,
       headers: {
         cookie,
