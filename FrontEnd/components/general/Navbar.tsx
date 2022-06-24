@@ -9,6 +9,7 @@ import DropMenu, { DropMenuLink } from './dropMenu';
 import Image from 'next/image';
 import Logo from './logo';
 import { logout } from '../auth/functions';
+
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
   const { darkTheme } = useThemeContext();

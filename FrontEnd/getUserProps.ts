@@ -32,7 +32,7 @@ export async function getUserProps(
 
 const fetchUser = async (cookie: string) => {
   try {
-    const res = await axios.get(`${process.env.NEXT_URL}auth/user`, {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/auth/user`, {
       withCredentials: true,
       headers: {
         cookie,
@@ -40,7 +40,7 @@ const fetchUser = async (cookie: string) => {
     });
     return res.data;
   } catch (err) {
-    console.log('err');
+    console.log(err);
     return null;
   }
 };
