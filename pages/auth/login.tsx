@@ -1,17 +1,21 @@
-import { NextPage } from "next"
-import { useContext } from 'react'
-import Router from 'next/router'
-import { UserContext } from '../../FrontEnd/Context/userContext'
-import AuthLayout from "../../FrontEnd/components/auth/authLayout";
-import LoginForm from "../../FrontEnd/components/auth/loginForm";
+import { GetServerSidePropsContext } from 'next';
+import AuthLayout from '../../FrontEnd/components/auth/authLayout';
+import LoginForm from '../../FrontEnd/components/auth/loginForm';
+import { getUserProps } from '../../FrontEnd/getUserProps';
 
-const Login :NextPage = () => {
-  const { user } = useContext(UserContext)
-  if (user.isAuthenticated){
-    Router.push('/')
-  }
-  return (
-    <AuthLayout page="login" form={<LoginForm />}/>
-  )
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const res = await getUserProps(context.req.headers.cookie);
+  if (res.props?.user)
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/dashboard',
+      },
+    };
+  return { props: {} }; // noredirection
 }
-export default Login
+
+const Login = () => {
+  return <AuthLayout page="login" form={<LoginForm />} />;
+};
+export default Login;

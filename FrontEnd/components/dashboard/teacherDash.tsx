@@ -1,23 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery } from '@apollo/client';
 import LessonBox from '../lesson/lessonBox';
 import { LessonInterface } from '../../../interfaces/lessonsInterface';
-import { UserContext } from '../../Context/userContext';
 import { GET_Lessons } from '../../graphql/queries';
 import DropMenu, { DropMenuLink } from '../general/dropMenu';
 import { DELETE_Lesson } from '../../graphql/mutations';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import MeetingsList from './meetingsList';
-const TeacherDash = () => {
-  const { user } = useContext(UserContext);
+import { UserInterface } from '../../../interfaces/userInterface';
+const TeacherDash: React.FC<{ user: UserInterface }> = (props) => {
   const [lessons, setLessons] = useState<LessonInterface[]>([]);
   const router = useRouter();
   const { data, loading } = useQuery(GET_Lessons, {
     variables: {
-      userID: user.info?._id,
+      userID: props.user._id,
       forTeacher: true,
     },
   });

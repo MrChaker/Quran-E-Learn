@@ -67,7 +67,6 @@ const GET_Lessons = gql`
     getLessons(userID: $userID, forTeacher: $forTeacher) {
       title
       thumbnail
-
       teacher {
         _id
         name

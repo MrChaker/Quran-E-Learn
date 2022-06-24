@@ -1,16 +1,19 @@
 import { useMutation } from '@apollo/client';
-import React, { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { Button } from '../../FrontEnd/components/general/Button';
 import { useThemeContext } from '../../FrontEnd/Context/themeContext';
-import { UserContext } from '../../FrontEnd/Context/userContext';
 import { CREATE_Request } from '../../FrontEnd/graphql/mutations';
-import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import Swal from 'sweetalert2';
 import FileInput from '../../FrontEnd/components/general/input';
-const TeachingRequest = () => {
-  useIsAuth();
+import { GetServerSidePropsContext } from 'next';
+import { getUserProps } from '../../FrontEnd/getUserProps';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie, false, true);
+}
+
+const TeachingRequest = ({ ...props }) => {
   const { darkTheme } = useThemeContext();
-  const { user } = useContext(UserContext);
   const message = useRef<HTMLTextAreaElement>(null!);
 
   const [createRequest] = useMutation(CREATE_Request, {
@@ -32,17 +35,14 @@ const TeachingRequest = () => {
     reader.onloadend = () => {
       createRequest({
         variables: {
-          userID: user.info?._id,
+          userID: props.user._id,
           message: message.current.value,
           cv: reader.result,
         },
       });
     };
   };
-  if (user.info?.roles?.teacher)
-    return (
-      <p className="text-5xl text-center p-8 mb-40">أنت مسجّل معنا كشيخ</p>
-    );
+
   return (
     <div className="text-darkColor dark:text-lightColor text-xl flex flex-col gap-10  w-2/3 m-auto mt-8">
       <h1 className="text-5xl">تقديم طلب للانظمام كمعلّم قرآن</h1>

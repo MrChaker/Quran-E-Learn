@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../FrontEnd/Context/userContext';
+import { useEffect, useState } from 'react';
 import { GET_Lessons } from '../../FrontEnd/graphql/queries';
 import { LessonInterface } from '../../interfaces/lessonsInterface';
 

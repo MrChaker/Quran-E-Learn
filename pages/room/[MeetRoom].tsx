@@ -1,20 +1,21 @@
-import React, { ReactElement, useContext } from 'react';
 import SocketContext from '../../FrontEnd/Context/SocketContext';
 import VideoPlayer from '../../FrontEnd/components/Meeting/VideoPlayer';
 import Chat from '../../FrontEnd/components/Meeting/Chat';
-
-import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
-import { UserContext } from '../../FrontEnd/Context/userContext';
 import { useRouter } from 'next/router';
-const MeetRoom = () => {
-  useIsAuth();
-  const { user } = useContext(UserContext);
+import { GetServerSidePropsContext } from 'next';
+import { getUserProps } from '../../FrontEnd/getUserProps';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie);
+}
+
+const MeetRoom = ({ ...props }) => {
   const Router = useRouter();
   const { MeetRoom } = Router.query;
   return (
     <>
-      {user.info && MeetRoom && (
-        <SocketContext user={user.info} Room={`room//${MeetRoom}`}>
+      {MeetRoom && (
+        <SocketContext user={props.user} Room={`room//${MeetRoom}`}>
           <div className="flex flex-row-reverse justify-between h-screen w-full ">
             <VideoPlayer />
             <Chat />

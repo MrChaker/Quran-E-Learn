@@ -1,9 +1,13 @@
-import React from 'react';
-import UserListing from '../../FrontEnd/components/admin/userListing';
+import { GetServerSidePropsContext } from 'next';
 import TeachersList from '../../FrontEnd/components/teachers/TeachersList';
+import { getUserProps } from '../../FrontEnd/getUserProps';
 
-const Teachers = () => {
-  return <TeachersList />;
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie);
+}
+
+const Teachers = ({ ...props }) => {
+  return <TeachersList user={props.user} />;
 };
 
 export default Teachers;

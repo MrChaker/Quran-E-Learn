@@ -1,16 +1,18 @@
-import { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { UserContext } from '../../FrontEnd/Context/userContext';
 import { useQuery } from '@apollo/client';
 import { GET_User } from '../../FrontEnd/graphql/queries';
-import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import type { UserInterface } from '../../interfaces/userInterface';
 import Photo from '../../FrontEnd/components/profile/photo';
 import ProfileDetails from '../../FrontEnd/components/profile/details';
-const Profile: NextPage = () => {
-  const { user } = useContext(UserContext);
+import { getUserProps } from '../../FrontEnd/getUserProps';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie);
+}
+
+const Profile = ({ ...props }) => {
   const Router = useRouter();
   const { profileID } = Router.query;
   const { data, loading } = useQuery(GET_User, {
@@ -23,14 +25,19 @@ const Profile: NextPage = () => {
       setThisUser(data.getUser);
     }
   }, [loading]);
-
-  useIsAuth();
+  if (!thisUser)
+    return (
+      <p className="text-center text-3xl h-screen pt-40">
+        {' '}
+        هذا المستخدم غير موجود{' '}
+      </p>
+    );
   return (
     <div className="">
       <div className="flex gap-10 sm:gap-16 items-center lg:flex-row flex-col text-darkColor dark:text-lightColor text-2xl sm:text-4xl">
         <div className="flex flex-col gap-8 items-center">
           <Photo
-            user={thisUser || user.info}
+            user={thisUser || props.user}
             profileID={profileID}
             loading={loading}
           />
@@ -39,7 +46,7 @@ const Profile: NextPage = () => {
         </div>
         <div className="">
           <ProfileDetails
-            user={thisUser || user.info}
+            user={thisUser || props.user}
             profileID={profileID}
             loading={loading}
           />

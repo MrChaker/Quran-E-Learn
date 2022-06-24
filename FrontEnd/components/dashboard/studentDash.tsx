@@ -1,16 +1,17 @@
 import { useQuery } from '@apollo/client';
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LessonInterface } from '../../../interfaces/lessonsInterface';
 import LessonBox from '../lesson/lessonBox';
-import { UserContext } from '../../Context/userContext';
 import { GET_Lessons } from '../../graphql/queries';
 import MeetingsList from './meetingsList';
+import { StudentInfo, UserInterface } from '../../../interfaces/userInterface';
 
-const StudentDashboard: React.FC = () => {
-  const { user } = useContext(UserContext);
+const StudentDashboard: React.FC<{ user: UserInterface & StudentInfo }> = (
+  props
+) => {
   // fetching lessons of a student
   const { data, loading } = useQuery(GET_Lessons, {
-    variables: { userID: user.info?._id, forTeacher: false },
+    variables: { userID: props.user?._id, forTeacher: false },
   });
   const [newLearner, setNewLearner] = useState(false);
   const [lessons, setLessons] = useState<LessonInterface[]>([]);
@@ -27,8 +28,7 @@ const StudentDashboard: React.FC = () => {
       });
     }
     setNewLearner(
-      user.studentInfo?.lessons == undefined ||
-        user.studentInfo?.lessons?.length == 0
+      props.user.lessons == undefined || props.user.lessons?.length == 0
     );
   }, [loading]);
   return (
@@ -55,7 +55,7 @@ const StudentDashboard: React.FC = () => {
                         title={lesson.title || ''}
                         thumbnail={lesson.thumbnail || ''}
                         progress={
-                          user.studentInfo?.lessons?.find(
+                          props.user.lessons?.find(
                             (l) => l.title == lesson.title
                           )?.progress || 0
                         }

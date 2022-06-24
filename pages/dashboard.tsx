@@ -1,16 +1,16 @@
-import { NextPage } from 'next';
-import { useContext } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import StudentDashboard from '../FrontEnd/components/dashboard/studentDash';
 import TeacherDash from '../FrontEnd/components/dashboard/teacherDash';
-import { UserContext } from '../FrontEnd/Context/userContext';
-import useIsAuth from '../FrontEnd/hooks/useIsAuth';
 
-const Dashboard: NextPage = () => {
-  useIsAuth();
+import { getUserProps } from '../FrontEnd/getUserProps';
 
-  const { user } = useContext(UserContext);
-  if (!user.info?.roles?.teacher) return <StudentDashboard />;
-  else return <TeacherDash />;
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie);
+}
+
+const Dashboard = ({ ...props }) => {
+  if (!props.user.roles?.teacher) return <StudentDashboard user={props.user} />;
+  else return <TeacherDash user={props.user} />;
 };
 
 export default Dashboard;

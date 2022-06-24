@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import QuillEditor from '../lesson/QuillEditor';
 import { Button } from '..//general/Button';
 import FileInput from '..//general/input';
@@ -6,19 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { usePost } from '../../hooks/usePost';
 import { Line as Progress } from 'rc-progress';
 import { useThemeContext } from '../../Context/themeContext';
-import { UserContext } from '../../Context/userContext';
 import Swal from 'sweetalert2';
 import Router from 'next/router';
 import imageDrawer from './canvas';
+import { TeacherInfo, UserInterface } from '../../../interfaces/userInterface';
 
 type PropsType = {
+  user: UserInterface & TeacherInfo;
   isNew?: boolean;
   title?: string;
 };
 const NewLessonForm: React.FC<PropsType> = (props) => {
   const { uploadProgress, uploadFile } = usePost('/video/upload');
   const [uploading, setUploading] = useState(false);
-  const { user } = useContext(UserContext);
+  const user = props.user;
   const quillContent = useRef('');
   const { darkTheme } = useThemeContext();
 
@@ -43,7 +44,7 @@ const NewLessonForm: React.FC<PropsType> = (props) => {
           event.target.title.value
         )
       );
-      formData.append('teacherID', user.info?._id || '');
+      formData.append('teacherID', user._id || '');
     } else {
       formData.append('title', props.title || '');
     }

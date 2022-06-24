@@ -1,5 +1,3 @@
-import { BooleanLiteral } from 'typescript';
-
 export interface UserInterface {
   name?: string;
   email?: string;

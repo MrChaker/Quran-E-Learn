@@ -1,16 +1,19 @@
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NextPage } from 'next';
-import React, { useContext, useRef, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
+import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
 import { Button } from '../../FrontEnd/components/general/Button';
 import { useThemeContext } from '../../FrontEnd/Context/themeContext';
-import { UserContext } from '../../FrontEnd/Context/userContext';
+import { getUserProps } from '../../FrontEnd/getUserProps';
 import { PLAN_Meeting } from '../../FrontEnd/graphql/mutations';
-import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
-const PlanMeeting: NextPage = () => {
-  useIsAuth(true);
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie, true);
+}
+
+const PlanMeeting = ({ ...props }) => {
   const [selected, setSelected] = useState<Date | null>(new Date());
   const [planMeeting] = useMutation(PLAN_Meeting, {
     onCompleted: () => {
@@ -26,7 +29,6 @@ const PlanMeeting: NextPage = () => {
       });
     },
   });
-  const { user } = useContext(UserContext);
   const dp = useRef<DatePicker>(null!);
   const title = useRef<HTMLInputElement>(null!);
   const mins = useRef<HTMLSelectElement>(null!);
@@ -37,7 +39,7 @@ const PlanMeeting: NextPage = () => {
     planMeeting({
       variables: {
         title: title.current.value,
-        teacherID: user.info?._id,
+        teacherID: props.user._id,
         date: selected,
         duration: Number(mins.current.value) + Number(hrs.current.value) * 60,
       },

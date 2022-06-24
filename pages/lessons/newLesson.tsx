@@ -1,11 +1,16 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import LessonLayout from '../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../FrontEnd/Layouts/layout';
-import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 import NewLessonForm from '../../FrontEnd/components/lesson/newLessonForm';
-const NewLesson = () => {
-  useIsAuth(true); // true for teacher condition
-  return <NewLessonForm isNew={true} />;
+import { GetServerSidePropsContext } from 'next';
+import { getUserProps } from '../../FrontEnd/getUserProps';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return await getUserProps(context.req.headers.cookie, true);
+}
+
+const NewLesson = ({ ...props }) => {
+  return <NewLessonForm isNew={true} user={props.user} />;
 };
 
 NewLesson.getLayout = function getLayout(page: ReactElement) {

@@ -1,22 +1,18 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useMutation, useQuery } from '@apollo/client';
-import React, { useContext, useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
-import { UserInterface } from '../../../interfaces/userInterface';
-import { UserContext } from '../../Context/userContext';
+import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { StudentInfo, UserInterface } from '../../../interfaces/userInterface';
 import { useThemeContext } from '../../Context/themeContext';
-import { JOIN_Teacher } from '../../graphql/mutations';
 import { GET_AllUsers } from '../../graphql/queries';
 import { Button } from '../general/Button';
 
-const TeachersList = () => {
-  const { user } = useContext(UserContext);
+const TeachersList = (props: { user: UserInterface & StudentInfo }) => {
   const { darkTheme } = useThemeContext();
   const { data, loading } = useQuery(GET_AllUsers, {
     variables: {
       query: {
-        roles: { teachers: true },
+        roles: { teacher: true },
       },
     },
   });
@@ -53,9 +49,7 @@ const TeachersList = () => {
                       <p className="text-center">{teacher.phone}</p>
                       <Button
                         text={
-                          !user.studentInfo?.teachers.includes(
-                            teacher._id ?? ''
-                          )
+                          !props.user.teachers.includes(teacher._id ?? '')
                             ? 'انظمّ الى طلابه'
                             : 'انت بالفعل منظم الى هذا الشيخ'
                         }
@@ -67,7 +61,7 @@ const TeachersList = () => {
                         txtColor={
                           darkTheme ? 'var(--main-color)' : 'var(--light-color)'
                         }
-                        disable={user.studentInfo?.teachers.includes(
+                        disable={props.user.teachers.includes(
                           teacher._id ?? ''
                         )}
                         block
