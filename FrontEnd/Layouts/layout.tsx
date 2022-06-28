@@ -8,7 +8,6 @@ import Footer from '../components/general/Footer';
 export const Layout: NextPage = ({ children }) => {
   const [menu, setMenu] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
-
   return (
     <>
       <ThemeCentext.Provider value={{ darkTheme, setDarkTheme }}>

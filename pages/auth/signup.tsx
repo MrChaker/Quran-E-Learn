@@ -1,24 +1,9 @@
-import { GetServerSidePropsContext, NextPage } from 'next';
 import AuthLayout from '../../FrontEnd/components/auth/authLayout';
 import SignForm from '../../FrontEnd/components/auth/signForm';
-import { getUserProps } from '../../FrontEnd/getUserProps';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const res = await getUserProps(context.req.headers.cookie);
-  if (res.props?.user)
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/dashboard',
-      },
-    };
-  return { props: {} }; // noredirection
-}
-const Signup: NextPage = () => {
-  return (
-    <>
-      <AuthLayout page="signUp" form={<SignForm />} />
-    </>
-  );
+import { useRouter } from 'next/router';
+const Signup = ({ ...props }) => {
+  const router = useRouter();
+  if (props.user) router.push('/dashboard');
+  return <>{!props.user && <AuthLayout page="signUp" form={<SignForm />} />}</>;
 };
 export default Signup;

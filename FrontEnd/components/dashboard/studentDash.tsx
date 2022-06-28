@@ -43,7 +43,7 @@ const StudentDashboard: React.FC<{ user: UserInterface & StudentInfo }> = (
               {name !== 'المنصة' ? `دروس الشيخ ${name}` : 'دروس المنصة'}
             </h2>
             <div className="flex gap-12 sm:gap-6 flex-wrap">
-              <MeetingsList top={100} left={40} />
+              <MeetingsList top={100} left={40} user={props.user} />
               {lessons.map((lesson, i) => (
                 <>
                   {lesson.teacher?.name == name && (

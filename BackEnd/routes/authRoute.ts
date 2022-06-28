@@ -5,6 +5,7 @@ import Lesson from '../models/lesson';
 import User from '../models/user';
 import { uniqueValidator } from '../Utils/authErrors';
 import nodemailer from 'nodemailer';
+import { mailConfirmation } from '../Utils/mailer';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -55,20 +56,12 @@ authRoute.post('/sign', async (req, res) => {
     }
   );
   const url = `${process.env.NEXT_PUBLIC_URL}/auth/confirmation/${jwtToken}`;
-  await transporter.sendMail({
-    to: req.body.email,
-    subject: 'تأكيد الايميل',
-    html: `انقر على هذا الرابط لتأكيد بريدك الالكتروني: <a target="_blank" href="${url}">${url}</a>`,
-  });
-  /*  res.cookie('jwt', jwtToken, {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 3 * 1000,
-  }); */
+  await mailConfirmation(transporter, url, req.body.email);
   res.status(200).send({ success: true, confirmed: false });
 });
 
 authRoute.post('/loginAPI', async (req, res) => {
-  const { email, password }: { email: string; password: string } = req.body;
+  const { email, password } = req.body;
 
   const user = await User.findOne({ email });
   if (!user)
@@ -120,11 +113,7 @@ authRoute.post('/resendEmail', async (req, res) => {
       }
     );
     const url = `${process.env.NEXT_PUBLIC_URL}/auth/confirmation/${jwtToken}`;
-    await transporter.sendMail({
-      to: req.body.email,
-      subject: 'تأكيد الايميل',
-      html: `انقر على هذا الرابط لتأكيد بريدك الالكتروني: <a target="_blank" href="${url}">${url}</a>`,
-    });
+    await mailConfirmation(transporter, url, req.body.email);
     res.status(200).json({});
   }
   res.status(400).json({ message: 'email not signed' });
@@ -150,7 +139,6 @@ authRoute.get('/user', (req, res) => {
           image: user.image,
           sex: user.sex,
           roles: user.roles,
-          isConfirmed: user.isConfirmed,
         };
         res.status(200).json(
           user.roles.teacher

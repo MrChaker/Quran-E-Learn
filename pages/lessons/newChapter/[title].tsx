@@ -3,13 +3,11 @@ import LessonLayout from '../../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../../FrontEnd/Layouts/layout';
 import NewLessonForm from '../../../FrontEnd/components/lesson/newLessonForm';
 import { useRouter } from 'next/router';
-import { getUserProps } from '../../../FrontEnd/getUserProps';
-import { GetServerSidePropsContext } from 'next';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie, true);
-}
+import useIsAuth from '../../../FrontEnd/hooks/useIsAuth';
+
 const NewLesson = ({ ...props }) => {
+  useIsAuth(props.user, true);
   const { title } = useRouter().query;
 
   return (

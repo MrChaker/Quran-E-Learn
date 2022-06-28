@@ -1,12 +1,7 @@
-import { GetServerSidePropsContext } from 'next';
 import TeachersList from '../../FrontEnd/components/teachers/TeachersList';
-import { getUserProps } from '../../FrontEnd/getUserProps';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie);
-}
 
 const Teachers = ({ ...props }) => {
+  if (!props.user) return <></>;
   return <TeachersList user={props.user} />;
 };
 

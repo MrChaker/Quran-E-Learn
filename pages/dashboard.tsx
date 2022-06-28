@@ -1,14 +1,10 @@
-import { GetServerSidePropsContext } from 'next';
 import StudentDashboard from '../FrontEnd/components/dashboard/studentDash';
 import TeacherDash from '../FrontEnd/components/dashboard/teacherDash';
-
-import { getUserProps } from '../FrontEnd/getUserProps';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie);
-}
+import useIsAuth from '../FrontEnd/hooks/useIsAuth';
 
 const Dashboard = ({ ...props }) => {
+  useIsAuth(props.user);
+  if (!props.user) return <></>;
   if (!props.user.roles?.teacher) return <StudentDashboard user={props.user} />;
   else return <TeacherDash user={props.user} />;
 };

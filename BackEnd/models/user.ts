@@ -79,9 +79,7 @@ UserSchema.static(
   async function loginAPI(Email: string, Password: string) {
     const user = await this.findOne({ email: Email });
     if (user) {
-      console.log(Password);
       const pass = await bcrypt.compare(Password, user.password);
-      console.log(pass);
       if (pass) {
         return user;
       }

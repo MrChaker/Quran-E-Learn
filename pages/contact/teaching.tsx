@@ -5,14 +5,10 @@ import { useThemeContext } from '../../FrontEnd/Context/themeContext';
 import { CREATE_Request } from '../../FrontEnd/graphql/mutations';
 import Swal from 'sweetalert2';
 import FileInput from '../../FrontEnd/components/general/input';
-import { GetServerSidePropsContext } from 'next';
-import { getUserProps } from '../../FrontEnd/getUserProps';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie, false, true);
-}
+import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 
 const TeachingRequest = ({ ...props }) => {
+  useIsAuth(props.user, false, true);
   const { darkTheme } = useThemeContext();
   const message = useRef<HTMLTextAreaElement>(null!);
 

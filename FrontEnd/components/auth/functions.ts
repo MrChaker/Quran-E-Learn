@@ -56,13 +56,6 @@ export const emailSign = async (
       if (!result.confirmed && confirmation) {
         confirmation.style.display = 'block';
       } else {
-        localStorage.setItem(
-          'currentUser',
-          crypt(
-            `{"info": {}, "isAuthenticated": true}`,
-            process.env.NEXT_PUBLIC_CRYPT
-          )
-        );
         location.assign(result.isAdmin ? '/admin' : '/dashboard');
       }
     }
@@ -123,12 +116,6 @@ export const dataIsValid = (
 };
 
 export const logout = (): void => {
-  localStorage.setItem(
-    'currentUser',
-    crypt(
-      '{ "info": null, "isAuthenticated": false}',
-      process.env.NEXT_PUBLIC_CRYPT
-    )
-  );
+  localStorage.setItem('currentUser', '');
   location.assign('/auth/logout');
 };

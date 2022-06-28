@@ -2,14 +2,10 @@ import { ReactElement } from 'react';
 import LessonLayout from '../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../FrontEnd/Layouts/layout';
 import NewLessonForm from '../../FrontEnd/components/lesson/newLessonForm';
-import { GetServerSidePropsContext } from 'next';
-import { getUserProps } from '../../FrontEnd/getUserProps';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie, true);
-}
+import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 
 const NewLesson = ({ ...props }) => {
+  useIsAuth(props.user, true);
   return <NewLessonForm isNew={true} user={props.user} />;
 };
 

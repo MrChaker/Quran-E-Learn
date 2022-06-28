@@ -5,7 +5,6 @@ import { useWindowWidth } from '../../hooks/useWindowWidth';
 import { useQuery } from '@apollo/client';
 import { GET_DocCount } from '../../graphql/queries';
 import useCounter from '../../hooks/useCounter';
-import imageDrawer from '../lesson/canvas';
 const Stats: React.FC = () => {
   const { ref: animatedBox, inView } = useInView({
     delay: 250,

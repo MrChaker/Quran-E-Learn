@@ -1,21 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMenuContext } from '../../Context/menuContext';
 import { useThemeContext } from '../../Context/themeContext';
-import { UserContext } from '../../Context/userContext';
 import { Button } from './Button';
 import DropMenu, { DropMenuLink } from './dropMenu';
 import Image from 'next/image';
 import Logo from './logo';
 import { logout } from '../auth/functions';
+import { useUserContext } from '../../Context/userContext';
 
 export const NavBar = () => {
   const { menu, setMenu } = useMenuContext();
   const { darkTheme } = useThemeContext();
-  const { user } = useContext(UserContext);
   const [dropMenu, setDropMenu] = useState(false);
-
+  const { user } = useUserContext();
   return (
     <>
       <nav
@@ -32,7 +31,7 @@ export const NavBar = () => {
         </ul>
 
         <div className="flex items-center">
-          {!user.isAuthenticated && (
+          {!user && (
             <>
               <Link href="/auth/login">
                 <a>
@@ -65,7 +64,7 @@ export const NavBar = () => {
               </Link>
             </>
           )}
-          {user.isAuthenticated && (
+          {user && (
             <>
               <div
                 className="flex items-center gap-1 sm:gap-2 rounded-xl hover:bg-lightColor dark:hover:bg-semiColor cursor-pointer py-1 px-2"
@@ -73,20 +72,17 @@ export const NavBar = () => {
               >
                 <div className="rounded-full border border-darkColor dark:border-lightColor w-8 h-8 ml-1 overflow-hidden">
                   <Image
-                    src={user.info?.image || '/male.png'}
+                    src={user?.image || '/male.png'}
                     width={32}
                     height={32}
                   />
                 </div>
-                <div className="text-md sm:text-xl">{user.info?.name}</div>
+                <div className="text-md sm:text-xl">{user?.name}</div>
                 <FontAwesomeIcon icon="caret-down" />
               </div>
               <DropMenu isOn={dropMenu} left="10%" top="80%">
-                <DropMenuLink
-                  name="الحساب"
-                  link={`/profile/${user.info?._id}`}
-                />
-                {user.info?.roles?.admin && (
+                <DropMenuLink name="الحساب" link={`/profile/${user?._id}`} />
+                {user?.roles?.admin && (
                   <DropMenuLink name="لوحة التحكم" link={`/admin`} />
                 )}
                 <DropMenuLink name="تسجيل الخروج" isButton onClick={logout} />

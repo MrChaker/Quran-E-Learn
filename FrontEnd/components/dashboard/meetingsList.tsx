@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Meeting } from '../../../interfaces/meetingInterface';
-import { UserContext } from '../../Context/userContext';
 import { GET_Meetings } from '../../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import Link from 'next/link';
@@ -13,14 +12,12 @@ const MeetingsList = (props: {
   forTeacher?: boolean;
   top: number;
   left: number;
+  user: any;
 }) => {
-  const { user } = useContext(UserContext);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const { data, loading } = useQuery(GET_Meetings, {
     variables: {
-      teachersIDs: props.forTeacher
-        ? [user.info?._id]
-        : user.studentInfo?.teachers,
+      teachersIDs: props.forTeacher ? [props.user._id] : props.user.teachers,
     },
   });
   useEffect(() => {

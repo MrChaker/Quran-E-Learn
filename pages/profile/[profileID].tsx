@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
@@ -6,11 +5,6 @@ import { GET_User } from '../../FrontEnd/graphql/queries';
 import type { UserInterface } from '../../interfaces/userInterface';
 import Photo from '../../FrontEnd/components/profile/photo';
 import ProfileDetails from '../../FrontEnd/components/profile/details';
-import { getUserProps } from '../../FrontEnd/getUserProps';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie);
-}
 
 const Profile = ({ ...props }) => {
   const Router = useRouter();
@@ -37,16 +31,18 @@ const Profile = ({ ...props }) => {
       <div className="flex gap-10 sm:gap-16 items-center lg:flex-row flex-col text-darkColor dark:text-lightColor text-2xl sm:text-4xl">
         <div className="flex flex-col gap-8 items-center">
           <Photo
-            user={thisUser || props.user}
+            IsThisAuthedUser={thisUser._id === props.user?._id}
             profileID={profileID}
             loading={loading}
+            user={thisUser}
           />
           <h1 className="">{thisUser?.name || 'الاسم'}</h1>
           {/* side notes */}
         </div>
         <div className="">
           <ProfileDetails
-            user={thisUser || props.user}
+            IsThisAuthedUser={thisUser._id === props.user._id}
+            user={thisUser}
             profileID={profileID}
             loading={loading}
           />

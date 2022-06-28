@@ -1,19 +1,15 @@
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GetServerSidePropsContext } from 'next';
 import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
 import { Button } from '../../FrontEnd/components/general/Button';
 import { useThemeContext } from '../../FrontEnd/Context/themeContext';
-import { getUserProps } from '../../FrontEnd/getUserProps';
 import { PLAN_Meeting } from '../../FrontEnd/graphql/mutations';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return await getUserProps(context.req.headers.cookie, true);
-}
+import useIsAuth from '../../FrontEnd/hooks/useIsAuth';
 
 const PlanMeeting = ({ ...props }) => {
+  useIsAuth(props.user, true);
   const [selected, setSelected] = useState<Date | null>(new Date());
   const [planMeeting] = useMutation(PLAN_Meeting, {
     onCompleted: () => {

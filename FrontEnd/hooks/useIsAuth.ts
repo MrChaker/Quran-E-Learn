@@ -1,18 +1,18 @@
-import { useEffect } from 'react';
 import Router from 'next/router';
-import { deCrypt } from '../../BackEnd/Utils/crypting';
 
-const useIsAuth = (isTeacher: boolean = false) => {
-  useEffect(() => {
-    const storedUser = JSON.parse(
-      deCrypt(
-        localStorage.getItem('currentUser') || '',
-        process.env.NEXT_PUBLIC_CRYPT
-      ) || '{}'
-    );
-    if (!storedUser.isAuthenticated || (isTeacher && !storedUser.isTeacher))
-      Router.push('/auth/login');
-  }, []);
+const useIsAuth = (user: any, teacherOnly?: boolean, studentOnly?: boolean) => {
+  if (!user) {
+    Router.push('/auth/login');
+    return;
+  }
+  if (!user.roles.teacher && teacherOnly) {
+    Router.push('/dashboard');
+    return;
+  }
+  if (user.roles.teacher && studentOnly) {
+    Router.push('/dashboard');
+    return;
+  }
 };
 
 export default useIsAuth;

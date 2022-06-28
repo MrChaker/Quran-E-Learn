@@ -1,12 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 import { GET_Lesson } from '../../../FrontEnd/graphql/queries';
 import { LessonInterface } from '../../../interfaces/lessonsInterface';
 import LessonLayout from '../../../FrontEnd/Layouts/lessonLayout';
 import { Layout } from '../../../FrontEnd/Layouts/layout';
 import { useLessonContext } from '../../../FrontEnd/Context/lessonContext';
-const Lesson = () => {
+import useIsAuth from '../../../FrontEnd/hooks/useIsAuth';
+const Lesson = ({ ...props }) => {
+  useIsAuth(props.user);
   const [Slesson, setLesson] = useState<LessonInterface>(null!);
   const { lesson, chapter } = useRouter().query;
   const { setLesson: setLCtx } = useLessonContext();

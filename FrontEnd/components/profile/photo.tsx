@@ -1,21 +1,19 @@
 import { UserInterface } from '../../../interfaces/userInterface';
 import React, { useState } from 'react';
-import { UserContext } from '../../Context/userContext';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { UPDATE_User } from '../../graphql/mutations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export type PropsType = {
-  user: UserInterface | null;
+  IsThisAuthedUser: boolean;
   profileID: string | string[] | undefined;
   loading: boolean;
+  user: UserInterface;
 };
 const Photo = (props: PropsType) => {
-  const { user } = useContext(UserContext);
   const [visibility, setVisibility] = useState('hidden');
-
   const image = useRef<HTMLInputElement>(null!);
   const [previewImage, setPreviewImage] = useState<string>(null!);
   const [uploading, setUploading] = useState(false);
@@ -37,7 +35,7 @@ const Photo = (props: PropsType) => {
           setPreviewImage(reader.result);
           updateUser({
             variables: {
-              _id: user.info?._id,
+              _id: props.user._id,
               query: { image: reader.result },
             },
           });
@@ -73,7 +71,7 @@ const Photo = (props: PropsType) => {
       )}
       {
         //check if authed user is on his profile to allow him make changes
-        user.info?._id == props.profileID && (
+        props.IsThisAuthedUser && (
           <div
             className={` ${visibility} bg-darkColor dark:bg-lightColor opacity-90 absolute w-full h-full rounded-full filter `}
           >

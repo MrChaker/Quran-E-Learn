@@ -74,7 +74,7 @@ const TeacherDash: React.FC<{ user: UserInterface }> = (props) => {
             <p>بث مباشر</p>
           </a>
         </Link>
-        <MeetingsList forTeacher top={0} left={-42} />
+        <MeetingsList forTeacher top={0} left={-42} user={props.user} />
       </div>
       {lessons.length == 0 ? (
         <p className="text-xl sm:text-2xl md:text-3xl my-6 sm:my-10">

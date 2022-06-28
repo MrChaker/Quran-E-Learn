@@ -6,8 +6,10 @@ import { StudentInfo, UserInterface } from '../../../interfaces/userInterface';
 import { useThemeContext } from '../../Context/themeContext';
 import { GET_AllUsers } from '../../graphql/queries';
 import { Button } from '../general/Button';
+import { useRouter } from 'next/router';
 
 const TeachersList = (props: { user: UserInterface & StudentInfo }) => {
+  const router = useRouter();
   const { darkTheme } = useThemeContext();
   const { data, loading } = useQuery(GET_AllUsers, {
     variables: {
@@ -22,7 +24,9 @@ const TeachersList = (props: { user: UserInterface & StudentInfo }) => {
       setUsers(data.getUsers);
     }
   }, [loading]);
-  const RequestJoinTeacher = (teacherID?: string) => {};
+  const RequestJoinTeacher = (teacherID?: string) => {
+    if (!props.user) return router.push('/auth/login');
+  };
   return (
     <>
       <div className="flex  flex-col gap-5 md:gap-8 mt-4">

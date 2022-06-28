@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { UserInterface } from '../interfaces/userInterface';
+import jwt, { Secret } from 'jsonwebtoken';
+
 export async function getUserProps(
   cookie: any,
   teacherOnly?: boolean,
   studentOnly?: boolean
 ) {
+  /* const loggedIn = verifyToken(cookie); */
+
   const user: UserInterface = await fetchUser(cookie);
   if (!user)
     return {
@@ -40,7 +44,18 @@ const fetchUser = async (cookie: string) => {
     });
     return res.data;
   } catch (err) {
-    console.log(err);
     return null;
   }
+};
+
+const verifyToken = (cookie: string): boolean => {
+  const jwtSecret: Secret = process.env.JWT_SECRET || '';
+  console.log(cookie.slice(4));
+  jwt.verify(cookie.slice(4), jwtSecret, async (err: any) => {
+    if (err) {
+      console.log(err);
+      return false;
+    }
+  });
+  return true;
 };

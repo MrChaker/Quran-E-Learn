@@ -10,11 +10,13 @@ const ProfileDetails = (props: PropsType) => {
         {
           title: 'المعلومات',
           content: (
+            /* (
             <ProfileInfo
               user={props.user}
               profileID={props.profileID}
               loading={props.loading}
             />
+          ) */ <></>
           ),
         },
         {
