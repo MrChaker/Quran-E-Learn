@@ -15,6 +15,7 @@ export const NavBar = () => {
   const { darkTheme } = useThemeContext();
   const [dropMenu, setDropMenu] = useState(false);
   const { user } = useUserContext();
+  console.log('navbar' + user);
   return (
     <>
       <nav

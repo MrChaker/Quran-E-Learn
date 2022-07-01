@@ -41,17 +41,19 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [userCtx, setUserCtx] = useState<User>(null);
 
   async function setUserInStorage(setter: Dispatch<SetStateAction<User>>) {
-    console.log(fetchUserClient());
     if (!fetchUserClient()) {
       // if not already in
       const userInfo = await fetchUserServer('');
       setter(userInfo);
+      console.log(userInfo);
       localStorage.setItem(
         'currentUser',
         userInfo
           ? crypt(JSON.stringify(userInfo), process.env.NEXT_PUBLIC_CRYPT)
           : ''
       );
+    } else {
+      setter(fetchUserClient());
     }
   }
 
