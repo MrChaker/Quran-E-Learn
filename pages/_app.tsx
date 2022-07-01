@@ -9,7 +9,7 @@ import App from 'next/app';
 import { Layout } from '../FrontEnd/Layouts/layout';
 import { fontAW } from '../FrontEnd/fontawsome';
 import ApolloProvider from '../FrontEnd/graphql/Apollo';
-import { useState, useEffect, SetStateAction } from 'react';
+import { useState, useEffect, SetStateAction, Dispatch } from 'react';
 import axios from 'axios';
 import { AppPropsWithLayout } from '../FrontEnd/Layouts/types';
 import { UserContext, User } from '../FrontEnd/Context/userContext';
@@ -40,11 +40,12 @@ MyApp.getInitialProps = async (appContext: any) => {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [userCtx, setUserCtx] = useState<User>(null);
 
-  async function setUserInStorage() {
+  async function setUserInStorage(setter: Dispatch<SetStateAction<User>>) {
     console.log(fetchUserClient());
     if (!fetchUserClient()) {
       // if not already in
       const userInfo = await fetchUserServer('');
+      setter(userInfo);
       localStorage.setItem(
         'currentUser',
         userInfo
@@ -56,8 +57,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     // this is for solving ssr state problem
-    setUserInStorage();
-    setUserCtx(fetchUserClient());
+    setUserInStorage(setUserCtx);
   }, []);
 
   // If we define a layout for some pages we get it with  getLayout else we choose the default layout

@@ -40,6 +40,14 @@ export const Header = () => {
             <Image src="/quran/Reading.png" alt="me" width={460} height={470} />
           </div>
         </div>
+        {/* <div className="absolute top-0 left-0 h-full w-2/4">
+          <Image
+            src="/backgound.png"
+            alt="islamic art"
+            layout="fill"
+            objectFit="cover"
+          />
+        </div> */}
       </div>
     </>
   );
